@@ -23,7 +23,7 @@ def findformants(sound,
         [
             [formants.get_value_at_time(i+1, x) 
                 for x in time_domain] 
-            for i in range(2)
+            for i in range(n_formants)
         ]
     )
     return(tracks)
