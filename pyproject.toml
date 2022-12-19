@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "fasttrackpy"
+version = "0.1.0"
+description = "A python implementation of FastTrack"
+authors = [
+    "Josef Fruehwald <JoFrhwld@gmail.com>",
+]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+praat-parselmouth = "^0.4.2"
+librosa = "^0.9.2"
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
