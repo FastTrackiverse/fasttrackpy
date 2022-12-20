@@ -27,6 +27,18 @@ def all_tracks(sound,
     formant_candidates = np.stack(formant_arrays, axis = -1)
     return(formant_candidates)
 
+def choose_winner(candidates, 
+                  smooth_fun,
+                  loss_fun,
+                  agg_fun):
+    """
+    Return index of winner
+    """
+    smoothed = smooth_formants(candidates, smooth_fun)
+    mses = smooth_error(candidates, smoothed, loss_fun, agg_fun)
+    winner_idx = np.argmin(mses)
+    return(winner_idx)
+    
 def dct_smooth(x, order = 5, out = "smooth"):
     """
     DCT smoother
