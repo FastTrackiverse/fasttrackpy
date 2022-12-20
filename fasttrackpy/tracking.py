@@ -18,12 +18,12 @@ def dct_smooth(x, order = 5, out = "smooth"):
         return(coef_subset, smooth)
 
 
-def findformants(sound, 
-                 n_formants=4,
-                 maximum_formant = 7000, 
-                 window_length = 0.05, 
-                 time_step = 0.002, 
-                 pre_emphasis_from = 50):
+def findformants(maximum_formant,
+                sound, 
+                n_formants=4,  
+                window_length = 0.05, 
+                time_step = 0.002, 
+                pre_emphasis_from = 50):
     """
     Track formants
     """
@@ -44,6 +44,30 @@ def findformants(sound,
         ]
     )
     return(tracks)
+
+def lmse(formants, smoothed, axis = 1):
+    """
+    calculate the log mean squared error
+    """
+    sqe = np.power(np.log(formants) - np.log(smoothed), 2)
+    mse = np.mean(sqe, axis = axis)
+    return(mse)
+
+def agg_sum(error, axis = 0):
+    """
+    Sum the error
+    """
+
+    agg_error = np.sum(error, axis = axis)
+    return(agg_error)
+
+def smooth_error(formants, smoothed, loss_fun, agg_fun):
+    """
+    calculate error
+    """
+    loss = loss_fun(formants, smoothed)
+    total_loss = agg_fun(loss)
+    return(total_loss)
 
 def smooth_formants(formants, 
                     smooth_fun, 
