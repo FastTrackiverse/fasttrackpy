@@ -40,7 +40,7 @@ def findformants(maximum_formant,
         [
             [formants.get_value_at_time(i+1, x) 
                 for x in time_domain] 
-            for i in range(n_formants)
+            for i in range(int(np.floor(n_formants)))
         ]
     )
     return(tracks)
