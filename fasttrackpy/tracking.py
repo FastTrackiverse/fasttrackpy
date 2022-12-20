@@ -43,7 +43,7 @@ def choose_winner(candidates,
     smoothed = smooth_formants(candidates, smooth_fun, **args["smooth_kwargs"])
     all_mses = smooth_error(candidates, smoothed, loss_fun, **args["loss_kwargs"])
     agg_mses = agg_fun(all_mses, **args["agg_kwargs"])
-    winner_idx = np.argmin(agg_mses)
+    winner_idx = np.nanargmin(agg_mses)
     return(winner_idx)
     
 def findformants(maximum_formant,
