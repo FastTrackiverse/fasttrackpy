@@ -1,0 +1,81 @@
+---
+title: "fasttrackpy flow"
+format: gfm
+---
+
+
+Current fasttrackpy approach
+
+
+```{dot}
+digraph G {
+    subgraph cluster_0 {
+        parselmouth [label = "parselmouth.Sound()"];
+        label = "";
+    }
+
+    subgraph cluster_1{
+        label = "all_tracks()"
+        input [label = "sound"];
+        input -> findformants
+        subgraph cluster_2{
+            
+            label = "for x in start to stop"
+            style="rounded"
+            subgraph cluster_3{
+                style = "filled"
+                label = ""
+                findformants [label="findformants(sound, maxformant=x)"];
+            }
+        
+        }
+    }
+
+    subgraph cluster_4{
+        label = "choose_winner()"
+        input2 [label = "candidate_tracks"];
+        subgraph cluster_5{
+            label = "";
+            smooth_tracks [label="smooth_tracks()"]
+        }
+        smoothed;
+        subgraph cluster_6{
+            label = ""
+            smooth_error [label = "smooth_error()"]
+        }
+        all_errors [label = "errors\n.shape=(n_formants, ncandidates)"];
+        subgraph cluster_7{
+            label = ""
+            agg_fun [label="agg_fun()"]
+        }
+        errors [label="errors\nshape=(ncandidates)"]
+        subgraph cluster_8{
+            label = ""
+            argmin [label = "np.nanargmin()"]
+        }
+    }
+    winner_index
+
+    wavfile -> parselmouth -> sound
+    sound->input
+    findformants -> candidate_tracks
+    candidate_tracks -> input2
+    input2 -> smooth_tracks
+    smooth_tracks -> smoothed
+    smooth_fun -> smooth_tracks
+    smooth_fun [label = "smoothers.dct_smooth()"]
+    smoothed -> smooth_error;
+    input2 -> smooth_error;
+    loss_fun -> smooth_error;
+    loss_fun [label="losses.lmse()"];
+    smooth_error -> all_errors
+    out_agg -> agg_fun
+    out_agg [label = "aggs.agg_sum()"]
+    all_errors -> agg_fun
+    agg_fun -> errors
+    errors -> argmin
+    argmin -> winner_index
+}
+```
+
+
