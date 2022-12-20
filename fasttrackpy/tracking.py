@@ -1,7 +1,9 @@
 import parselmouth as pm
 import numpy as np
 import scipy.fft
-
+from . import smoothers
+from . import losses
+from . import aggs
 
 def all_tracks(sound, 
                start = 5000, 
@@ -28,9 +30,9 @@ def all_tracks(sound,
     return(formant_candidates)
 
 def choose_winner(candidates, 
-                  smooth_fun,
-                  loss_fun,
-                  agg_fun):
+                  smooth_fun = smoothers.dct_smooth,
+                  loss_fun = losses.lmse,
+                  agg_fun = aggs.agg_sum):
     """
     Return index of winner
     """
@@ -39,21 +41,6 @@ def choose_winner(candidates,
     winner_idx = np.argmin(mses)
     return(winner_idx)
     
-def dct_smooth(x, order = 5, out = "smooth"):
-    """
-    DCT smoother
-    """
-    coefs = scipy.fft.dct(x)
-    coef_subset = coefs[0:order]
-    smooth = scipy.fft.idct(coef_subset, n = x.shape[0])
-    if out == "smooth":
-        return(smooth)
-    elif out == "coef":
-        return(coef_subset)
-    elif out == "both":
-        return(coef_subset, smooth)
-
-
 def findformants(maximum_formant,
                 sound, 
                 n_formants=4,  
@@ -80,22 +67,6 @@ def findformants(maximum_formant,
         ]
     )
     return(tracks)
-
-def lmse(formants, smoothed, axis = 1):
-    """
-    calculate the log mean squared error
-    """
-    sqe = np.power(np.log(formants) - np.log(smoothed), 2)
-    mse = np.mean(sqe, axis = axis)
-    return(mse)
-
-def agg_sum(error, axis = 0):
-    """
-    Sum the error
-    """
-
-    agg_error = np.sum(error, axis = axis)
-    return(agg_error)
 
 def smooth_error(formants, smoothed, loss_fun, agg_fun):
     """
