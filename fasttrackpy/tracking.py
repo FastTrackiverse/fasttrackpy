@@ -68,7 +68,9 @@ def findformants(maximum_formant,
     )
     return(tracks)
 
-def smooth_error(formants, smoothed, loss_fun, agg_fun):
+def smooth_error(formants, smoothed, 
+                 loss_fun = losses.lmse, 
+                 agg_fun = aggs.agg_sum):
     """
     calculate error
     """
@@ -77,7 +79,7 @@ def smooth_error(formants, smoothed, loss_fun, agg_fun):
     return(total_loss)
 
 def smooth_formants(formants, 
-                    smooth_fun, 
+                    smooth_fun = smoothers.dct_smooth, 
                     axis = 1, 
                     **kwargs):
     """
