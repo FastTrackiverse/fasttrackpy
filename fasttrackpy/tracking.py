@@ -114,3 +114,6 @@ def smooth_formants(formants,
     """
     smoothed = np.apply_along_axis(smooth_fun, axis, formants, **kwargs)
     return(smoothed)
+
+if __name__ == "__main__":
+    pass
