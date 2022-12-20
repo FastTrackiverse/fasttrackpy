@@ -32,13 +32,18 @@ def all_tracks(sound,
 def choose_winner(candidates, 
                   smooth_fun = smoothers.dct_smooth,
                   loss_fun = losses.lmse,
-                  agg_fun = aggs.agg_sum):
+                  agg_fun = aggs.agg_sum,
+                  args = {"smooth_kwargs": {},
+                          "loss_kwargs": {},
+                          "agg_kwargs": {} }):
     """
     Return index of winner
     """
-    smoothed = smooth_formants(candidates, smooth_fun)
-    mses = smooth_error(candidates, smoothed, loss_fun, agg_fun)
-    winner_idx = np.argmin(mses)
+
+    smoothed = smooth_formants(candidates, smooth_fun, **args["smooth_kwargs"])
+    all_mses = smooth_error(candidates, smoothed, loss_fun, **args["loss_kwargs"])
+    agg_mses = agg_fun(all_mses, **args["agg_kwargs"])
+    winner_idx = np.argmin(agg_mses)
     return(winner_idx)
     
 def findformants(maximum_formant,
@@ -70,13 +75,13 @@ def findformants(maximum_formant,
 
 def smooth_error(formants, smoothed, 
                  loss_fun = losses.lmse, 
-                 agg_fun = aggs.agg_sum):
+                 **kwargs):
     """
     calculate error
     """
-    loss = loss_fun(formants, smoothed)
-    total_loss = agg_fun(loss)
-    return(total_loss)
+    
+    loss = loss_fun(formants, smoothed, **kwargs)
+    return(loss)
 
 def smooth_formants(formants, 
                     smooth_fun = smoothers.dct_smooth, 
