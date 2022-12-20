@@ -3,6 +3,30 @@ import numpy as np
 import scipy.fft
 
 
+def all_tracks(sound, 
+               start = 5000, 
+               stop = 7000, 
+               nstep = 20,
+               time_step = 0.001,
+               n_formants = 6,
+               window_length = 0.025,
+               pre_emphasis_from = 50):
+    """
+    Extract all formant tracks
+    """
+    max_formants = np.linspace(start = start, stop = stop, num = nstep)
+    formant_arrays = [
+        findformants(maximum_formant = x,
+                     sound=sound,
+                     time_step = time_step,
+                     n_formants = n_formants, 
+                     window_length = window_length,
+                     pre_emphasis_from = pre_emphasis_from)
+        for x in max_formants
+    ]
+    formant_candidates = np.stack(formant_arrays, axis = -1)
+    return(formant_candidates)
+
 def dct_smooth(x, order = 5, out = "smooth"):
     """
     DCT smoother
