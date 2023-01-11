@@ -15,6 +15,19 @@ def all_tracks(sound,
                pre_emphasis_from = 50):
     """
     Extract all formant tracks
+
+    Args:
+        sound (parselmouth.Sound): Sound object read in by `parselmouth`
+        start (float): lowest max-formant
+        stop (float): highest max-formant
+        nstep (int): number of steps along max-formant
+        time_step (float): time step of formant tracks (in sec)
+        n_formants (float): Number of formants (2*`n_formants`) must be an integer
+        window_length (float): analysis window size
+        pre_emphasis_from (float): pre-emphasis
+    
+    Returns:
+        (numpy.ndarray): array of all formant tracks with shape (n_formants, :, nstep)
     """
     max_formants = np.linspace(start = start, stop = stop, num = nstep)
     formant_arrays = [
@@ -79,7 +92,7 @@ def smooth_error(formants, smoothed,
     """
     calculate error
     """
-    
+
     loss = loss_fun(formants, smoothed, **kwargs)
     return(loss)
 

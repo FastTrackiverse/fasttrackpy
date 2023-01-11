@@ -19,6 +19,9 @@ jupyter = "^1.0.0"
 plotly = "^5.11.0"
 pandas = "^1.5.2"
 kaleido = "0.2.1"
+mkdocs = "^1.4.2"
+mkdocstrings = {extras = ["python"], version = "^0.19.1"}
+mkdocs-material = "^8.5.11"
 
 [build-system]
 requires = ["poetry-core"]
