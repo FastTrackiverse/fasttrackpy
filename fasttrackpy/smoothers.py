@@ -32,6 +32,6 @@ def dct_smooth_regression(x, order = 5, out = "smooth"):
     if out == "smooth":
         return(smooth)
     elif out == "coef":
-        return(coef_subset)
+        return(coefs)
     elif out == "both":
-        return(coef_subset, smooth)
+        return(coefs, smooth)
