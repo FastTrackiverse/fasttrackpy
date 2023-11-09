@@ -7,22 +7,43 @@ authors = [
 ]
 license = "MIT"
 readme = "README.md"
+packages = [{include = "fasttrackpy", from="src"}]
+exclude = [
+    "notebooks/",
+    "examples/",
+    "docs/"
+]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.10,<3.13"
 praat-parselmouth = "^0.4.2"
 librosa = "^0.9.2"
 scipy = "^1.9.3"
+numpy = "^1.26.1"
 
 [tool.poetry.group.dev.dependencies]
 jupyter = "^1.0.0"
 plotly = "^5.11.0"
 pandas = "^1.5.2"
 kaleido = "0.2.1"
-mkdocs = "^1.4.2"
-mkdocstrings = {extras = ["python"], version = "^0.19.1"}
-mkdocs-material = "^8.5.11"
+pytest = "^7.4.3"
+
+
+[tool.poetry.group.docs.dependencies]
+quartodoc = "^0.6.5"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    "--cov-config=.coveragerc",
+    "--cov"
+]
+filterwarnings =[
+    "ignore::UserWarning"
+]
+pythonpath = "src"
+testpaths = "tests"
