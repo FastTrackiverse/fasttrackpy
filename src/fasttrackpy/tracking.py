@@ -1,9 +1,9 @@
 import parselmouth as pm
 import numpy as np
 import scipy.fft
-from fasttrackpy import smoothers
-from fasttrackpy import losses
-from fasttrackpy import aggs
+from fasttrackpy.processors import smoothers
+from fasttrackpy.processors import losses
+from fasttrackpy.processors import aggs
 
 def all_tracks(sound, 
                start = 5000, 
