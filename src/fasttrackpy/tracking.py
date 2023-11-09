@@ -40,7 +40,7 @@ def all_tracks(sound,
         for x in max_formants
     ]
     formant_candidates = np.stack(formant_arrays, axis = -1)
-    return(formant_candidates)
+    return formant_candidates
 
 def choose_winner(candidates, 
                   smooth_fun = smoothers.dct_smooth,
@@ -57,7 +57,7 @@ def choose_winner(candidates,
     all_mses = smooth_error(candidates, smoothed, loss_fun, **args["loss_kwargs"])
     agg_mses = agg_fun(all_mses, **args["agg_kwargs"])
     winner_idx = np.nanargmin(agg_mses)
-    return(winner_idx)
+    return winner_idx
     
 def findformants(maximum_formant,
                 sound, 
@@ -84,7 +84,7 @@ def findformants(maximum_formant,
             for i in range(int(np.floor(n_formants)))
         ]
     )
-    return(tracks)
+    return tracks
 
 def smooth_error(formants, smoothed, 
                  loss_fun = losses.lmse, 
@@ -104,7 +104,7 @@ def smooth_formants(formants,
     Given a formants array, smooth it according to smooth_fun
     """
     smoothed = np.apply_along_axis(smooth_fun, axis, formants, **kwargs)
-    return(smoothed)
+    return smoothed
 
 if __name__ == "__main__":
     pass

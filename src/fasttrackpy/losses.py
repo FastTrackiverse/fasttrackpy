@@ -6,7 +6,7 @@ def lmse(formants, smoothed, axis = 1):
     """
     sqe = np.power(np.log(formants) - np.log(smoothed), 2)
     mse = np.nanmean(sqe, axis = axis)
-    return(mse)
+    return mse
 
 def mse(formants, smoothed, axis = 1):
     """
@@ -14,4 +14,4 @@ def mse(formants, smoothed, axis = 1):
     """
     sqe = np.power(formants - smoothed, 2)
     mse = np.nanmean(sqe, axis = axis)
-    return(mse)
+    return mse

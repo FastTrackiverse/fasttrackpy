@@ -9,11 +9,11 @@ def dct_smooth(x, order = 5, out = "smooth"):
     coef_subset = coefs[0:order]
     smooth = scipy.fft.idct(coef_subset, n = x.shape[0])
     if out == "smooth":
-        return(smooth)
-    elif out == "coef":
-        return(coef_subset)
-    elif out == "both":
-        return(coef_subset, smooth)
+        return smooth
+    if out == "coef":
+        return coef_subset
+    if out == "both":
+        return coef_subset, smooth
 
 
 
@@ -30,8 +30,8 @@ def dct_smooth_regression(x, order = 5, out = "smooth"):
     smooth = np.dot(predictors, coefs)
 
     if out == "smooth":
-        return(smooth)
-    elif out == "coef":
-        return(coefs)
-    elif out == "both":
-        return(coefs, smooth)
+        return smooth
+    if out == "coef":
+        return coefs
+    if out == "both":
+        return coefs, smooth

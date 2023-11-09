@@ -6,4 +6,4 @@ def agg_sum(error, axis = 0):
     """
 
     agg_error = np.sum(error, axis = axis)
-    return(agg_error)
+    return agg_error
