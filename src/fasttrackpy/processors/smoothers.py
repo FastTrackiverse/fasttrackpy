@@ -1,16 +1,19 @@
 import numpy as np
 import scipy.fft
-
+from typing import Union
+from collections.abc import Callable
 class Smoother:
     def __init__(
         self,
-        method = "dct_smooth",
+        method: Union[str, Callable] = "dct_smooth",
         **kwargs
     ):
         self.smooth_fun = self._get_fun(method)
         self.method_args = kwargs
     
     def _get_fun(self, method):
+        if callable(method):
+            return method
         if method == "dct_smooth":
             return dct_smooth
         if method == "dct_smooth_regression":
