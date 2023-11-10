@@ -35,7 +35,7 @@ class OneTrack:
         self.formants = self._track_formants()
         self.n_measured_formants = self._get_measured()
         self.imputed_formants = self._impute_formants()
-        self.smoothed_formants = self._smooth_formants()
+        self.smoothed_list = self._smooth_formants()
     
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
@@ -63,13 +63,12 @@ class OneTrack:
         return(tracks)
 
     def _smooth_formants(self):
-        smoothed = np.apply_along_axis(
-            self.smoother.smooth,
-            1,
-            self.imputed_formants
-        )
-
-        return smoothed
+        smoothed_list = [
+          self.smoother.smooth(x) 
+            for x in self.imputed_formants
+        ]
+    
+        return smoothed_list
     
     def _get_measured(self):
         nan_tracks = np.isnan(self.formants)
@@ -91,6 +90,11 @@ class OneTrack:
         )
         return imputed
 
+    @property
+    def smoothed_formants(self):
+        return np.array(
+            [x.smoothed for x in self.smoothed_list]
+        )
 
     @property
     def smooth_error(self):

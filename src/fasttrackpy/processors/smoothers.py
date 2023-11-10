@@ -22,25 +22,36 @@ class Smoother:
     def smooth(self, x):
         return self.smooth_fun(x, **self.method_args)
 
-        
+class Smoothed:
+    def __init__(
+        self,
+        smoothed: np.ndarray,
+        params: np.ndarray = None
+    ):
+        self.smoothed = smoothed
+        self.params = params
 
-def dct_smooth(x, order = 5, out = "smooth"):
+def dct_smooth(
+        x:np.array, 
+        order:int = 5
+    ) -> Smoothed:
     """
     DCT smoother
     """
     coefs = scipy.fft.dct(x)
     coef_subset = coefs[0:order]
     smooth = scipy.fft.idct(coef_subset, n = x.shape[0])
-    if out == "smooth":
-        return smooth
-    if out == "coef":
-        return coef_subset
-    if out == "both":
-        return coef_subset, smooth
+    return Smoothed(
+        smoothed=smooth, 
+        params=coef_subset
+    )
 
 
 
-def dct_smooth_regression(x, order = 5, out = "smooth"):
+def dct_smooth_regression(
+        x:np.array, 
+        order:int = 5
+    ) -> Smoothed:
     """
     DCT smoother using regression
     """
@@ -51,10 +62,7 @@ def dct_smooth_regression(x, order = 5, out = "smooth"):
     predictors = predictors.T
     coefs = np.dot((np.linalg.inv(np.dot(predictors.T,predictors))), np.dot(predictors.T,y))
     smooth = np.dot(predictors, coefs)
-
-    if out == "smooth":
-        return smooth
-    if out == "coef":
-        return coefs
-    if out == "both":
-        return coefs, smooth
+    return Smoothed(
+        smoothed=smooth,
+        params = coefs
+    )
