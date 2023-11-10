@@ -9,11 +9,10 @@ from sklearn.impute import IterativeImputer
 
 from typing import Union
 
-class OneTrack:
+class Track:
     def __init__(
             self,
             sound: pm.Sound,
-            maximum_formant: float,
             n_formants: int = 4,
             window_length: float = 0.05,
             time_step: float = 0.002,
@@ -21,9 +20,8 @@ class OneTrack:
             smoother:Smoother = Smoother(),
             loss_fun = losses.lmse,
             agg_fun = aggs.agg_sum
-        ):
+    ):
         self.sound = sound
-        self.maximum_formant = maximum_formant
         self.n_formants = n_formants
         self.window_length = window_length
         self.time_step = time_step
@@ -31,6 +29,15 @@ class OneTrack:
         self.smoother = smoother
         self.loss_fun = loss_fun
         self.agg_fun = agg_fun
+
+class OneTrack(Track):
+    def __init__(
+            self,
+            maximum_formant: float,
+            **kwargs
+        ):
+        super().__init__(**kwargs)
+        self.maximum_formant = maximum_formant
 
         self.formants = self._track_formants()
         self.n_measured_formants = self._get_measured()
@@ -99,8 +106,51 @@ class OneTrack:
     @property
     def smooth_error(self):
         msqe =  self.loss_fun(
-            self.formants, 
-            self.smoothed_formants
+            self.formants[0:self.n_measured_formants], 
+            self.smoothed_formants[0:self.n_measured_formants]
         )
         error = self.agg_fun(msqe)
         return error
+
+class CandidateTracks(Track):
+    def __init__(
+        self,
+        min_max_formant: float = 5000,
+        max_max_formant: float = 7000,
+        nstep = 20,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.min_max_formant = min_max_formant
+        self.max_max_formant = max_max_formant
+        self.nstep = nstep
+        self.max_formants = np.linspace(
+            start = self.min_max_formant,
+            stop = self.max_max_formant,
+            num = self.nstep
+        )
+
+        self.candidates = [
+            OneTrack(
+                maximum_formant=x,
+                **kwargs
+            ) for x in self.max_formants
+        ]
+
+        self.min_n_measured = np.array([
+            x.n_measured_formants 
+            for x in self.candidates
+        ]).min()
+
+        self._normalize_n_measured()
+
+        self.smooth_errors = np.array(
+            [x.smooth_error for x in self.candidates]
+        )
+
+        self.winner_idx = np.argmin(self.smooth_errors)
+        self.winner = self.candidates[self.winner_idx]
+
+    def _normalize_n_measured(self):
+        for track in self.candidates:
+            track.n_measured_formants = self.min_n_measured
