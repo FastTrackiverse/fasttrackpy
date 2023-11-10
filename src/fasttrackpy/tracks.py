@@ -7,6 +7,8 @@ from fasttrackpy.processors import aggs
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 
+import polars as pl
+
 from typing import Union
 
 class Track:
@@ -39,7 +41,7 @@ class OneTrack(Track):
         super().__init__(**kwargs)
         self.maximum_formant = maximum_formant
 
-        self.formants = self._track_formants()
+        self.formants, self.time_domain = self._track_formants()
         self.n_measured_formants = self._get_measured()
         self.imputed_formants = self._impute_formants()
         self.smoothed_list = self._smooth_formants()
@@ -67,7 +69,7 @@ class OneTrack(Track):
             ]
         )
 
-        return(tracks)
+        return tracks, time_domain
 
     def _smooth_formants(self):
         smoothed_list = [
@@ -111,6 +113,29 @@ class OneTrack(Track):
         )
         error = self.agg_fun(msqe)
         return error
+    
+    def to_dataframe(self):
+        orig_names = [
+            f"F{x}" for x in np.arange(self.n_measured_formants)+1
+        ]
+        smooth_names = [
+            f"F{x}_s" for x in np.arange(self.n_measured_formants)+1
+        ]
+        orig_df = pl.DataFrame(
+            data = self.formants.T,
+            schema=orig_names
+        )
+        orig_df = orig_df.with_columns(
+            time = pl.lit(self.time_domain)
+        )
+
+        smooth_df = pl.DataFrame(
+            data = self.smoothed_formants.T,
+            schema=smooth_names
+        )
+        out_df = pl.concat([orig_df, smooth_df], how = "horizontal")
+
+        return out_df
 
 class CandidateTracks(Track):
     def __init__(
