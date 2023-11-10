@@ -1,6 +1,26 @@
 import numpy as np
 import scipy.fft
 
+class Smoother:
+    def __init__(
+        self,
+        method = "dct_smooth",
+        **kwargs
+    ):
+        self.smooth_fun = self._get_fun(method)
+        self.method_args = kwargs
+    
+    def _get_fun(self, method):
+        if method == "dct_smooth":
+            return dct_smooth
+        if method == "dct_smooth_regression":
+            return dct_smooth_regression
+        
+    def smooth(self, x):
+        return self.smooth_fun(x, **self.method_args)
+
+        
+
 def dct_smooth(x, order = 5, out = "smooth"):
     """
     DCT smoother

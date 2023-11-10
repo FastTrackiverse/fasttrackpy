@@ -1,6 +1,6 @@
 import parselmouth as pm
 import numpy as np
-from fasttrackpy.processors import smoothers
+from fasttrackpy.processors.smoothers import Smoother
 from fasttrackpy.processors import losses
 from fasttrackpy.processors import aggs
 
@@ -18,7 +18,7 @@ class OneTrack:
             window_length: float = 0.05,
             time_step: float = 0.002,
             pre_emphasis_from: float = 50,
-            smoother = smoothers.dct_smooth,
+            smoother:Smoother = Smoother(),
             loss_fun = losses.lmse,
             agg_fun = aggs.agg_sum
         ):
@@ -64,7 +64,7 @@ class OneTrack:
 
     def _smooth_formants(self):
         smoothed = np.apply_along_axis(
-            self.smoother,
+            self.smoother.smooth,
             1,
             self.imputed_formants
         )
