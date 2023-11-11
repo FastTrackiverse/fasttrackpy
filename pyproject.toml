@@ -25,6 +25,8 @@ jupyter = "^1.0.0"
 pytest = "^7.4.3"
 plotly = "^5.18.0"
 pandas = "^2.1.2"
+ipython = "^8.17.2"
+kaleido = "0.2.1"
 
 [build-system]
 requires = ["poetry-core"]
