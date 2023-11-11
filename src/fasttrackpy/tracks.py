@@ -2,8 +2,7 @@ import parselmouth as pm
 import numpy as np
 from fasttrackpy.processors.smoothers import Smoother
 from fasttrackpy.processors.losses import Loss
-from fasttrackpy.processors import losses
-from fasttrackpy.processors import aggs
+from fasttrackpy.processors.aggs import Agg
 
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
@@ -35,7 +34,7 @@ class Track:
             pre_emphasis_from: float = 50,
             smoother: Smoother = Smoother(),
             loss_fun: Loss = Loss(),
-            agg_fun = aggs.agg_sum
+            agg_fun: Agg = Agg()
     ):
         self.sound = sound
         self.n_formants = n_formants
@@ -125,7 +124,7 @@ class OneTrack(Track):
             self.formants[0:self.n_measured_formants], 
             self.smoothed_formants[0:self.n_measured_formants]
         )
-        error = self.agg_fun(msqe)
+        error = self.agg_fun.aggregate(msqe)
         return error
     
     def to_dataframe(self):
