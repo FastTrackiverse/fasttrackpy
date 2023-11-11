@@ -4,14 +4,17 @@ from collections.abc import Callable
 class Loss:
     def __init__(
         self,
-        method = "lmse",
+        method: Union[str, Callable] = "lmse",
         **kwargs
     ):
         
         self.method = self._get_fun(method)
         self.method_args = kwargs
     
-    def _get_fun(self, method):
+    def _get_fun(
+            self, 
+            method: Union[str, Callable]
+        ) -> Callable:
         if callable(method):
             return method
         if method == "lmse":
@@ -21,12 +24,16 @@ class Loss:
         
     def calculate_loss(
         self,
-        formants, 
-        smoothed
+        formants: np.ndarray, 
+        smoothed: np.ndarray
     ):
         return self.method(formants, smoothed, **self.method_args)
     
-def lmse(formants, smoothed, axis = 1):
+def lmse(
+        formants: np.ndarray, 
+        smoothed: np.ndarray, 
+        axis: int = 1
+    ) -> np.ndarray:
     """
     calculate the log mean squared error
     """
@@ -34,10 +41,11 @@ def lmse(formants, smoothed, axis = 1):
     mse = np.nanmean(sqe, axis = axis)
     return mse
 
-def mse(formants, smoothed, axis = 1):
-    """
-    calculate the mean squared error
-    """
+def mse(
+        formants: np.ndarray, 
+        smoothed: np.ndarray, 
+        axis: int = 1
+    ) -> np.ndarray:
     sqe = np.power(formants - smoothed, 2)
     mse = np.nanmean(sqe, axis = axis)
     return mse
