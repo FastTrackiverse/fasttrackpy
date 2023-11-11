@@ -13,16 +13,6 @@ from typing import Union
 
 class Track:
     """A generic track class to set up attribute values
-
-    Args:
-        sound (pm.Sound): A `parselmouth.Sound` object.
-        n_formants (int, optional): Number of formants to track. Defaults to 4.
-        window_length (float, optional): Defaults to 0.05.
-        time_step (float, optional):Defaults to 0.002.
-        pre_emphasis_from (float, optional): Defaults to 50.
-        smoother (Smoother, optional): Smoother function. Defaults to `Smoother` default.
-        loss_fun (_type_, optional): Loss function
-        agg_fun (_type_, optional): Aggregation function
     """
 
     def __init__(
@@ -46,6 +36,34 @@ class Track:
         self.agg_fun = agg_fun
 
 class OneTrack(Track):
+    """_summary_
+
+    Args:
+        maximum_formant (float): max formant
+        sound (pm.Sound): A `parselmouth.Sound` object.
+        n_formants (int, optional): Number of formants to track. Defaults to 4.
+        window_length (float, optional): Defaults to 0.05.
+        time_step (float, optional):Defaults to 0.002.
+        pre_emphasis_from (float, optional): Defaults to 50.
+        smoother (Smoother, optional): Smoother function. Defaults to `Smoother` default.
+        loss_fun (_type_, optional): Loss function
+        agg_fun (_type_, optional): Aggregation function
+    
+    Attributes:
+        maximum_formant (float): The max formant
+        time_domain (np.array): The time domain of the formant estimates
+        formants (np.ndarray): A (formants, time) array of values. The formants
+            as initially estimated by praat-parselmouth
+        n_measured_formants (int): The total number of formants for which
+            formant tracks were estimatable
+        imputed_formants (np.ndarray): Formant tracks for which missing values
+            were imputed using `sklearn.impute.IterativeImputer`
+        smoothed_formants (np.ndarray): The smoothed formant values, using 
+           the method passed to `smoother`.
+        smooth_error (float): The error term between imputed formants and 
+           smoothed formants.
+    """
+
     def __init__(
             self,
             maximum_formant: float,
@@ -128,6 +146,11 @@ class OneTrack(Track):
         return error
     
     def to_dataframe(self):
+        """Return data as a data frame
+
+        Returns:
+           (pl.DataFrame): A data frame
+        """
         orig_names = [
             f"F{x}" for x in np.arange(self.n_measured_formants)+1
         ]
@@ -151,9 +174,30 @@ class OneTrack(Track):
         return out_df
 
 class CandidateTracks(Track):
+    """A class for candidate tracks for a single formant
+    
+    This takes the same arguments as `OneTrack` except for `max_formant.
+
+    Args:
+        min_max_formant (float, optional): The floor for the `max_formant` setting. 
+            Defaults to 4000.
+        max_max_formant (float, optional): The cieling for the `max_formant` setting.
+            Defaults to 7000.
+        nstep (int, optional): The number of steps for the grid search.
+            Defaults to 20.
+
+    Attributes:
+        candidates (list[OneTrack,...]): A list of `OneTrack` tracks.
+        min_n_measured (int): The smallest number of successfully measured 
+            formants across all `candidates`
+        smooth_errors (np.array): The error terms for each treack in `candidates`
+        winner_idx (int): The candidate track with the smallest error term
+        winner (OneTrack): The winning `OneTrack` track,
+    """
+
     def __init__(
         self,
-        min_max_formant: float = 5000,
+        min_max_formant: float = 4000,
         max_max_formant: float = 7000,
         nstep = 20,
         **kwargs
