@@ -1,6 +1,7 @@
 import parselmouth as pm
 import numpy as np
 from fasttrackpy.processors.smoothers import Smoother
+from fasttrackpy.processors.losses import Loss
 from fasttrackpy.processors import losses
 from fasttrackpy.processors import aggs
 
@@ -12,6 +13,19 @@ import polars as pl
 from typing import Union
 
 class Track:
+    """A generic track class to set up attribute values
+
+    Args:
+        sound (pm.Sound): A `parselmouth.Sound` object.
+        n_formants (int, optional): Number of formants to track. Defaults to 4.
+        window_length (float, optional): Defaults to 0.05.
+        time_step (float, optional):Defaults to 0.002.
+        pre_emphasis_from (float, optional): Defaults to 50.
+        smoother (Smoother, optional): Smoother function. Defaults to `Smoother` default.
+        loss_fun (_type_, optional): Loss function
+        agg_fun (_type_, optional): Aggregation function
+    """
+
     def __init__(
             self,
             sound: pm.Sound,
@@ -19,8 +33,8 @@ class Track:
             window_length: float = 0.05,
             time_step: float = 0.002,
             pre_emphasis_from: float = 50,
-            smoother:Smoother = Smoother(),
-            loss_fun = losses.lmse,
+            smoother: Smoother = Smoother(),
+            loss_fun: Loss = Loss(),
             agg_fun = aggs.agg_sum
     ):
         self.sound = sound
@@ -107,7 +121,7 @@ class OneTrack(Track):
 
     @property
     def smooth_error(self):
-        msqe =  self.loss_fun(
+        msqe =  self.loss_fun.calculate_loss(
             self.formants[0:self.n_measured_formants], 
             self.smoothed_formants[0:self.n_measured_formants]
         )
