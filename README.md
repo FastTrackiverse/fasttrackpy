@@ -1,24 +1,32 @@
 # FastTrackPy
+[![Python CI](https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml/badge.svg)](https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml)
 
 Goal: A FastTrack python implementation with importable modules
 
-## Poetry setup
+## Installation
 
-### Installation: 
+```bash
+pip install git+https://github.com/JoFrhwld/fasttrackpy.git
+```
+
+## Dev Usage
+### Poetry setup
+
+#### Installation: 
 
 [https://python-poetry.org/docs/#installation](https://github.com/pyenv/pyenv)
 
-### Python version
+#### Python version
 
-^3.9, managed by pyenv [https://github.com/pyenv/pyenv](https://github.com/pyenv/pyenv)
+^3.10
 
-### venv setup
+#### venv setup
 
 ```bash
 python -m venv venv
 ```
 
-### Depdendencies installation
+#### Depdendencies installation
 
 ```bash
 poetry install
