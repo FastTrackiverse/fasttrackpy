@@ -1,4 +1,5 @@
 # FastTrackPy
+[![Python CI](https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml/badge.svg)](https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml)
 
 Goal: A FastTrack python implementation with importable modules
 
