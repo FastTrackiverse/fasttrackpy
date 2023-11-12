@@ -41,7 +41,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
-    "--cov-config=.coveragerc",
+    "--cov-config=tests/.coveragerc",
     "--cov"
 ]
 filterwarnings =[
