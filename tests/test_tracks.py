@@ -37,4 +37,34 @@ class TestOneTrack:
         )
 
         assert this_track
-        assert this_track.formants.shape[0] == 4
+        td = this_track.time_domain
+        assert this_track.formants.shape == (4, td.shape[0])
+        assert this_track.formants.shape == this_track.smoothed_formants.shape
+        assert isinstance(this_track.smooth_error, float)
+
+        df = this_track.to_df()
+        assert isinstance(df, pl.DataFrame)
+
+    def test_custom_one_track(self):
+        this_track = OneTrack(
+            sound = SOUND,
+            maximum_formant=5000,
+            n_formants = 5,
+            smoother = Smoother(order = 6)
+        )
+
+        assert this_track.formants.shape[0] == 5
+        assert this_track.parameters.shape == (5, 6)
+
+class TestCandidateTracks:
+
+    def test_candidate_tracks_default(self):
+        candidates = CandidateTracks(
+            sound = SOUND
+        )
+
+        assert candidates
+        assert len(candidates.candidates) == 20
+        assert candidates.max_formants.shape == (20,)
+        assert candidates.smooth_errors.shape == (20,)
+        assert isinstance(candidates.winner, OneTrack)
