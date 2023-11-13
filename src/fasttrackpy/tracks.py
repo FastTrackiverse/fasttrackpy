@@ -11,6 +11,7 @@ from sklearn.impute import IterativeImputer
 import polars as pl
 
 from typing import Union
+import warnings
 
 class Track:
     """A generic track class to set up attribute values
@@ -135,14 +136,18 @@ class OneTrack(Track):
             return np.argmax(all_nan)
         return all_nan.shape[0]
     
-    def _impute_formants(self):
+    def _impute_formants(self):     
         imp = IterativeImputer(max_iter=10, random_state=0)
         to_impute = self.formants[0:self.n_measured_formants,:]
         nan_entries = np.isnan(to_impute)
+        
         if not np.any(nan_entries):
             return to_impute
-
-        imp.fit(np.transpose(to_impute))
+        
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")   
+            imp.fit(np.transpose(to_impute))
+        
         imputed = np.transpose(
             imp.transform(np.transpose(to_impute))
         )
