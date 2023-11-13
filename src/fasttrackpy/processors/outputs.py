@@ -65,7 +65,7 @@ def param_to_dataframe(self):
         data = self.parameters.T,schema=schema
     )
        
-    out_df = add_metadata(self, out_df)       
+    param_df = add_metadata(self, param_df)       
 
     return param_df
 
