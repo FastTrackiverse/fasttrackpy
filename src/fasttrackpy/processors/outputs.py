@@ -15,12 +15,12 @@ def to_dataframe(self):
     ]
 
     orig_df = pl.DataFrame(
-        data = self.formants.T,
+        data = self.formants[0:self.n_measured_formants].T,
         schema=orig_names
     )
 
     smooth_df = pl.DataFrame(
-        data = self.smoothed_formants.T,
+        data = self.smoothed_formants[0:self.n_measured_formants].T,
         schema=smooth_names
     )
 
