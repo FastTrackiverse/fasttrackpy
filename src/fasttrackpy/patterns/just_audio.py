@@ -75,13 +75,14 @@ def process_audio_file(
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg()
-):
+)->CandidateTracks:
     if not is_audio(str(path)):
-        raise TypeError(f"The file at {path} is not an audio file")
+        raise TypeError(f"The file at {str(path)} is not an audio file")
     
     sound = pm.Sound(str(path))
     if not xmax:
         xmax = sound.xmax
+
     sound_to_process = sound.extract_part(from_time = xmin, to_time = xmax)
     candidates = CandidateTracks(
         sound=sound_to_process,
@@ -96,5 +97,44 @@ def process_audio_file(
         loss_fun=loss_fun,
         agg_fun=agg_fun
     )
+    candidates.file_name = Path(str(path)).name
     return candidates
+
+def process_directory(
+        path: Union[str, Path],
+        min_max_formant:float = 4000,
+        max_max_formant:float = 7000,
+        nstep:int = 20,
+        n_formants: int = 4,
+        window_length: float = 0.05,
+        time_step: float = 0.002,
+        pre_emphasis_from: float = 50,
+        smoother: Smoother = Smoother(),
+        loss_fun: Loss = Loss(),
+        agg_fun: Agg = Agg()
+)->list[CandidateTracks]:
+    if not isinstance(path, Path) and isinstance(path, str):
+        path = Path(path)
+
+    all_files = path.glob("*")
+    all_audio = [x for x in all_files if is_audio(str(x))]
+    all_candidates = [
+        process_audio_file(
+            path = x,
+            min_max_formant=min_max_formant,
+            max_max_formant=max_max_formant,
+            nstep=nstep,
+            n_formants=n_formants,
+            window_length=window_length,
+            time_step=time_step,
+            pre_emphasis_from=pre_emphasis_from,
+            smoother=smoother,
+            loss_fun=loss_fun,
+            agg_fun=agg_fun
+        ) for x in all_audio
+    ]
+    for x, path in zip(all_candidates, all_audio):
+        x.file_name = Path(str(path)).name
+
+    return all_candidates
 
