@@ -1,5 +1,6 @@
 try:
     import magic
+    no_magic = False
 except:
     no_magic = True
     import sndhdr
