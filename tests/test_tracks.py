@@ -37,3 +37,4 @@ class TestOneTrack:
         )
 
         assert this_track
+        assert this_track.formants.shape[0] == 4
