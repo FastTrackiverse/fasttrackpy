@@ -11,10 +11,10 @@ from fasttrackpy import CandidateTracks,\
 try:
     import magic
     no_magic = False
-    warnings.warn("libmagic not found. "\
-                  "Some audio file types won't be discovered by fasttrack. "\
-                  "(mp3, ogg, ...)")
 except:
+    warnings.warn("libmagic not found. "\
+                "Some audio file types won't be discovered by fasttrack. "\
+                "(mp3, ogg, ...)")
     import sndhdr
     from sndhdr import SndHeaders
     no_magic = True
