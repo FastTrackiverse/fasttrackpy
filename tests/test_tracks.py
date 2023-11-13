@@ -45,6 +45,9 @@ class TestOneTrack:
         df = this_track.to_df()
         assert isinstance(df, pl.DataFrame)
 
+        df2 = this_track.to_df(output = "param")
+        assert isinstance(df2, pl.DataFrame)
+
     def test_custom_one_track(self):
         this_track = OneTrack(
             sound = SOUND,
@@ -68,3 +71,15 @@ class TestCandidateTracks:
         assert candidates.max_formants.shape == (20,)
         assert candidates.smooth_errors.shape == (20,)
         assert isinstance(candidates.winner, OneTrack)
+
+        candidates.file_name = "filename"
+        assert candidates.file_name == "filename"
+        assert candidates.winner.file_name == "filename"
+
+        candidates.id = "123"
+        assert candidates.id == "123"
+        assert candidates.winner.id == "123"
+
+        df = candidates.winner.to_df()
+        assert "id" in df.columns
+        assert "file_name" in df.columns
