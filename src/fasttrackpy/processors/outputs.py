@@ -2,6 +2,18 @@ import numpy as np
 import polars as pl
 from pathlib import Path
 
+def add_metadata(self, out_df):
+    if self.file_name:
+        out_df = out_df.with_columns(
+            file_name = pl.lit(self.file_name)
+        )
+
+    if self.id:
+        out_df = out_df.with_columns(
+            id = pl.lit(self.id)
+        )
+    return out_df
+
 def formant_to_dataframe(self):
     """Return data as a data frame
 
@@ -34,15 +46,7 @@ def formant_to_dataframe(self):
         smooth_method = pl.lit(self.smoother.smooth_fun.__name__)
     )
 
-    if self.file_name:
-        out_df = out_df.with_columns(
-            file_name = pl.lit(self.file_name)
-        )
-
-    if self.id:
-        out_df = out_df.with_columns(
-            id = pl.lit(self.id)
-        )        
+    out_df = add_metadata(self, out_df)       
 
     return out_df
 
@@ -60,16 +64,8 @@ def param_to_dataframe(self):
     param_df = pl.DataFrame(
         data = self.parameters.T,schema=schema
     )
-
-    if self.file_name:
-        param_df = param_df.with_columns(
-            file_name = pl.lit(self.file_name)
-        )
-
-    if self.id:
-        param_df = param_df.with_columns(
-            id = pl.lit(self.id)
-        )        
+       
+    out_df = add_metadata(self, out_df)       
 
     return param_df
 
