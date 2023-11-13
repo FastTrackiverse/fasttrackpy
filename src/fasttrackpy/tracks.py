@@ -12,6 +12,7 @@ import polars as pl
 
 from typing import Union
 
+from functools import cache
 class Track:
     """A generic track class to set up attribute values
     """
@@ -131,6 +132,38 @@ class OneTrack(Track):
             imp.transform(np.transpose(to_impute))
         )
         return imputed
+    
+    @property
+    def formant_obj(self):
+        
+        @cache
+        def _make_formant_obj(
+            time_step, 
+            max_number_of_formants, 
+            maximum_formant, 
+            window_length, 
+            pre_emphasis_from,
+            sound=self.sound
+        ):
+            obj = sound.to_formant_burg(
+                time_step = time_step,
+                max_number_of_formants = max_number_of_formants,
+                maximum_formant = maximum_formant,
+                window_length = window_length,
+                pre_emphasis_from = pre_emphasis_from
+            )
+            return obj
+        
+        return _make_formant_obj(
+            self.time_step,
+            self.n_formants,
+            self.maximum_formant,
+            self.window_length,
+            self.pre_emphasis_from
+        )
+
+
+
 
     @property
     def smoothed_formants(self):
