@@ -3,8 +3,8 @@ import numpy as np
 from fasttrackpy.processors.smoothers import Smoother
 from fasttrackpy.processors.losses import Loss
 from fasttrackpy.processors.aggs import Agg
-from fasttrackpy.processors.outputs import to_dataframe
-
+from fasttrackpy.processors.outputs import formant_to_dataframe,\
+                                           param_to_dataframe
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 
@@ -94,7 +94,6 @@ class OneTrack(Track):
         self.n_measured_formants = self._get_measured()
         self.imputed_formants = self._impute_formants()
         self.smoothed_list = self._smooth_formants()
-        self.to_dataframe = to_dataframe
     
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
@@ -140,7 +139,7 @@ class OneTrack(Track):
         imp = IterativeImputer(max_iter=10, random_state=0)
         to_impute = self.formants[0:self.n_measured_formants,:]
         nan_entries = np.isnan(to_impute)
-        
+
         if not np.any(nan_entries):
             return to_impute
         
@@ -174,8 +173,14 @@ class OneTrack(Track):
         error = self.agg_fun.aggregate(msqe)
         return error
     
-    def to_df(self):
-        return to_dataframe(self)
+    def to_df(self, output = "formants"):
+        if output == "formants":
+            return formant_to_dataframe(self)
+        if output == "param":
+            return param_to_dataframe(self)
+        
+        raise ValueError("output must be either 'formants' or 'param'")
+        
     
 
 class CandidateTracks(Track):

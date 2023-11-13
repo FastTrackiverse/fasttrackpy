@@ -1,7 +1,7 @@
 import numpy as np
 import polars as pl
 
-def to_dataframe(self):
+def formant_to_dataframe(self):
     """Return data as a data frame
 
     Returns:
@@ -34,3 +34,20 @@ def to_dataframe(self):
     )
 
     return out_df
+
+def param_to_dataframe(self):
+    """Return data as a data frame
+
+    Returns:
+        (pl.DataFrame): A data frame
+    """
+
+    schema = [
+        f"F{x}" for x in 
+        np.arange(self.parameters.shape[0])+1
+    ]
+    param_df = pl.DataFrame(
+        data = self.parameters.T,schema=schema
+    )
+
+    return param_df
