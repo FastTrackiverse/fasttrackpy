@@ -94,6 +94,8 @@ class OneTrack(Track):
         self.n_measured_formants = self._get_measured()
         self.imputed_formants = self._impute_formants()
         self.smoothed_list = self._smooth_formants()
+        self._file_name = None
+        self._id = None        
     
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
@@ -173,6 +175,22 @@ class OneTrack(Track):
         error = self.agg_fun.aggregate(msqe)
         return error
     
+    @property
+    def file_name(self):
+        return self._file_name
+    
+    @file_name.setter
+    def file_name(self, x):
+        self._file_name = x
+    
+    @property
+    def id(self):
+        return self._id
+    
+    @id.setter
+    def id(self, x):
+        self._id = x
+
     def to_df(self, output = "formants"):
         if output == "formants":
             return formant_to_dataframe(self)
@@ -238,6 +256,9 @@ class CandidateTracks(Track):
             stop = self.max_max_formant,
             num = self.nstep
         )
+        self._file_name = None
+        self._id = None        
+
 
         self.candidates = [
             OneTrack(
@@ -267,6 +288,26 @@ class CandidateTracks(Track):
 
         self.winner_idx = np.argmin(self.smooth_errors)
         self.winner = self.candidates[self.winner_idx]
+
+    @property
+    def file_name(self):
+        return self._file_name
+    
+    @file_name.setter
+    def file_name(self, x):
+        self._file_name = x
+        for c in self.candidates:
+            c.file_name = x
+    
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, x):
+        self._id = x
+        for c in self.candidates:
+            c.id = x
 
     def _normalize_n_measured(self):
         for track in self.candidates:
