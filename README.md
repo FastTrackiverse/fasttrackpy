@@ -1,24 +1,32 @@
 # FastTrackPy
+[![Python CI](https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml/badge.svg)](https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml) [![codecov](https://codecov.io/gh/JoFrhwld/fasttrackpy/graph/badge.svg?token=VLUOCZIV6K)](https://codecov.io/gh/JoFrhwld/fasttrackpy) <a href="https://codeclimate.com/github/JoFrhwld/fasttrackpy/maintainability"><img src="https://api.codeclimate.com/v1/badges/6725fded174b21a3c59f/maintainability" /></a>
 
 Goal: A FastTrack python implementation with importable modules
 
-## Poetry setup
+## Installation
 
-### Installation: 
+```bash
+pip install git+https://github.com/JoFrhwld/fasttrackpy.git
+```
+
+## Dev Usage
+### Poetry setup
+
+#### Installation: 
 
 [https://python-poetry.org/docs/#installation](https://github.com/pyenv/pyenv)
 
-### Python version
+#### Python version
 
-^3.9, managed by pyenv [https://github.com/pyenv/pyenv](https://github.com/pyenv/pyenv)
+^3.10
 
-### venv setup
+#### venv setup
 
 ```bash
 python -m venv venv
 ```
 
-### Depdendencies installation
+#### Depdendencies installation
 
 ```bash
 poetry install

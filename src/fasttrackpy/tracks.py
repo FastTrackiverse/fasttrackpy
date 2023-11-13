@@ -68,9 +68,25 @@ class OneTrack(Track):
     def __init__(
             self,
             maximum_formant: float,
-            **kwargs
+            sound: pm.Sound,
+            n_formants: int = 4,
+            window_length: float = 0.05,
+            time_step: float = 0.002,
+            pre_emphasis_from: float = 50,
+            smoother: Smoother = Smoother(),
+            loss_fun: Loss = Loss(),
+            agg_fun: Agg = Agg()
         ):
-        super().__init__(**kwargs)
+        super().__init__(
+            sound=sound,
+            n_formants=n_formants,
+            window_length=window_length,
+            time_step=time_step,
+            pre_emphasis_from=pre_emphasis_from,
+            smoother=smoother,
+            loss_fun=loss_fun,
+            agg_fun=agg_fun
+        )
         self.maximum_formant = maximum_formant
 
         self.formants, self.time_domain = self._track_formants()
@@ -139,6 +155,12 @@ class OneTrack(Track):
         )
 
     @property
+    def parameters(self):
+        return np.array(
+            [x.params for x in self.smoothed_list]
+        )
+
+    @property
     def smooth_error(self):
         msqe =  self.loss_fun.calculate_loss(
             self.formants[0:self.n_measured_formants], 
@@ -175,12 +197,29 @@ class CandidateTracks(Track):
 
     def __init__(
         self,
+        sound: pm.Sound,
         min_max_formant: float = 4000,
         max_max_formant: float = 7000,
         nstep = 20,
-        **kwargs
+        n_formants: int = 4,
+        window_length: float = 0.05,
+        time_step: float = 0.002,
+        pre_emphasis_from: float = 50,
+        smoother: Smoother = Smoother(),
+        loss_fun: Loss = Loss(),
+        agg_fun: Agg = Agg()
     ):
-        super().__init__(**kwargs)
+        super().__init__(
+            sound=sound,
+            n_formants=n_formants,
+            window_length=window_length,
+            time_step=time_step,
+            pre_emphasis_from=pre_emphasis_from,
+            smoother=smoother,
+            loss_fun=loss_fun,
+            agg_fun=agg_fun
+        )
+
         self.min_max_formant = min_max_formant
         self.max_max_formant = max_max_formant
         self.nstep = nstep
@@ -192,8 +231,16 @@ class CandidateTracks(Track):
 
         self.candidates = [
             OneTrack(
+                sound = self.sound,
                 maximum_formant=x,
-                **kwargs
+                n_formants = self.n_formants,
+                window_length = self.window_length,
+                time_step = self.time_step,
+                pre_emphasis_from = self.pre_emphasis_from,
+                smoother = self.smoother,
+                loss_fun = self.loss_fun,
+                agg_fun = self.agg_fun
+                
             ) for x in self.max_formants
         ]
 
