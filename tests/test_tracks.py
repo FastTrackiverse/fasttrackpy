@@ -43,7 +43,14 @@ class TestOneTrack:
         assert isinstance(this_track.smooth_error, float)
 
         df = this_track.to_df()
+        df2 = this_track.to_df()
         assert isinstance(df, pl.DataFrame)
+        assert isinstance(df2, pl.DataFrame)
+
+        df3 = this_track.to_df(output = "param")
+        df4 = this_track.to_df(output = "param")
+        assert isinstance(df3, pl.DataFrame)
+        assert isinstance(df4, pl.DataFrame)
 
     def test_custom_one_track(self):
         this_track = OneTrack(
@@ -68,3 +75,28 @@ class TestCandidateTracks:
         assert candidates.max_formants.shape == (20,)
         assert candidates.smooth_errors.shape == (20,)
         assert isinstance(candidates.winner, OneTrack)
+
+        candidates.file_name = "filename"
+        assert candidates.file_name == "filename"
+        assert candidates.winner.file_name == "filename"
+
+        candidates.id = "123"
+        assert candidates.id == "123"
+        assert candidates.winner.id == "123"
+
+        df = candidates.winner.to_df()
+        assert "id" in df.columns
+        assert "file_name" in df.columns
+
+
+        big_df = candidates.to_df(which = "all")
+        big_df2 = candidates.to_df(which = "all")
+
+        assert isinstance(big_df, pl.DataFrame)
+        assert isinstance(big_df2, pl.DataFrame)
+
+        big_df3 = candidates.to_df(which = "all", output="param")
+        big_df4 = candidates.to_df(which = "all", output="param")
+
+        assert isinstance(big_df3, pl.DataFrame)
+        assert isinstance(big_df4, pl.DataFrame)        
