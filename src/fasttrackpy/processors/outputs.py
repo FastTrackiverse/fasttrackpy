@@ -94,6 +94,8 @@ def write_data(
         return
     
     if destination and candidates.file_name:
+        if not isinstance(destination, Path):
+            destination = Path(destination)
         file = destination.joinpath(
             candidates.winner.file_name
         ).with_suffix(".csv")

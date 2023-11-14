@@ -23,6 +23,8 @@ pytest-cov = "^4.1.0"
 pytest = "^7.4.3"
 python-magic = {version = "^0.4.27", markers = "sys_platform != 'win32'"}
 python-magic-bin = {version = "^0.4.14", markers = "sys_platform == 'win32'"}
+click = "^8.1.7"
+cloup = "^3.0.3"
 
 [tool.poetry.group.dev.dependencies]
 jupyter = "^1.0.0"
@@ -52,3 +54,6 @@ filterwarnings =[
 ]
 pythonpath = "src"
 testpaths = "tests"
+
+[tool.poetry.scripts]
+fasttrack = 'fasttrackpy.cli:fasttrack'
