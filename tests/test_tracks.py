@@ -43,10 +43,14 @@ class TestOneTrack:
         assert isinstance(this_track.smooth_error, float)
 
         df = this_track.to_df()
+        df2 = this_track.to_df()
         assert isinstance(df, pl.DataFrame)
-
-        df2 = this_track.to_df(output = "param")
         assert isinstance(df2, pl.DataFrame)
+
+        df3 = this_track.to_df(output = "param")
+        df4 = this_track.to_df(output = "param")
+        assert isinstance(df3, pl.DataFrame)
+        assert isinstance(df4, pl.DataFrame)
 
     def test_custom_one_track(self):
         this_track = OneTrack(

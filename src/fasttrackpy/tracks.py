@@ -195,13 +195,15 @@ class OneTrack(Track):
         self._id = x
 
     def to_df(self, output = "formants"):
-        if output == "formants" and not self._formant_df:
+        if output == "formants"\
+              and not isinstance(self._formant_df, pl.DataFrame):
             df =  formant_to_dataframe(self)
             self._formant_df
             return df
         if output == "formants":
             return self._formant_df
-        if output == "param" and not self._param_df:
+        if output == "param"\
+            and not isinstance(self._param_df, pl.DataFrame):
             df =  param_to_dataframe(self)
             self._param_df = df
             return df
