@@ -145,3 +145,6 @@ def fasttrack(
             which = which_output,
             output=data_output
             ) for x in candidate_list]
+        
+if __name__ == "__main__":
+    fasttrack()
