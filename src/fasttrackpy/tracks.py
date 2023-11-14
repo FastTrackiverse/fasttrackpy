@@ -198,7 +198,7 @@ class OneTrack(Track):
         if output == "formants"\
               and not isinstance(self._formant_df, pl.DataFrame):
             df =  formant_to_dataframe(self)
-            self._formant_df
+            self._formant_df = df
             return df
         if output == "formants":
             return self._formant_df
