@@ -65,9 +65,21 @@ def param_to_dataframe(self):
         data = self.parameters.T,schema=schema
     )
        
-    param_df = add_metadata(self, param_df)       
+    param_df = add_metadata(self, param_df)    
 
     return param_df
+
+def get_big_df(self, output):
+        all_df = [x.to_df(output = output) for x in self.candidates]
+        all_df = [
+            x.with_columns(
+                candidate = idx+1
+            )
+            for idx, x in enumerate(all_df)
+        ]
+
+        big_df = pl.concat(all_df, how = "vertical")
+        return big_df
 
 def write_winner(
         candidates,

@@ -4,7 +4,8 @@ from fasttrackpy.processors.smoothers import Smoother
 from fasttrackpy.processors.losses import Loss
 from fasttrackpy.processors.aggs import Agg
 from fasttrackpy.processors.outputs import formant_to_dataframe,\
-                                           param_to_dataframe
+                                           param_to_dataframe,\
+                                           get_big_df
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 
@@ -96,6 +97,8 @@ class OneTrack(Track):
         self.smoothed_list = self._smooth_formants()
         self._file_name = None
         self._id = None        
+        self._formant_df = None
+        self._param_df = None
     
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
@@ -192,10 +195,18 @@ class OneTrack(Track):
         self._id = x
 
     def to_df(self, output = "formants"):
+        if output == "formants" and not self._formant_df:
+            df =  formant_to_dataframe(self)
+            self._formant_df
+            return df
         if output == "formants":
-            return formant_to_dataframe(self)
+            return self._formant_df
+        if output == "param" and not self._param_df:
+            df =  param_to_dataframe(self)
+            self._param_df = df
+            return df
         if output == "param":
-            return param_to_dataframe(self)
+            return self._param_df
         
         raise ValueError("output must be either 'formants' or 'param'")
         
@@ -257,7 +268,9 @@ class CandidateTracks(Track):
             num = self.nstep
         )
         self._file_name = None
-        self._id = None        
+        self._id = None
+        self._formant_df = None
+        self._param_df = None
 
 
         self.candidates = [
@@ -312,3 +325,26 @@ class CandidateTracks(Track):
     def _normalize_n_measured(self):
         for track in self.candidates:
             track.n_measured_formants = self.min_n_measured
+    
+    def to_df(self, which = "winner", output = "formants"):
+        if which == "winner":
+            return self.winner.to_df(output=output)
+        
+        if output == "formants"\
+            and not isinstance(self._formant_df, pl.DataFrame):
+            big_df = get_big_df(self, output=output)
+            self._formant_df = big_df
+            return big_df
+        
+        if output == "formants":
+            return self._formant_df
+        
+        if output == "param"\
+            and not isinstance(self._param_df, pl.DataFrame):
+            big_df = get_big_df(self, output=output)
+            self._param_df = big_df
+            return big_df
+        
+        if output == "param":
+            return self._param_df
+
