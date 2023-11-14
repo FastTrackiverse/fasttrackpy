@@ -78,7 +78,7 @@ def get_big_df(self, output):
             for idx, x in enumerate(all_df)
         ]
 
-        big_df = pl.concat(all_df, how = "vertical")
+        big_df = pl.concat(all_df, how = "diagonal")
         return big_df
 
 def write_winner(

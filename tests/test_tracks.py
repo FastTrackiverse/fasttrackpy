@@ -83,3 +83,16 @@ class TestCandidateTracks:
         df = candidates.winner.to_df()
         assert "id" in df.columns
         assert "file_name" in df.columns
+
+
+        big_df = candidates.to_df(which = "all")
+        big_df2 = candidates.to_df(which = "all")
+
+        assert isinstance(big_df, pl.DataFrame)
+        assert isinstance(big_df2, pl.DataFrame)
+
+        big_df3 = candidates.to_df(which = "all", output="param")
+        big_df4 = candidates.to_df(which = "all", output="param")
+
+        assert isinstance(big_df3, pl.DataFrame)
+        assert isinstance(big_df4, pl.DataFrame)        
