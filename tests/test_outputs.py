@@ -29,6 +29,8 @@ class TestWrite:
         with filename2.open() as f2:
             alllines = f2.readlines()
 
+        assert filename1.is_file()
+        assert filename2.is_file()
         assert len(alllines) > len(winnerlines)
         filename1.unlink()
         filename2.unlink()
