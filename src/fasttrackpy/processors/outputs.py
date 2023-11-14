@@ -85,8 +85,8 @@ def write_data(
         candidates,
         file: Path = None,
         destination: Path = None,
-        which: {"winner", "all"} = "winner",
-        output: {"formants", "param"} = "formants"
+        which: str = "winner",
+        output: str = "formants"
 ):
     df = candidates.to_df(which = which, output = output)
     if file:
