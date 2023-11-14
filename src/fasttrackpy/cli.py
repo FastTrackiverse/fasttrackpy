@@ -121,6 +121,7 @@ def fasttrack(
 
         write_data(candidates=candidates, 
                    file=output, 
+                   destination=destination,
                    which=which_output, 
                    output=data_output
         )
