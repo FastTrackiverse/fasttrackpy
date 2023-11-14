@@ -5,6 +5,7 @@ from fasttrackpy.tracks import Track,\
                                Loss, \
                                Agg
 from fasttrackpy.processors.outputs import write_data
+from fasttrackpy.patterns.just_audio import process_audio_file
 import parselmouth as pm
 import polars as pl
 import numpy as np
@@ -31,3 +32,26 @@ class TestWrite:
         assert len(alllines) > len(winnerlines)
         filename1.unlink()
         filename2.unlink()
+    
+    def test_write_with_dest(self):
+        dest = Path("tests", "test_data")
+        file_name = SOUND_PATH.with_suffix(".csv")
+        candidates = CandidateTracks(sound = SOUND)
+        candidates.file_name = file_name.name
+        write_data(candidates=candidates,
+                   destination=dest)
+        
+        assert file_name.is_file()
+        file_name.unlink()
+
+    def test_write_only_dest(self):
+        dest =  Path("tests", "test_data")
+        file_name = dest.joinpath("output.csv")
+        candidates = CandidateTracks(sound = SOUND)
+        write_data(candidates=candidates,
+                   destination=dest)
+        
+        assert file_name.is_file()
+        file_name.unlink()
+
+

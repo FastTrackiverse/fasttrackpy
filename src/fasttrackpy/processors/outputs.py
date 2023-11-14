@@ -103,5 +103,6 @@ def write_data(
     if destination:
         file = destination.joinpath("output.csv")
         df.write_csv(file = file)
+        return
     
     raise ValueError("Either 'file' or 'destination' needs to be set")
