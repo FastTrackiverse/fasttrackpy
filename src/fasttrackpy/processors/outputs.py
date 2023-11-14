@@ -81,18 +81,19 @@ def get_big_df(self, output):
         big_df = pl.concat(all_df, how = "diagonal")
         return big_df
 
-def write_winner(
+def write_data(
         candidates,
         file: Path = None,
         destination: Path = None,
-        output: str = "formants"
+        which: {"winner", "all"} = "winner",
+        output: {"formants", "param"} = "formants"
 ):
-    df = candidates.winner.to_df(output=output)
+    df = candidates.to_df(which = which, output = output)
     if file:
         df.write_csv(file = file)
         return
     
-    if destination and candidates.winner.file_name:
+    if destination and candidates.file_name:
         file = destination.joinpath(
             candidates.winner.file_name
         ).with_suffix(".csv")
