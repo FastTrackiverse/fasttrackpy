@@ -9,10 +9,23 @@ from fasttrackpy.patterns.just_audio import process_audio_file, \
 import parselmouth as pm
 from pathlib import Path
 from typing import Union
+
 import click
 import cloup
+from cloup import HelpFormatter, HelpTheme, Style
 
-@cloup.command()
+formatter_settings = HelpFormatter.settings(
+    theme=HelpTheme(
+        invoked_command=Style(fg='bright_yellow'),
+        heading=Style(fg='bright_white', bold=True),
+        constraint=Style(fg='magenta'),
+        col1=Style(fg='bright_yellow'),
+    )
+)
+
+@cloup.command(
+   formatter_settings=formatter_settings
+)
 @cloup.option_group(
     "Inputs",
     cloup.option("--file", type=click.Path(exists=True)),
@@ -31,7 +44,9 @@ import cloup
 )
 @cloup.option_group(
     "Output Options",
-    cloup.option("--which-output", type=click.Choice(["winner", "all"]), default="winner"),
+    cloup.option(
+        "--which-output", 
+        type=click.Choice(["winner", "all"]), default="winner"),
     cloup.option("--data-output", type=click.Choice(["formants", "param"]), default="formants")
 )
 @cloup.option_group(
