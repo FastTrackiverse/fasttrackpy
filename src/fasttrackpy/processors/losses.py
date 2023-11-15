@@ -2,12 +2,17 @@ import numpy as np
 from typing import Union
 from collections.abc import Callable
 class Loss:
+    """_summary_
+
+    Args:
+        method (Union[str, Callable], optional): _description_. Defaults to "lmse".
+    """
+
     def __init__(
         self,
         method: Union[str, Callable] = "lmse",
         **kwargs
     ):
-        
         self.method = self._get_fun(method)
         self.method_args = kwargs
     
@@ -34,8 +39,15 @@ def lmse(
         smoothed: np.ndarray, 
         axis: int = 1
     ) -> np.ndarray:
-    """
-    calculate the log mean squared error
+    """_summary_
+
+    Args:
+        formants (np.ndarray): _description_
+        smoothed (np.ndarray): _description_
+        axis (int, optional): _description_. Defaults to 1.
+
+    Returns:
+        np.ndarray: _description_
     """
     sqe = np.power(np.log(formants) - np.log(smoothed), 2)
     mse = np.nanmean(sqe, axis = axis)
@@ -46,6 +58,16 @@ def mse(
         smoothed: np.ndarray, 
         axis: int = 1
     ) -> np.ndarray:
+    """_summary_
+
+    Args:
+        formants (np.ndarray): _description_
+        smoothed (np.ndarray): _description_
+        axis (int, optional): _description_. Defaults to 1.
+
+    Returns:
+        np.ndarray: _description_
+    """
     sqe = np.power(formants - smoothed, 2)
     mse = np.nanmean(sqe, axis = axis)
     return mse

@@ -1,0 +1,5 @@
+# processors.aggs.agg_sum { #fasttrackpy.processors.aggs.agg_sum }
+
+`processors.aggs.agg_sum(error, axis=0)`
+
+Sum the error

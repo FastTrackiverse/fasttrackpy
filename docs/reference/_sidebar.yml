@@ -1,0 +1,29 @@
+website:
+  sidebar:
+  - contents:
+    - reference/index.qmd
+    - contents:
+      - reference/process_audio_file.qmd
+      - reference/process_directory.qmd
+      section: functions
+    - contents:
+      - reference/OneTrack.qmd
+      - reference/CandidateTracks.qmd
+      section: Classes
+    - contents:
+      - reference/Smoother.qmd
+      - reference/processors.smoothers.Smoothed.qmd
+      - reference/processors.smoothers.dct_smooth.qmd
+      - reference/processors.smoothers.dct_smooth_regression.qmd
+      section: Smoothers
+    - contents:
+      - reference/Loss.qmd
+      - reference/processors.losses.lmse.qmd
+      - reference/processors.losses.mse.qmd
+      section: Losses
+    - contents:
+      - reference/Agg.qmd
+      - reference/processors.aggs.agg_sum.qmd
+      section: Aggs
+    id: reference
+  - id: dummy-sidebar

@@ -76,6 +76,29 @@ def process_audio_file(
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg()
 )->CandidateTracks:
+    """_summary_
+
+    Args:
+        path (Union[str, Path]): _description_
+        xmin (float, optional): _description_. Defaults to 0.
+        xmax (float, optional): _description_. Defaults to None.
+        min_max_formant (float, optional): _description_. Defaults to 4000.
+        max_max_formant (float, optional): _description_. Defaults to 7000.
+        nstep (int, optional): _description_. Defaults to 20.
+        n_formants (int, optional): _description_. Defaults to 4.
+        window_length (float, optional): _description_. Defaults to 0.05.
+        time_step (float, optional): _description_. Defaults to 0.002.
+        pre_emphasis_from (float, optional): _description_. Defaults to 50.
+        smoother (Smoother, optional): _description_. Defaults to Smoother().
+        loss_fun (Loss, optional): _description_. Defaults to Loss().
+        agg_fun (Agg, optional): _description_. Defaults to Agg().
+
+    Raises:
+        TypeError: _description_
+
+    Returns:
+        CandidateTracks: _description_
+    """
     if not is_audio(str(path)):
         raise TypeError(f"The file at {str(path)} is not an audio file")
     
@@ -113,6 +136,24 @@ def process_directory(
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg()
 )->list[CandidateTracks]:
+    """_summary_
+
+    Args:
+        path (Union[str, Path]): _description_
+        min_max_formant (float, optional): _description_. Defaults to 4000.
+        max_max_formant (float, optional): _description_. Defaults to 7000.
+        nstep (int, optional): _description_. Defaults to 20.
+        n_formants (int, optional): _description_. Defaults to 4.
+        window_length (float, optional): _description_. Defaults to 0.05.
+        time_step (float, optional): _description_. Defaults to 0.002.
+        pre_emphasis_from (float, optional): _description_. Defaults to 50.
+        smoother (Smoother, optional): _description_. Defaults to Smoother().
+        loss_fun (Loss, optional): _description_. Defaults to Loss().
+        agg_fun (Agg, optional): _description_. Defaults to Agg().
+
+    Returns:
+        list[CandidateTracks]: _description_
+    """
     if not isinstance(path, Path) and isinstance(path, str):
         path = Path(path)
 

@@ -1,0 +1,16 @@
+---
+title: Getting Started
+engine: jupyter
+---
+
+Install fasttrackpy
+
+```bash
+! pip install fasttrackpy
+```
+
+Run fasttrack
+
+```{python}
+! fasttrack --help
+```

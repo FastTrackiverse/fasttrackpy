@@ -62,9 +62,9 @@ class OneTrack(Track):
         imputed_formants (np.ndarray): Formant tracks for which missing values
             were imputed using `sklearn.impute.IterativeImputer`
         smoothed_formants (np.ndarray): The smoothed formant values, using 
-           the method passed to `smoother`.
+            the method passed to `smoother`.
         smooth_error (float): The error term between imputed formants and 
-           smoothed formants.
+            smoothed formants.
     """
 
     def __init__(

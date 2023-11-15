@@ -1,0 +1,25 @@
+# CandidateTracks { #fasttrackpy.CandidateTracks }
+
+`CandidateTracks(self, sound, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
+
+A class for candidate tracks for a single formant
+
+This takes the same arguments as `OneTrack` except for `max_formant.
+
+## Parameters
+
+| Name              | Type   | Description                                                  | Default   |
+|-------------------|--------|--------------------------------------------------------------|-----------|
+| `min_max_formant` | float  | The floor for the `max_formant` setting.  Defaults to 4000.  | `4000`    |
+| `max_max_formant` | float  | The cieling for the `max_formant` setting. Defaults to 7000. | `7000`    |
+| `nstep`           | int    | The number of steps for the grid search. Defaults to 20.     | `20`      |
+
+## Attributes
+
+| Name           | Type                  | Description                                                                    |
+|----------------|-----------------------|--------------------------------------------------------------------------------|
+| candidates     | list\[OneTrack, ...\] | A list of `OneTrack` tracks.                                                   |
+| min_n_measured | int                   | The smallest number of successfully measured  formants across all `candidates` |
+| smooth_errors  | np.array              | The error terms for each treack in `candidates`                                |
+| winner_idx     | int                   | The candidate track with the smallest error term                               |
+| winner         | OneTrack              | The winning `OneTrack` track,                                                  |

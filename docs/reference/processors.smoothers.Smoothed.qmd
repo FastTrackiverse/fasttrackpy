@@ -1,0 +1,12 @@
+# processors.smoothers.Smoothed { #fasttrackpy.processors.smoothers.Smoothed }
+
+`processors.smoothers.Smoothed(self, smoothed, params=None)`
+
+Smooothed formant tracks
+
+## Parameters
+
+| Name       | Type       | Description                                                       | Default    |
+|------------|------------|-------------------------------------------------------------------|------------|
+| `smoothed` | np.ndarray | a (formants, time) shaped numpy array of  smoothed formant values | _required_ |
+| `params`   | np.ndarray | Parameters (if any) of the smoother.  Defaults to None.           | `None`     |
