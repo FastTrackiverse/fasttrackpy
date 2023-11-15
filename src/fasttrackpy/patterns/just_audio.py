@@ -116,7 +116,8 @@ def process_directory(
     if not isinstance(path, Path) and isinstance(path, str):
         path = Path(path)
 
-    all_files = path.glob("*")
+    all_files = list(path.glob("*"))
+    all_files = [x for x in all_files if x.is_file()]
     all_audio = [x for x in all_files if is_audio(str(x))]
     all_candidates = [
         process_audio_file(
