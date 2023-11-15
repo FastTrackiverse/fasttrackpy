@@ -7,14 +7,15 @@ import pytest
 class TestCLI:
     sound_path = Path("tests", "test_data", "ay.wav")
     def test_file_usage(self):
+        output_file = self.sound_path.with_suffix(".csv")
         runner = CliRunner()
         runner.invoke(
             fasttrack,
-            f"--file {str(self.sound_path)} --output {str(self.sound_path.with_suffix('.csv'))}"
+            f"--file {str(self.sound_path)} --output {str(output_file)}"
         )
 
-        assert self.sound_path.with_suffix('.csv').is_file()
-        self.sound_path.with_suffix('.csv').unlink()
+        assert output_file.is_file()
+        output_file.unlink()
 
 
     def test_dir_usage(self):
