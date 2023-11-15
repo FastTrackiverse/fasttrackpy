@@ -1,0 +1,310 @@
+[
+  {
+    "objectID": "reference/Smoother.html",
+    "href": "reference/Smoother.html",
+    "title": "Smoother",
+    "section": "",
+    "text": "Smoother(self, method='dct_smooth', **kwargs)\nA smoother function factory\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\nThe smoothing method to use. Defaults to “dct_smooth”. Can be a custom smoother such that it takes a 1D array as input and returns a Smoothed class.\n'dct_smooth'\n\n\nkwargs\n\nAny additional arguments or parameters for the method.\n{}\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\nsmooth\nApply the smoother function to the data\n\n\n\n\n\nSmoother.smooth(x)\nApply the smoother function to the data\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\na 1D numpy array\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nA Smoothed object"
+  },
+  {
+    "objectID": "reference/Smoother.html#parameters",
+    "href": "reference/Smoother.html#parameters",
+    "title": "Smoother",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\nThe smoothing method to use. Defaults to “dct_smooth”. Can be a custom smoother such that it takes a 1D array as input and returns a Smoothed class.\n'dct_smooth'\n\n\nkwargs\n\nAny additional arguments or parameters for the method.\n{}"
+  },
+  {
+    "objectID": "reference/Smoother.html#methods",
+    "href": "reference/Smoother.html#methods",
+    "title": "Smoother",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nsmooth\nApply the smoother function to the data\n\n\n\n\n\nSmoother.smooth(x)\nApply the smoother function to the data\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\na 1D numpy array\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nA Smoothed object"
+  },
+  {
+    "objectID": "reference/processors.losses.lmse.html",
+    "href": "reference/processors.losses.lmse.html",
+    "title": "processors.losses.lmse",
+    "section": "",
+    "text": "processors.losses.lmse(formants, smoothed, axis=1)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description"
+  },
+  {
+    "objectID": "reference/processors.losses.lmse.html#parameters",
+    "href": "reference/processors.losses.lmse.html#parameters",
+    "title": "processors.losses.lmse",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1"
+  },
+  {
+    "objectID": "reference/processors.losses.lmse.html#returns",
+    "href": "reference/processors.losses.lmse.html#returns",
+    "title": "processors.losses.lmse",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description"
+  },
+  {
+    "objectID": "reference/process_directory.html",
+    "href": "reference/process_directory.html",
+    "title": "process_directory",
+    "section": "",
+    "text": "process_directory(path, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nsummary\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npath\nUnion[str, Path]\ndescription\nrequired\n\n\nmin_max_formant\nfloat\ndescription. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\ndescription. Defaults to 7000.\n7000\n\n\nnstep\nint\ndescription. Defaults to 20.\n20\n\n\nn_formants\nint\ndescription. Defaults to 4.\n4\n\n\nwindow_length\nfloat\ndescription. Defaults to 0.05.\n0.05\n\n\ntime_step\nfloat\ndescription. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\ndescription. Defaults to 50.\n50\n\n\nsmoother\nSmoother\ndescription. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\ndescription. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\ndescription. Defaults to Agg().\nAgg()\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nlist[CandidateTracks]\nlist[CandidateTracks]: description"
+  },
+  {
+    "objectID": "reference/process_directory.html#parameters",
+    "href": "reference/process_directory.html#parameters",
+    "title": "process_directory",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npath\nUnion[str, Path]\ndescription\nrequired\n\n\nmin_max_formant\nfloat\ndescription. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\ndescription. Defaults to 7000.\n7000\n\n\nnstep\nint\ndescription. Defaults to 20.\n20\n\n\nn_formants\nint\ndescription. Defaults to 4.\n4\n\n\nwindow_length\nfloat\ndescription. Defaults to 0.05.\n0.05\n\n\ntime_step\nfloat\ndescription. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\ndescription. Defaults to 50.\n50\n\n\nsmoother\nSmoother\ndescription. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\ndescription. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\ndescription. Defaults to Agg().\nAgg()"
+  },
+  {
+    "objectID": "reference/process_directory.html#returns",
+    "href": "reference/process_directory.html#returns",
+    "title": "process_directory",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nlist[CandidateTracks]\nlist[CandidateTracks]: description"
+  },
+  {
+    "objectID": "reference/OneTrack.html",
+    "href": "reference/OneTrack.html",
+    "title": "OneTrack",
+    "section": "",
+    "text": "OneTrack(self, maximum_formant, sound, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nsummary\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmaximum_formant\nfloat\nmax formant\nrequired\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nrequired\n\n\nn_formants\nint\nNumber of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nDefaults to 0.05.\n0.05\n\n\ntime_step\nfloat\nDefaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nDefaults to 50.\n50\n\n\nsmoother\nSmoother\nSmoother function. Defaults to Smoother default.\nSmoother()\n\n\nloss_fun\ntype\nLoss function\nLoss()\n\n\nagg_fun\ntype\nAggregation function\nAgg()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\nmaximum_formant\nfloat\nThe max formant\n\n\ntime_domain\nnp.array\nThe time domain of the formant estimates\n\n\nformants\nnp.ndarray\nA (formants, time) array of values. The formants as initially estimated by praat-parselmouth\n\n\nn_measured_formants\nint\nThe total number of formants for which formant tracks were estimatable\n\n\nimputed_formants\nnp.ndarray\nFormant tracks for which missing values were imputed using sklearn.impute.IterativeImputer\n\n\nsmoothed_formants\nnp.ndarray\nThe smoothed formant values, using the method passed to smoother.\n\n\nsmooth_error\nfloat\nThe error term between imputed formants and smoothed formants."
+  },
+  {
+    "objectID": "reference/OneTrack.html#parameters",
+    "href": "reference/OneTrack.html#parameters",
+    "title": "OneTrack",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmaximum_formant\nfloat\nmax formant\nrequired\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nrequired\n\n\nn_formants\nint\nNumber of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nDefaults to 0.05.\n0.05\n\n\ntime_step\nfloat\nDefaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nDefaults to 50.\n50\n\n\nsmoother\nSmoother\nSmoother function. Defaults to Smoother default.\nSmoother()\n\n\nloss_fun\ntype\nLoss function\nLoss()\n\n\nagg_fun\ntype\nAggregation function\nAgg()"
+  },
+  {
+    "objectID": "reference/OneTrack.html#attributes",
+    "href": "reference/OneTrack.html#attributes",
+    "title": "OneTrack",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\nmaximum_formant\nfloat\nThe max formant\n\n\ntime_domain\nnp.array\nThe time domain of the formant estimates\n\n\nformants\nnp.ndarray\nA (formants, time) array of values. The formants as initially estimated by praat-parselmouth\n\n\nn_measured_formants\nint\nThe total number of formants for which formant tracks were estimatable\n\n\nimputed_formants\nnp.ndarray\nFormant tracks for which missing values were imputed using sklearn.impute.IterativeImputer\n\n\nsmoothed_formants\nnp.ndarray\nThe smoothed formant values, using the method passed to smoother.\n\n\nsmooth_error\nfloat\nThe error term between imputed formants and smoothed formants."
+  },
+  {
+    "objectID": "reference/index.html",
+    "href": "reference/index.html",
+    "title": "Function reference",
+    "section": "",
+    "text": "functions\n\n\n\nprocess_audio_file\nsummary\n\n\nprocess_directory\nsummary\n\n\n\n\n\n\nClasses\n\n\n\nOneTrack\nsummary\n\n\nCandidateTracks\nA class for candidate tracks for a single formant\n\n\n\n\n\n\nSmoother\n\n\n\nSmoother\nA smoother function factory\n\n\nprocessors.smoothers.Smoothed\nSmooothed formant tracks\n\n\nprocessors.smoothers.dct_smooth\nA DCT Smoother\n\n\nprocessors.smoothers.dct_smooth_regression\nA DCT Smoother using regression\n\n\n\n\n\n\nLosses\n\n\n\nLoss\nsummary\n\n\nprocessors.losses.lmse\nsummary\n\n\nprocessors.losses.mse\nsummary\n\n\n\n\n\n\nAggs\n\n\n\nAgg\nsummary\n\n\nprocessors.aggs.agg_sum\nSum the error"
+  },
+  {
+    "objectID": "reference/index.html#functions",
+    "href": "reference/index.html#functions",
+    "title": "Function reference",
+    "section": "",
+    "text": "functions\n\n\n\nprocess_audio_file\nsummary\n\n\nprocess_directory\nsummary"
+  },
+  {
+    "objectID": "reference/index.html#classes",
+    "href": "reference/index.html#classes",
+    "title": "Function reference",
+    "section": "",
+    "text": "Classes\n\n\n\nOneTrack\nsummary\n\n\nCandidateTracks\nA class for candidate tracks for a single formant"
+  },
+  {
+    "objectID": "reference/index.html#smoothers",
+    "href": "reference/index.html#smoothers",
+    "title": "Function reference",
+    "section": "",
+    "text": "Smoother\n\n\n\nSmoother\nA smoother function factory\n\n\nprocessors.smoothers.Smoothed\nSmooothed formant tracks\n\n\nprocessors.smoothers.dct_smooth\nA DCT Smoother\n\n\nprocessors.smoothers.dct_smooth_regression\nA DCT Smoother using regression"
+  },
+  {
+    "objectID": "reference/index.html#losses",
+    "href": "reference/index.html#losses",
+    "title": "Function reference",
+    "section": "",
+    "text": "Losses\n\n\n\nLoss\nsummary\n\n\nprocessors.losses.lmse\nsummary\n\n\nprocessors.losses.mse\nsummary"
+  },
+  {
+    "objectID": "reference/index.html#aggs",
+    "href": "reference/index.html#aggs",
+    "title": "Function reference",
+    "section": "",
+    "text": "Aggs\n\n\n\nAgg\nsummary\n\n\nprocessors.aggs.agg_sum\nSum the error"
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth.html",
+    "href": "reference/processors.smoothers.dct_smooth.html",
+    "title": "processors.smoothers.dct_smooth",
+    "section": "",
+    "text": "processors.smoothers.dct_smooth(x, order=5)\nA DCT Smoother\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array of values to smooth.\nrequired\n\n\norder\nint\nDCT Order. Defaults to 5.\n5\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nSee Smoothed"
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth.html#parameters",
+    "href": "reference/processors.smoothers.dct_smooth.html#parameters",
+    "title": "processors.smoothers.dct_smooth",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array of values to smooth.\nrequired\n\n\norder\nint\nDCT Order. Defaults to 5.\n5"
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth.html#returns",
+    "href": "reference/processors.smoothers.dct_smooth.html#returns",
+    "title": "processors.smoothers.dct_smooth",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nSmoothed\nSee Smoothed"
+  },
+  {
+    "objectID": "reference/processors.aggs.agg_sum.html",
+    "href": "reference/processors.aggs.agg_sum.html",
+    "title": "processors.aggs.agg_sum",
+    "section": "",
+    "text": "processors.aggs.agg_sum\nprocessors.aggs.agg_sum(error, axis=0)\nSum the error"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "getting_started.html",
+    "href": "getting_started.html",
+    "title": "Getting Started",
+    "section": "",
+    "text": "Install fasttrackpy\n! pip install fasttrackpy\nRun fasttrack\n\n! fasttrack --help\n\nUsage: fasttrack [OPTIONS]\n\n  Run fasttrack\n\nInputs: [at least 1 required]\n  Input file options\n  --file PATH                     A single input audio file to process.\n  --dir PATH                      A directory of input audio files to process.\n\nOutput Destinations: [at least 1 required]\n  Output destination options\n  --output PATH                   Name of an output file\n  --dest PATH                     Name of an output directory\n\nOutput Options:\n  Options for what data should be saved.\n  --which-output [winner|all]     Whether to save just the winner, or all\n                                  candidates. Defaults to 'winner'\n  --data-output [formants|param]  Whether to save the formant data, or\n                                  smoothing parameter data. Defaults to\n                                  'formants'.\n\nAudio processing:\n  --xmin FLOAT RANGE              Start time for beginning analysis. Defaults\n                                  to 0(s). (Ignored for multi-file input.)\n                                  [x&gt;=0]\n  --xmax FLOAT RANGE              End time for analysis. If not set, defaults\n                                  to full duration. (Ignored for multi-file\n                                  input.)  [x&gt;0]\n  --min-max-formant FLOAT RANGE   Start of possible max-formant range. Defaults\n                                  to 4000(Hz).  [x&gt;0]\n  --max-max-formant FLOAT RANGE   End of possible max-formant range. Defaults\n                                  to 7000(Hz).  [x&gt;0]\n  --nstep INTEGER RANGE           Number of max-formant steps to be evaluated.\n                                  Defaults to 20.  [x&gt;=1]\n  --n-formants INTEGER RANGE      Number of formants to track. Defaults to 4.\n                                  [x&gt;=1]\n  --window-length FLOAT RANGE     Formant analysis window length. Defaults to\n                                  0.05(s).  [x&gt;0]\n  --time-step FLOAT RANGE         Formant analysis window step size. Defaults\n                                  to 0.002(s).  [x&gt;0]\n  --pre-emphasis-from FLOAT RANGE\n                                  Pre-emphasis. Defaults to 50(Hz).  [x&gt;=0]\n\nSmoother options:\n  --smoother-method [dct_smooth|dct_smooth_regression]\n                                  Smoother method to use. Defaults to\n                                  'dct_smooth' (Discrete Cosine Transform)\n  --smoother-order INTEGER RANGE  Order of the smooth. Defaults to 5. (More is\n                                  wigglier.)  [x&gt;=1]\n  --loss-method [lmse|mse]        The loss function comparing formants to\n                                  smoothed tracks. Defaults to lmse (log mean\n                                  squared error).\n\nOther options:\n  --help                          Show this message and exit."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "These are the docs for fasttrackpy"
+  },
+  {
+    "objectID": "reference/process_audio_file.html",
+    "href": "reference/process_audio_file.html",
+    "title": "process_audio_file",
+    "section": "",
+    "text": "process_audio_file(path, xmin=0, xmax=None, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nsummary\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npath\nUnion[str, Path]\ndescription\nrequired\n\n\nxmin\nfloat\ndescription. Defaults to 0.\n0\n\n\nxmax\nfloat\ndescription. Defaults to None.\nNone\n\n\nmin_max_formant\nfloat\ndescription. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\ndescription. Defaults to 7000.\n7000\n\n\nnstep\nint\ndescription. Defaults to 20.\n20\n\n\nn_formants\nint\ndescription. Defaults to 4.\n4\n\n\nwindow_length\nfloat\ndescription. Defaults to 0.05.\n0.05\n\n\ntime_step\nfloat\ndescription. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\ndescription. Defaults to 50.\n50\n\n\nsmoother\nSmoother\ndescription. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\ndescription. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\ndescription. Defaults to Agg().\nAgg()\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nTypeError\ndescription\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nCandidateTracks\ndescription"
+  },
+  {
+    "objectID": "reference/process_audio_file.html#parameters",
+    "href": "reference/process_audio_file.html#parameters",
+    "title": "process_audio_file",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npath\nUnion[str, Path]\ndescription\nrequired\n\n\nxmin\nfloat\ndescription. Defaults to 0.\n0\n\n\nxmax\nfloat\ndescription. Defaults to None.\nNone\n\n\nmin_max_formant\nfloat\ndescription. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\ndescription. Defaults to 7000.\n7000\n\n\nnstep\nint\ndescription. Defaults to 20.\n20\n\n\nn_formants\nint\ndescription. Defaults to 4.\n4\n\n\nwindow_length\nfloat\ndescription. Defaults to 0.05.\n0.05\n\n\ntime_step\nfloat\ndescription. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\ndescription. Defaults to 50.\n50\n\n\nsmoother\nSmoother\ndescription. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\ndescription. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\ndescription. Defaults to Agg().\nAgg()"
+  },
+  {
+    "objectID": "reference/process_audio_file.html#raises",
+    "href": "reference/process_audio_file.html#raises",
+    "title": "process_audio_file",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nTypeError\ndescription"
+  },
+  {
+    "objectID": "reference/process_audio_file.html#returns",
+    "href": "reference/process_audio_file.html#returns",
+    "title": "process_audio_file",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nCandidateTracks\ndescription"
+  },
+  {
+    "objectID": "reference/Loss.html",
+    "href": "reference/Loss.html",
+    "title": "Loss",
+    "section": "",
+    "text": "Loss(self, method='lmse', **kwargs)\nsummary\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “lmse”.\n'lmse'"
+  },
+  {
+    "objectID": "reference/Loss.html#parameters",
+    "href": "reference/Loss.html#parameters",
+    "title": "Loss",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “lmse”.\n'lmse'"
+  },
+  {
+    "objectID": "reference/processors.losses.mse.html",
+    "href": "reference/processors.losses.mse.html",
+    "title": "processors.losses.mse",
+    "section": "",
+    "text": "processors.losses.mse(formants, smoothed, axis=1)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description"
+  },
+  {
+    "objectID": "reference/processors.losses.mse.html#parameters",
+    "href": "reference/processors.losses.mse.html#parameters",
+    "title": "processors.losses.mse",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1"
+  },
+  {
+    "objectID": "reference/processors.losses.mse.html#returns",
+    "href": "reference/processors.losses.mse.html#returns",
+    "title": "processors.losses.mse",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description"
+  },
+  {
+    "objectID": "reference/processors.smoothers.Smoothed.html",
+    "href": "reference/processors.smoothers.Smoothed.html",
+    "title": "processors.smoothers.Smoothed",
+    "section": "",
+    "text": "processors.smoothers.Smoothed(self, smoothed, params=None)\nSmooothed formant tracks\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nsmoothed\nnp.ndarray\na (formants, time) shaped numpy array of smoothed formant values\nrequired\n\n\nparams\nnp.ndarray\nParameters (if any) of the smoother. Defaults to None.\nNone"
+  },
+  {
+    "objectID": "reference/processors.smoothers.Smoothed.html#parameters",
+    "href": "reference/processors.smoothers.Smoothed.html#parameters",
+    "title": "processors.smoothers.Smoothed",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nsmoothed\nnp.ndarray\na (formants, time) shaped numpy array of smoothed formant values\nrequired\n\n\nparams\nnp.ndarray\nParameters (if any) of the smoother. Defaults to None.\nNone"
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth_regression.html",
+    "href": "reference/processors.smoothers.dct_smooth_regression.html",
+    "title": "processors.smoothers.dct_smooth_regression",
+    "section": "",
+    "text": "processors.smoothers.dct_smooth_regression(x, order=5)\nA DCT Smoother using regression\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array to smooth\nrequired\n\n\norder\nint\nOrder of the DCT smoother. Defaults to 5.\n5\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nSee smoothed"
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth_regression.html#parameters",
+    "href": "reference/processors.smoothers.dct_smooth_regression.html#parameters",
+    "title": "processors.smoothers.dct_smooth_regression",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array to smooth\nrequired\n\n\norder\nint\nOrder of the DCT smoother. Defaults to 5.\n5"
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth_regression.html#returns",
+    "href": "reference/processors.smoothers.dct_smooth_regression.html#returns",
+    "title": "processors.smoothers.dct_smooth_regression",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nSmoothed\nSee smoothed"
+  },
+  {
+    "objectID": "reference/Agg.html",
+    "href": "reference/Agg.html",
+    "title": "Agg",
+    "section": "",
+    "text": "Agg(self, method='agg_sum', **kwargs)\nsummary\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “agg_sum”.\n'agg_sum'"
+  },
+  {
+    "objectID": "reference/Agg.html#parameters",
+    "href": "reference/Agg.html#parameters",
+    "title": "Agg",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “agg_sum”.\n'agg_sum'"
+  },
+  {
+    "objectID": "reference/CandidateTracks.html",
+    "href": "reference/CandidateTracks.html",
+    "title": "CandidateTracks",
+    "section": "",
+    "text": "CandidateTracks(self, sound, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nA class for candidate tracks for a single formant\nThis takes the same arguments as OneTrack except for `max_formant.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmin_max_formant\nfloat\nThe floor for the max_formant setting. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe cieling for the max_formant setting. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps for the grid search. Defaults to 20.\n20\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ncandidates\nlist[OneTrack, …]\nA list of OneTrack tracks.\n\n\nmin_n_measured\nint\nThe smallest number of successfully measured formants across all candidates\n\n\nsmooth_errors\nnp.array\nThe error terms for each treack in candidates\n\n\nwinner_idx\nint\nThe candidate track with the smallest error term\n\n\nwinner\nOneTrack\nThe winning OneTrack track,"
+  },
+  {
+    "objectID": "reference/CandidateTracks.html#parameters",
+    "href": "reference/CandidateTracks.html#parameters",
+    "title": "CandidateTracks",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmin_max_formant\nfloat\nThe floor for the max_formant setting. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe cieling for the max_formant setting. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps for the grid search. Defaults to 20.\n20"
+  },
+  {
+    "objectID": "reference/CandidateTracks.html#attributes",
+    "href": "reference/CandidateTracks.html#attributes",
+    "title": "CandidateTracks",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\ncandidates\nlist[OneTrack, …]\nA list of OneTrack tracks.\n\n\nmin_n_measured\nint\nThe smallest number of successfully measured formants across all candidates\n\n\nsmooth_errors\nnp.array\nThe error terms for each treack in candidates\n\n\nwinner_idx\nint\nThe candidate track with the smallest error term\n\n\nwinner\nOneTrack\nThe winning OneTrack track,"
+  }
+]
