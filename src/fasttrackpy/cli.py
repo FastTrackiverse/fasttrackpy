@@ -182,7 +182,46 @@ def fasttrack(
         time_step: float = 0.002,
         pre_emphasis_from: float = 50
 ):
-    
+    """Run fasttrack.
+
+    Args:
+        file (Union[str, Path], optional): A single input audio file to process. 
+            Defaults to None.
+        dir (Union[str,Path], optional): A directory of input audio files to process. Defaults to None.
+        output (Union[str, Path], optional): Name of an output file. Defaults to None.
+        dest (Union[str, Path], optional): "Name of an output directory. Defaults to None.
+        which_output (str, optional): Whether to save just the winner, 
+            or all candidates. Defaults to 'winner'. Defaults to "winner".
+        data_output (str, optional): Whether to save the formant data,
+            or smoothing parameter data.
+            Defaults to "formants".
+        smoother_method (str, optional): Smoother method to use. Defaults to 'dct_smooth'
+            (Discrete Cosine Transform)
+        smoother_order (int, optional): Order of the smooth. 
+            Defaults to 5. (More is wigglier.)
+        loss_method (str, optional): The loss function comparing formants to 
+            smoothed tracks.
+            Defaults to lmse (log mean squared error).
+        xmin (float, optional): Start time for beginning analysis.
+            Defaults to 0(s). 
+            Defaults to 0.
+        xmax (float, optional): End time for analysis.
+            If not set, defaults to full duration.
+            Defaults to None.
+        min_max_formant (float, optional): Start of possible max-formant range. 
+            Defaults to 4000(Hz).
+        max_max_formant (float, optional): End of possible max-formant range. 
+            Defaults to 7000(Hz).
+        nstep (int, optional): Number of max-formant steps to be evaluated.
+            Defaults to 20.
+        n_formants (int, optional): Number of formants to track.
+            Defaults to 4.
+        window_length (float, optional): Formant analysis window length. 
+            Defaults to 0.05(s).
+        time_step (float, optional): Formant analysis window step size.
+            Defaults to 0.002(s)
+        pre_emphasis_from (float, optional): Pre-emphasis. Defaults to 50(Hz)
+    """
     smoother_kwargs = {
         "method": smoother_method,
         "order": smoother_order
