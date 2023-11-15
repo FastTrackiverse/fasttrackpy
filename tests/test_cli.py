@@ -17,6 +17,7 @@ class TestCLI:
             f"--file {str(self.sound_path)} --dest {str(out_dir)}"
         )
         out_files = list(out_dir.glob("*"))
+        assert all([x.is_file() for x in out_files])
         [x.unlink() for x in out_files]
         out_dir.rmdir()
 
