@@ -1,0 +1,18 @@
+# processors.smoothers.dct_smooth_regression { #fasttrackpy.processors.smoothers.dct_smooth_regression }
+
+`processors.smoothers.dct_smooth_regression(x, order=5)`
+
+A DCT Smoother using regression
+
+## Parameters
+
+| Name    | Type     | Description                                 | Default    |
+|---------|----------|---------------------------------------------|------------|
+| `x`     | np.array | A 1D array to smooth                        | _required_ |
+| `order` | int      | Order of the DCT smoother.   Defaults to 5. | `5`        |
+
+## Returns
+
+| Type     | Description    |
+|----------|----------------|
+| Smoothed | See `smoothed` |

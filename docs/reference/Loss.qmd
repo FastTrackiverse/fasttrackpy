@@ -1,0 +1,11 @@
+# Loss { #fasttrackpy.Loss }
+
+`Loss(self, method='lmse', **kwargs)`
+
+_summary_
+
+## Parameters
+
+| Name     | Type                   | Description                        | Default   |
+|----------|------------------------|------------------------------------|-----------|
+| `method` | Union\[str, Callable\] | _description_. Defaults to "lmse". | `'lmse'`  |

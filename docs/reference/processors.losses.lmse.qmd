@@ -1,0 +1,19 @@
+# processors.losses.lmse { #fasttrackpy.processors.losses.lmse }
+
+`processors.losses.lmse(formants, smoothed, axis=1)`
+
+_summary_
+
+## Parameters
+
+| Name       | Type       | Description                   | Default    |
+|------------|------------|-------------------------------|------------|
+| `formants` | np.ndarray | _description_                 | _required_ |
+| `smoothed` | np.ndarray | _description_                 | _required_ |
+| `axis`     | int        | _description_. Defaults to 1. | `1`        |
+
+## Returns
+
+| Type       | Description               |
+|------------|---------------------------|
+| np.ndarray | np.ndarray: _description_ |

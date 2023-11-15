@@ -1,0 +1,35 @@
+# process_audio_file { #fasttrackpy.process_audio_file }
+
+`process_audio_file(path, xmin=0, xmax=None, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
+
+_summary_
+
+## Parameters
+
+| Name                | Type               | Description                            | Default      |
+|---------------------|--------------------|----------------------------------------|--------------|
+| `path`              | Union\[str, Path\] | _description_                          | _required_   |
+| `xmin`              | float              | _description_. Defaults to 0.          | `0`          |
+| `xmax`              | float              | _description_. Defaults to None.       | `None`       |
+| `min_max_formant`   | float              | _description_. Defaults to 4000.       | `4000`       |
+| `max_max_formant`   | float              | _description_. Defaults to 7000.       | `7000`       |
+| `nstep`             | int                | _description_. Defaults to 20.         | `20`         |
+| `n_formants`        | int                | _description_. Defaults to 4.          | `4`          |
+| `window_length`     | float              | _description_. Defaults to 0.05.       | `0.05`       |
+| `time_step`         | float              | _description_. Defaults to 0.002.      | `0.002`      |
+| `pre_emphasis_from` | float              | _description_. Defaults to 50.         | `50`         |
+| `smoother`          | Smoother           | _description_. Defaults to Smoother(). | `Smoother()` |
+| `loss_fun`          | Loss               | _description_. Defaults to Loss().     | `Loss()`     |
+| `agg_fun`           | Agg                | _description_. Defaults to Agg().      | `Agg()`      |
+
+## Raises
+
+| Type      | Description   |
+|-----------|---------------|
+| TypeError | _description_ |
+
+## Returns
+
+| Type            | Description   |
+|-----------------|---------------|
+| CandidateTracks | _description_ |

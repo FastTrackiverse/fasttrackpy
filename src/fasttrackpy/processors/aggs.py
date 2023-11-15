@@ -3,6 +3,12 @@ from typing import Union
 from collections.abc import Callable
 
 class Agg:
+    """_summary_
+
+    Args:
+        method (Union[str, Callable], optional): _description_. Defaults to "agg_sum".
+    """
+
     def __init__(
         self, 
         method: Union[str, Callable]= "agg_sum",

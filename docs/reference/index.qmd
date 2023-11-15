@@ -1,0 +1,49 @@
+# Function reference
+
+## functions
+
+functions
+
+| | |
+| --- | --- |
+| [process_audio_file](process_audio_file.qmd#fasttrackpy.process_audio_file) | _summary_ |
+| [process_directory](process_directory.qmd#fasttrackpy.process_directory) | _summary_ |
+
+## Classes
+
+Classes
+
+| | |
+| --- | --- |
+| [OneTrack](OneTrack.qmd#fasttrackpy.OneTrack) | _summary_ |
+| [CandidateTracks](CandidateTracks.qmd#fasttrackpy.CandidateTracks) | A class for candidate tracks for a single formant |
+
+## Smoothers
+
+Smoother
+
+| | |
+| --- | --- |
+| [Smoother](Smoother.qmd#fasttrackpy.Smoother) | A smoother function factory |
+| [processors.smoothers.Smoothed](processors.smoothers.Smoothed.qmd#fasttrackpy.processors.smoothers.Smoothed) | Smooothed formant tracks |
+| [processors.smoothers.dct_smooth](processors.smoothers.dct_smooth.qmd#fasttrackpy.processors.smoothers.dct_smooth) | A DCT Smoother |
+| [processors.smoothers.dct_smooth_regression](processors.smoothers.dct_smooth_regression.qmd#fasttrackpy.processors.smoothers.dct_smooth_regression) | A DCT Smoother using regression |
+
+## Losses
+
+Losses
+
+| | |
+| --- | --- |
+| [Loss](Loss.qmd#fasttrackpy.Loss) | _summary_ |
+| [processors.losses.lmse](processors.losses.lmse.qmd#fasttrackpy.processors.losses.lmse) | _summary_ |
+| [processors.losses.mse](processors.losses.mse.qmd#fasttrackpy.processors.losses.mse) | _summary_ |
+
+## Aggs
+
+Aggs
+
+| | |
+| --- | --- |
+| [Agg](Agg.qmd#fasttrackpy.Agg) | _summary_ |
+| [processors.aggs.agg_sum](processors.aggs.agg_sum.qmd#fasttrackpy.processors.aggs.agg_sum) | Sum the error |

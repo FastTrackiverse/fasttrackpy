@@ -1,0 +1,78 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "fasttrackpy"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: reference/
+        text: Package reference 
+    right:
+      - icon: github
+        href: https://github.com/JoFrhwld/fasttrackpy
+  sidebar:
+      - id: get-started
+        title: Get Started
+        style: floating
+        align: left
+        contents:
+          - index.qmd
+          - getting_started.qmd
+
+metadata-files:
+  - reference/_sidebar.yml
+
+interlinks:
+  sources:
+    numpy:
+      url: https://numpy.org/doc/stable/
+    python:
+      url: https://docs.python.org/3/          
+
+format:
+  html:
+    theme: 
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+
+quartodoc:
+  style: pkgdown
+  dir: reference
+  package: fasttrackpy
+  sidebar: "reference/_sidebar.yml"
+  parser: google
+  render_interlinks: false
+  sections:
+    - title: functions
+      desc: functions
+      contents:
+        - process_audio_file
+        - process_directory
+    - title: Classes
+      desc: Classes
+      contents:
+        - OneTrack
+        - CandidateTracks
+    - title: Smoothers
+      desc: Smoother
+      contents:
+        - Smoother
+        - processors.smoothers.Smoothed
+        - processors.smoothers.dct_smooth
+        - processors.smoothers.dct_smooth_regression
+    - title: Losses
+      desc: Losses
+      contents:
+        - Loss
+        - processors.losses.lmse
+        - processors.losses.mse
+    - title: Aggs
+      desc: Aggs
+      contents:
+        - Agg
+        - processors.aggs.agg_sum
