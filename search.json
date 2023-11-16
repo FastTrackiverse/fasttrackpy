@@ -154,11 +154,11 @@
     "text": "processors.aggs.agg_sum\nprocessors.aggs.agg_sum(error, axis=0)\nSum the error"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
     "section": "",
-    "text": "About this site"
+    "text": "These are the docs for fasttrackpy"
   },
   {
     "objectID": "getting_started.html",
@@ -166,13 +166,6 @@
     "title": "Getting Started",
     "section": "",
     "text": "Install fasttrackpy\n! pip install fasttrackpy\nRun fasttrack\n\n! fasttrack --help\n\nUsage: fasttrack [OPTIONS]\n\n  Run fasttrack\n\nInputs: [at least 1 required]\n  Input file options\n  --file PATH                     A single input audio file to process.\n  --dir PATH                      A directory of input audio files to process.\n\nOutput Destinations: [at least 1 required]\n  Output destination options\n  --output PATH                   Name of an output file\n  --dest PATH                     Name of an output directory\n\nOutput Options:\n  Options for what data should be saved.\n  --which-output [winner|all]     Whether to save just the winner, or all\n                                  candidates. Defaults to 'winner'\n  --data-output [formants|param]  Whether to save the formant data, or\n                                  smoothing parameter data. Defaults to\n                                  'formants'.\n\nAudio processing:\n  --xmin FLOAT RANGE              Start time for beginning analysis. Defaults\n                                  to 0(s). (Ignored for multi-file input.)\n                                  [x&gt;=0]\n  --xmax FLOAT RANGE              End time for analysis. If not set, defaults\n                                  to full duration. (Ignored for multi-file\n                                  input.)  [x&gt;0]\n  --min-max-formant FLOAT RANGE   Start of possible max-formant range. Defaults\n                                  to 4000(Hz).  [x&gt;0]\n  --max-max-formant FLOAT RANGE   End of possible max-formant range. Defaults\n                                  to 7000(Hz).  [x&gt;0]\n  --nstep INTEGER RANGE           Number of max-formant steps to be evaluated.\n                                  Defaults to 20.  [x&gt;=1]\n  --n-formants INTEGER RANGE      Number of formants to track. Defaults to 4.\n                                  [x&gt;=1]\n  --window-length FLOAT RANGE     Formant analysis window length. Defaults to\n                                  0.05(s).  [x&gt;0]\n  --time-step FLOAT RANGE         Formant analysis window step size. Defaults\n                                  to 0.002(s).  [x&gt;0]\n  --pre-emphasis-from FLOAT RANGE\n                                  Pre-emphasis. Defaults to 50(Hz).  [x&gt;=0]\n\nSmoother options:\n  --smoother-method [dct_smooth|dct_smooth_regression]\n                                  Smoother method to use. Defaults to\n                                  'dct_smooth' (Discrete Cosine Transform)\n  --smoother-order INTEGER RANGE  Order of the smooth. Defaults to 5. (More is\n                                  wigglier.)  [x&gt;=1]\n  --loss-method [lmse|mse]        The loss function comparing formants to\n                                  smoothed tracks. Defaults to lmse (log mean\n                                  squared error).\n\nOther options:\n  --help                          Show this message and exit."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Home",
-    "section": "",
-    "text": "These are the docs for fasttrackpy"
   },
   {
     "objectID": "reference/process_audio_file.html",
