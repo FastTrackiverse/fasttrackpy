@@ -6,8 +6,6 @@ from fasttrackpy.processors.aggs import Agg
 from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            param_to_dataframe,\
                                            get_big_df
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer
 import matplotlib.pyplot as mp
 
 import polars as pl
@@ -60,11 +58,9 @@ class OneTrack(Track):
             as initially estimated by praat-parselmouth
         n_measured_formants (int): The total number of formants for which
             formant tracks were estimatable
-        imputed_formants (np.ndarray): Formant tracks for which missing values
-            were imputed using `sklearn.impute.IterativeImputer`
         smoothed_formants (np.ndarray): The smoothed formant values, using 
             the method passed to `smoother`.
-        smooth_error (float): The error term between imputed formants and 
+        smooth_error (float): The error term between formants and 
             smoothed formants.
     """
 
@@ -94,7 +90,6 @@ class OneTrack(Track):
 
         self.formants, self.time_domain = self._track_formants()
         self.n_measured_formants = self._get_measured()
-        self.imputed_formants = self._impute_formants()
         self.smoothed_list = self._smooth_formants()
         self._file_name = None
         self._id = None        
@@ -129,7 +124,7 @@ class OneTrack(Track):
     def _smooth_formants(self):
         smoothed_list = [
           self.smoother.smooth(x) 
-            for x in self.imputed_formants
+            for x in self.formants
         ]
     
         return smoothed_list
@@ -141,23 +136,6 @@ class OneTrack(Track):
             return np.argmax(all_nan)
         return all_nan.shape[0]
     
-    def _impute_formants(self):     
-        imp = IterativeImputer(max_iter=10, random_state=0)
-        to_impute = self.formants[0:self.n_measured_formants,:]
-        nan_entries = np.isnan(to_impute)
-
-        if not np.any(nan_entries):
-            return to_impute
-        
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")   
-            imp.fit(np.transpose(to_impute))
-        
-        imputed = np.transpose(
-            imp.transform(np.transpose(to_impute))
-        )
-        return imputed
-
     @property
     def smoothed_formants(self):
         return np.array(
