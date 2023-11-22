@@ -95,7 +95,6 @@ class OneTrack(Track):
         self.n_measured_formants = self._get_measured()
         self.imputed_formants = self._impute_formants()
         self.smoothed_list = self._smooth_formants()
-        self.spectrogram = self.spectrogram()
         self._file_name = None
         self._id = None        
         self._formant_df = None
@@ -212,10 +211,10 @@ class OneTrack(Track):
             return self._param_df
         
         raise ValueError("output must be either 'formants' or 'param'")
-    
+
     def spectrogram(self, maximum_frequency=3500, tracks = True, dynamic_range=60):
 
-        spctgrm = self.sound.spctgrm(maximum_frequency=maximum_frequency)
+        spctgrm = self.sound.to_spectrogram(maximum_frequency=maximum_frequency)
         Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
         db = 10 * np.log10(spctgrm.values)
         min_shown = db.max() - dynamic_range
@@ -372,4 +371,33 @@ class CandidateTracks(Track):
         
         if output == "param":
             return self._param_df
+
+
+
+    def spectrograms(self, maximum_frequency = 3500, dynamic_range=60):
+        
+        spectrogram = self.sound.to_spectrogram(maximum_frequency=maximum_frequency,time_step=0.005)
+        Time, Hz = spectrogram.x_grid(), spectrogram.y_grid()
+        db = 10 * np.log10(spectrogram.values)
+        min_shown = db.max() - dynamic_range
+        n_time_steps = len(self.candidates[0].formants[0])
+        point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
+        
+        
+        fig = mp.figure(figsize=(12,8))
+        gs = fig.add_gridspec(4,5, hspace=0.05, wspace=0.05)
+        axs = gs.subplots(sharex='col', sharey='row')
+
+        for i in range (4):
+            for j in range(5):
+                axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+                axs[i, j].set_ylim([0, spectrogram.ymax])
+                analysis = i*3+j
+                axs[i, j].scatter (point_times, self.candidates[analysis].formants[0], c="red", s = 5)
+                axs[i, j].scatter (point_times, self.candidates[analysis].formants[1], c="blue", s = 5)
+                axs[i, j].scatter (point_times, self.candidates[analysis].formants[2], c="green", s = 5)    
+
+        for ax in fig.get_axes():
+            ax.label_outer()
+
 
