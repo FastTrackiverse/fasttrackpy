@@ -30,7 +30,7 @@ python-magic = {version = "^0.4.27", markers = "sys_platform != 'win32'"}
 python-magic-bin = {version = "^0.4.14", markers = "sys_platform == 'win32'"}
 click = "^8.1.7"
 cloup = "^3.0.3"
-aligned-textgrid = "^0.4.1"
+aligned-textgrid = "0.5.0"
 tqdm = "^4.66.1"
 
 [tool.poetry.group.dev.dependencies]
