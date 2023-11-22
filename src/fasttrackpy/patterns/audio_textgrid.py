@@ -136,6 +136,7 @@ def process_audio_textgrid(
         )
     for cand, interval in zip(candidate_list, target_intervals):
         cand.interval = interval
+        cand.file_name = Path(str(audio_path)).stem
 
     return candidate_list
 

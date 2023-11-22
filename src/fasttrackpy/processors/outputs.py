@@ -1,5 +1,6 @@
 import numpy as np
 import polars as pl
+from aligned_textgrid import SequenceInterval
 from pathlib import Path
 
 def add_metadata(self, out_df):
@@ -12,6 +13,18 @@ def add_metadata(self, out_df):
         out_df = out_df.with_columns(
             id = pl.lit(self.id)
         )
+
+    if self.group:
+        out_df = out_df.with_columns(
+            group = pl.lit(self.group)
+        )
+    
+    if isinstance(self.interval, SequenceInterval) :
+        out_df = out_df.with_columns(
+            (pl.col("time") + self.interval.start)\
+            .alias("time_abs")
+        )
+
     return out_df
 
 def formant_to_dataframe(self):
