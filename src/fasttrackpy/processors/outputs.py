@@ -152,9 +152,6 @@ def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic
     gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.05, wspace=0.05)
     axs = gs.subplots(sharex='col', sharey='row')
 
-    #gs = fig.add_gridspec(3, hspace=0)
-    #axs = gs.subplots(sharex=True, sharey=True)
-
     for i in range (panel_rows):
         for j in range(panel_columns):
             axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
