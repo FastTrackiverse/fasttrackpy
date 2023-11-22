@@ -6,8 +6,8 @@ from fasttrackpy.processors.aggs import Agg
 from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            param_to_dataframe,\
                                            get_big_df
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer
+
+from aligned_textgrid import SequenceInterval
 
 import polars as pl
 
@@ -72,7 +72,7 @@ class OneTrack(Track):
             maximum_formant: float,
             sound: pm.Sound,
             n_formants: int = 4,
-            window_length: float = 0.05,
+            window_length: float = 0.025,
             time_step: float = 0.002,
             pre_emphasis_from: float = 50,
             smoother: Smoother = Smoother(),
@@ -98,6 +98,7 @@ class OneTrack(Track):
         self._id = None        
         self._formant_df = None
         self._param_df = None
+        self._interval = None
     
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
@@ -176,6 +177,17 @@ class OneTrack(Track):
     def id(self, x):
         self._id = x
 
+    @property
+    def interval(self):
+        return self._interval
+    
+    @interval.setter
+    def interval(self, interval: SequenceInterval):
+        self._interval = interval
+        self.label = interval.label
+        #self.id = interval.id
+        #self.group = interval.within.name
+
     def to_df(self, output = "formants"):
         if output == "formants"\
               and not isinstance(self._formant_df, pl.DataFrame):
@@ -225,7 +237,7 @@ class CandidateTracks(Track):
         max_max_formant: float = 7000,
         nstep = 20,
         n_formants: int = 4,
-        window_length: float = 0.05,
+        window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
         smoother: Smoother = Smoother(),
@@ -255,7 +267,7 @@ class CandidateTracks(Track):
         self._id = None
         self._formant_df = None
         self._param_df = None
-
+        self._interval = None
 
         self.candidates = [
             OneTrack(
@@ -305,6 +317,16 @@ class CandidateTracks(Track):
         self._id = x
         for c in self.candidates:
             c.id = x
+
+    @property
+    def interval(self):
+        return self._interval
+
+    @interval.setter
+    def interval(self, interval):
+        self._interval = interval
+        for c in self.candidates:
+            c.interval = interval
 
     def _normalize_n_measured(self):
         for track in self.candidates:
