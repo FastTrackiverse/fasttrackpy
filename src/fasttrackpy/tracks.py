@@ -8,6 +8,7 @@ from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            get_big_df
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
+import matplotlib.pyplot as mp
 
 import polars as pl
 
@@ -193,7 +194,30 @@ class OneTrack(Track):
             return self._param_df
         
         raise ValueError("output must be either 'formants' or 'param'")
+    
+    def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynamic_range=60, figsize = (8,5)):
+
+        spctgrm = self.sound.to_spectrogram(maximum_frequency=maximum_frequency)
+        Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
+        db = 10 * np.log10(spctgrm.values)
+        min_shown = db.max() - dynamic_range
+        n_time_steps = len(self.formants[0])
+        point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
         
+        mp.figure(figsize=figsize)
+        mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+        mp.ylim([spctgrm.ymin, spctgrm.ymax])
+        mp.xlabel("Time (s)")
+        mp.ylabel("Frequency (Hz)")
+        
+        if tracks:
+            mp.scatter (point_times, self.formants[0], c="red")
+            mp.scatter (point_times, self.formants[1], c="blue")
+            mp.scatter (point_times, self.formants[2], c="green")
+            if formants == 4:
+                mp.scatter (point_times, self.formants[3], c="darkturquoise")    
+
+            
     
 
 class CandidateTracks(Track):
@@ -331,4 +355,54 @@ class CandidateTracks(Track):
         
         if output == "param":
             return self._param_df
+            
+            
+    def spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic_range=60,figsize=(12,8)):
+        
+        spectrogram = self.sound.to_spectrogram(maximum_frequency=maximum_frequency,time_step=0.005)
+        Time, Hz = spectrogram.x_grid(), spectrogram.y_grid()
+        db = 10 * np.log10(spectrogram.values)
+        min_shown = db.max() - dynamic_range
+        n_time_steps = len(self.candidates[0].formants[0])
+        point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
+        
+        # for plotting layout
+        match self.nstep:
+            case 8:
+                panel_columns = 4
+                panel_rows = 2
+            case 12:
+                panel_columns = 4
+                panel_rows = 3
+            case 16:
+                panel_columns = 4
+                panel_rows = 4
+            case 20:
+                panel_columns = 5
+                panel_rows = 4
+            case 24:
+                panel_columns = 6
+                panel_rows = 4
+        
+        fig = mp.figure(figsize=figsize)
+        gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.05, wspace=0.05)
+        axs = gs.subplots(sharex='col', sharey='row')
+
+        #gs = fig.add_gridspec(3, hspace=0)
+        #axs = gs.subplots(sharex=True, sharey=True)
+
+        for i in range (panel_rows):
+            for j in range(panel_columns):
+                axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+                axs[i, j].set_ylim([0, spectrogram.ymax])
+                analysis = i*3+j
+                axs[i, j].scatter (point_times, self.candidates[analysis].formants[0], c="red", s = 5)
+                axs[i, j].scatter (point_times, self.candidates[analysis].formants[1], c="blue", s = 5)
+                axs[i, j].scatter (point_times, self.candidates[analysis].formants[2], c="green", s = 5)    
+                if formants == 4:
+                    axs[i, j].scatter (point_times, self.candidates[analysis].formants[3], c="darkturquoise", s = 5)    
+
+        for ax in fig.get_axes():
+            ax.label_outer()
+
 
