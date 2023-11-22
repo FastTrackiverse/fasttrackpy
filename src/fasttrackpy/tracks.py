@@ -95,6 +95,7 @@ class OneTrack(Track):
         self.n_measured_formants = self._get_measured()
         self.imputed_formants = self._impute_formants()
         self.smoothed_list = self._smooth_formants()
+        self.spectrogram = self.spectrogram()
         self._file_name = None
         self._id = None        
         self._formant_df = None
@@ -211,6 +212,28 @@ class OneTrack(Track):
             return self._param_df
         
         raise ValueError("output must be either 'formants' or 'param'")
+    
+    def spectrogram(self, maximum_frequency=3500, tracks = True, dynamic_range=60):
+
+        spctgrm = self.sound.spctgrm(maximum_frequency=maximum_frequency)
+        Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
+        db = 10 * np.log10(spctgrm.values)
+        min_shown = db.max() - dynamic_range
+        n_time_steps = len(self.formants[0])
+        point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
+        
+        mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+        mp.ylim([spctgrm.ymin, spctgrm.ymax])
+        mp.xlabel("Time (s)")
+        mp.ylabel("Frequency (Hz)")
+        
+        if tracks:
+            mp.scatter (point_times, self.formants[0], c="red")
+            mp.scatter (point_times, self.formants[1], c="blue")
+            mp.scatter (point_times, self.formants[2], c="green")
+    
+
+
         
     
 
