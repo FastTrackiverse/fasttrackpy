@@ -6,8 +6,6 @@ from fasttrackpy.processors.aggs import Agg
 from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            param_to_dataframe,\
                                            get_big_df
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer
 import matplotlib.pyplot as mp
 
 import polars as pl
@@ -60,11 +58,9 @@ class OneTrack(Track):
             as initially estimated by praat-parselmouth
         n_measured_formants (int): The total number of formants for which
             formant tracks were estimatable
-        imputed_formants (np.ndarray): Formant tracks for which missing values
-            were imputed using `sklearn.impute.IterativeImputer`
         smoothed_formants (np.ndarray): The smoothed formant values, using 
             the method passed to `smoother`.
-        smooth_error (float): The error term between imputed formants and 
+        smooth_error (float): The error term between formants and 
             smoothed formants.
     """
 
