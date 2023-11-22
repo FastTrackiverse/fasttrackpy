@@ -8,6 +8,7 @@ from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            get_big_df
 
 from aligned_textgrid import SequenceInterval
+from aligned_textgrid.sequences.tiers import TierGroup
 
 import polars as pl
 
@@ -135,10 +136,10 @@ class OneTrack(Track):
     
     def _get_measured(self):
         nan_tracks = np.isnan(self.formants)
-        all_nan = np.all(nan_tracks, axis = 1)
-        if np.any(all_nan):
-            return np.argmax(all_nan)
-        return all_nan.shape[0]
+        mostly_nan = np.mean(nan_tracks, axis = 1) > 0.5
+        if np.any(mostly_nan):
+            return np.argmax(mostly_nan)
+        return mostly_nan.shape[0]
     
     @property
     def smoothed_formants(self):
@@ -185,8 +186,14 @@ class OneTrack(Track):
     def interval(self, interval: SequenceInterval):
         self._interval = interval
         self.label = interval.label
-        #self.id = interval.id
-        #self.group = interval.within.name
+        self.id = interval.id
+        self.group = self.__get_group(self._interval)
+
+    def __get_group(self, interval):
+        if isinstance(interval.within, TierGroup):
+            return interval.within.name
+        
+        return self.__get_group(interval.within)
 
     def to_df(self, output = "formants"):
         if output == "formants"\
