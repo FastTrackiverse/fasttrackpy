@@ -1,3 +1,4 @@
+import pytest
 from fasttrackpy.tracks import Track,\
                                OneTrack,\
                                CandidateTracks,\
@@ -9,6 +10,7 @@ from fasttrackpy.patterns.just_audio import process_audio_file
 import parselmouth as pm
 import polars as pl
 import numpy as np
+import matplotlib.pyplot as mp
 from pathlib import Path
 
 SOUND_PATH = Path("tests", "test_data", "ay.wav")
@@ -56,4 +58,24 @@ class TestWrite:
         assert file_name.is_file()
         file_name.unlink()
 
+@pytest.fixture(scope='function')
+def plot_spectrogram():
+    def _plot(self):
+        self.cands.winner.spectrogram()
+        yield mp.show()
+        mp.close("all")
+    return _plot
 
+class TestPlots:
+
+    cands = CandidateTracks(SOUND)
+
+    def test_spectrogram(self, monkeypatch):
+        monkeypatch.setattr(mp, 'show', lambda: None)
+        self.cands.winner.spectrogram()
+        assert True
+
+    def test_spectrograms(self, monkeypatch):
+        monkeypatch.setattr(mp, 'show', lambda: None)
+        self.cands.spectrograms()
+        assert True
