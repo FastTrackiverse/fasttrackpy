@@ -2,7 +2,10 @@
 name = "fasttrackpy"
 version = "0.1.0"
 description = "A python implementation of FastTrack"
-authors = ["JoFrhwld <JoFrhwld@gmail.com>"]
+authors = [
+    "JoFrhwld <JoFrhwld@gmail.com>",
+    "santiagobarreda <sbarreda@ucdavis.edu>"
+]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "fasttrackpy", from="src"}]
@@ -11,6 +14,8 @@ exclude = [
     "examples/",
     "docs/"
 ]
+homepage = "https://fasttrackiverse.github.io/fasttrackpy/"
+repository = "https://github.com/FastTrackiverse/fasttrackpy"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
