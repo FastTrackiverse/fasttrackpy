@@ -142,24 +142,11 @@ def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic
     min_shown = db.max() - dynamic_range
     n_time_steps = len(self.candidates[0].formants[0])
     point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
-    
-    # for plotting layout
-    match self.nstep:
-        case 8:
-            panel_columns = 4
-            panel_rows = 2
-        case 12:
-            panel_columns = 4
-            panel_rows = 3
-        case 16:
-            panel_columns = 4
-            panel_rows = 4
-        case 20:
-            panel_columns = 5
-            panel_rows = 4
-        case 24:
-            panel_columns = 6
-            panel_rows = 4
+
+    # for plotting layout    
+    dims = np.array([4, self.nstep//4])
+    panel_columns = dims.max()
+    panel_rows = dims.min()
     
     fig = mp.figure(figsize=figsize)
     gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.05, wspace=0.05)
