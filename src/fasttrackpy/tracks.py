@@ -93,7 +93,6 @@ class OneTrack(Track):
 
         self.formants, self.time_domain = self._track_formants()
         self.n_measured_formants = self._get_measured()
-        self.imputed_formants = self._impute_formants()
         self.smoothed_list = self._smooth_formants()
         self._file_name = None
         self._id = None        
@@ -128,7 +127,7 @@ class OneTrack(Track):
     def _smooth_formants(self):
         smoothed_list = [
           self.smoother.smooth(x) 
-            for x in self.imputed_formants
+            for x in self.formants
         ]
     
         return smoothed_list
@@ -140,23 +139,6 @@ class OneTrack(Track):
             return np.argmax(all_nan)
         return all_nan.shape[0]
     
-    def _impute_formants(self):     
-        imp = IterativeImputer(max_iter=10, random_state=0)
-        to_impute = self.formants[0:self.n_measured_formants,:]
-        nan_entries = np.isnan(to_impute)
-
-        if not np.any(nan_entries):
-            return to_impute
-        
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")   
-            imp.fit(np.transpose(to_impute))
-        
-        imputed = np.transpose(
-            imp.transform(np.transpose(to_impute))
-        )
-        return imputed
-
     @property
     def smoothed_formants(self):
         return np.array(
