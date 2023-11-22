@@ -213,7 +213,7 @@ class OneTrack(Track):
         
         raise ValueError("output must be either 'formants' or 'param'")
     
-    def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynamic_range=60):
+    def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynamic_range=60, figsize = (8,5)):
 
         spctgrm = self.sound.to_spectrogram(maximum_frequency=maximum_frequency)
         Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
@@ -222,6 +222,7 @@ class OneTrack(Track):
         n_time_steps = len(self.formants[0])
         point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
         
+        mp.figure(figsize=figsize)
         mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
         mp.ylim([spctgrm.ymin, spctgrm.ymax])
         mp.xlabel("Time (s)")
@@ -374,7 +375,7 @@ class CandidateTracks(Track):
             return self._param_df
             
             
-    def spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic_range=60):
+    def spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic_range=60,figsize=(12,8)):
         
         spectrogram = self.sound.to_spectrogram(maximum_frequency=maximum_frequency,time_step=0.005)
         Time, Hz = spectrogram.x_grid(), spectrogram.y_grid()
@@ -383,16 +384,33 @@ class CandidateTracks(Track):
         n_time_steps = len(self.candidates[0].formants[0])
         point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
         
+        # for plotting layout
+        match self.nstep:
+            case 8:
+                panel_columns = 4
+                panel_rows = 2
+            case 12:
+                panel_columns = 4
+                panel_rows = 3
+            case 16:
+                panel_columns = 4
+                panel_rows = 4
+            case 20:
+                panel_columns = 5
+                panel_rows = 4
+            case 24:
+                panel_columns = 6
+                panel_rows = 4
         
-        fig = mp.figure(figsize=(12,8))
-        gs = fig.add_gridspec(4,5, hspace=0.05, wspace=0.05)
+        fig = mp.figure(figsize=figsize)
+        gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.05, wspace=0.05)
         axs = gs.subplots(sharex='col', sharey='row')
 
         #gs = fig.add_gridspec(3, hspace=0)
         #axs = gs.subplots(sharex=True, sharey=True)
 
-        for i in range (4):
-            for j in range(5):
+        for i in range (panel_rows):
+            for j in range(panel_columns):
                 axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
                 axs[i, j].set_ylim([0, spectrogram.ymax])
                 analysis = i*3+j
