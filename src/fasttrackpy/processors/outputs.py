@@ -133,22 +133,41 @@ def spectrogram(
     point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
     
     mp.figure(figsize=figsize)
-    mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+    mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='Greys')
     mp.ylim([spctgrm.ymin, spctgrm.ymax])
     mp.xlabel("Time (s)")
     mp.ylabel("Frequency (Hz)")
-    
-    if tracks:
-        mp.scatter (point_times, self.formants[0], c="red")
-        mp.scatter (point_times, self.formants[1], c="blue")
-        mp.scatter (point_times, self.formants[2], c="green")
-        if formants == 4:
-            mp.scatter (point_times, self.formants[3], c="darkturquoise")    
 
-def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic_range=60,figsize=(12,8)):
+    formant_cols = [f"F{x+1}" for x in range(formants)]
+    data = self.to_df()
+    formant_cols = [x for x in formant_cols if x in data.columns]
+
+    data = data\
+        .select(["time"]+formant_cols)\
+        .melt(id_vars = "time")\
+        .with_columns(
+            pl.col("variable")\
+            .map_dict(remapping=ptolmap)\
+            .alias("color")
+        )
     
-    spectrogram = self.sound.to_spectrogram(maximum_frequency=maximum_frequency,time_step=0.005)
-    Time, Hz = spectrogram.x_grid(), spectrogram.y_grid()
+    mp.scatter(x = "time", y="value", c="color", data=data)    
+
+def candidate_spectrograms(
+        self, 
+        formants = 3, 
+        maximum_frequency = 3500, 
+        dynamic_range=60,
+        figsize=(12,8)
+    ):
+    
+    spectrogram = self.sound.to_spectrogram(
+        maximum_frequency=maximum_frequency,
+        time_step=0.005
+        )
+    Time = spectrogram.x_grid()
+    Hz = spectrogram.y_grid()
+
     db = 10 * np.log10(spectrogram.values)
     min_shown = db.max() - dynamic_range
     n_time_steps = len(self.candidates[0].formants[0])
