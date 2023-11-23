@@ -114,9 +114,18 @@ def write_data(
     raise ValueError("Either 'file' or 'destination' needs to be set")
 
 
-def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynamic_range=60, figsize = (8,5)):
+def spectrogram(
+        self, 
+        formants = 3, 
+        maximum_frequency=3500, 
+        tracks = True, 
+        dynamic_range=60, 
+        figsize = (8,5)
+    ):
 
-    spctgrm = self.sound.to_spectrogram(maximum_frequency=maximum_frequency)
+    spctgrm = self.sound.to_spectrogram(
+        maximum_frequency=maximum_frequency
+    )
     Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
     db = 10 * np.log10(spctgrm.values)
     min_shown = db.max() - dynamic_range
