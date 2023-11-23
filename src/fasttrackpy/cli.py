@@ -6,6 +6,7 @@ from fasttrackpy.processors.losses import Loss
 from fasttrackpy.patterns.just_audio import process_audio_file, \
                                             process_directory,\
                                             is_audio
+from fasttrackpy.patterns.audio_textgrid import process_audio_textgrid
 import parselmouth as pm
 from pathlib import Path
 from typing import Union
@@ -23,12 +24,18 @@ formatter_settings = HelpFormatter.settings(
     )
 )
 
-@cloup.command(
-   formatter_settings=formatter_settings,
-   help="Run fasttrack"
+@cloup.group(show_subcommand_aliases=True)
+def fasttrack():
+    """jawn"""
+    pass
+
+@fasttrack.command(
+    aliases = ["audio"],
+    formatter_settings=formatter_settings,
+    help="run fasttrack"
 )
 @cloup.option_group(
-    "Inputs",
+    "Audio Inputs",
     cloup.option(
         "--file", 
         type=click.Path(exists=True),
@@ -39,7 +46,22 @@ formatter_settings = HelpFormatter.settings(
         type=click.Path(exists=True),
         help = "A directory of input audio files to process."
     ),
-    help="Input file options",
+    help="Audio input file options",
+    constraint=cloup.constraints.RequireAtLeast(1)
+)
+@cloup.option_group(
+    "Audio Inputs",
+    cloup.option(
+        "--file", 
+        type=click.Path(exists=True),
+        help = "A single input audio file to process."
+    ),
+    cloup.option(
+        "--dir", 
+        type=click.Path(exists=True),
+        help = "A directory of input audio files to process."
+    ),
+    help="Audio input file options",
     constraint=cloup.constraints.RequireAtLeast(1)
 )
 @cloup.option_group(
@@ -57,7 +79,6 @@ formatter_settings = HelpFormatter.settings(
     help = "Output destination options",
     constraint=cloup.constraints.RequireAtLeast(1)    
 )
-
 @cloup.option_group(
     "Output Options",
     cloup.option(
@@ -160,9 +181,9 @@ formatter_settings = HelpFormatter.settings(
         default="lmse",
         help = "The loss function comparing formants to smoothed tracks. "\
                "Defaults to lmse (log mean squared error)."
-    ),
+    )
 )
-def fasttrack(
+def audio(
         file: Union[str, Path] = None,
         dir: Union[str,Path] = None,
         output: Union[str, Path] = None,
@@ -283,3 +304,33 @@ def fasttrack(
         
 if __name__ == "__main__":
     fasttrack()
+
+
+
+
+
+# # @cloup.option_group(
+# #     "Textgrid",
+# #     cloup.option(
+# #         "--textgrid",
+# #         type = click.Path(exists=True),
+# #         help = "A textgrid to process"
+# #     ),
+# #     cloup.option(
+# #         "--entry-classes",
+# #         default="SequenceInterval",
+# #         type = click.STRING,
+# #         help = "Entry classes for TextGrid"
+# #     ),
+# #     cloup.option(
+# #         "--target-tier",
+# #         type = click.STRING,
+# #         help = "The tier to target"        
+# #     ),
+# #     click.option(
+# #         "--target-labels",
+# #         default = ".",
+# #         type = click.STRING,
+# #         help = "Regex for target labels"
+# #     )
+# # )
