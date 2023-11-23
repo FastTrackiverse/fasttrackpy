@@ -182,19 +182,45 @@ def candidate_spectrograms(
     gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.05, wspace=0.05)
     axs = gs.subplots(sharex='col', sharey='row')
 
-    #gs = fig.add_gridspec(3, hspace=0)
-    #axs = gs.subplots(sharex=True, sharey=True)
+    formant_cols = [f"F{x+1}" for x in range(formants)]
 
     for i in range (panel_rows):
         for j in range(panel_columns):
-            axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+            axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='Greys')
             axs[i, j].set_ylim([0, spectrogram.ymax])
-            analysis = i*3+j
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[0], c="red", s = 5)
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[1], c="blue", s = 5)
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[2], c="green", s = 5)    
-            if formants == 4:
-                axs[i, j].scatter (point_times, self.candidates[analysis].formants[3], c="darkturquoise", s = 5)    
+            analysis = (i*(panel_columns))+j
+
+            data = self.candidates[analysis].to_df()
+            formant_cols = [x for x in formant_cols if x in data.columns]
+
+            data = data\
+                .select(["time"]+formant_cols)\
+                .melt(id_vars = "time")\
+                .with_columns(
+                    pl.col("variable")\
+                    .map_dict(remapping=ptolmap)\
+                    .alias("color")
+                )
+            if analysis == self.winner_idx:
+                axs[i,j].spines['bottom'].set(color = "red", linewidth = 2)
+                axs[i,j].spines['top'].set(color = "red", linewidth = 2)
+                axs[i,j].spines['left'].set(color = "red", linewidth = 2)
+                axs[i,j].spines['right'].set(color = "red", linewidth = 2)
+                
+
+            axs[i,j].scatter(
+                x = "time",
+                y = "value",
+                c = "color",
+                data = data
+            )
+
+            axs[i,j].text(
+                x = 0.1,
+                y = spectrogram.ymax * 0.9,
+                #s = str(analysis)
+                s = str(round(self.candidates[analysis].maximum_formant))
+            )
 
     for ax in fig.get_axes():
         ax.label_outer()
