@@ -151,7 +151,19 @@ def spectrogram(
             .alias("color")
         )
     
-    mp.scatter(x = "time", y="value", c="color", data=data)    
+    if tracks:
+        mp.scatter(x = "time", y="value", c="color", data=data, marker = '.')    
+
+        mp.scatter (point_times[0:len(self.formants[0]):3], 
+                    self.smoothed_formants[0][0:len(self.formants[0]):3], c="red", marker="+")
+        mp.scatter (point_times[0:len(self.formants[1]):3], 
+                    self.smoothed_formants[1][0:len(self.formants[1]):3], c="blue", marker="+")
+        mp.scatter (point_times[0:len(self.formants[2]):3], 
+                    self.smoothed_formants[2][0:len(self.formants[2]):3], c="green", marker="+")
+
+        if formants == 4:
+            mp.scatter (point_times[0:len(self.formants[3]):3], 
+                        self.smoothed_formants[3][0:len(self.formants[3]):3], c="darkturquoise", marker="+")
 
 def candidate_spectrograms(
         self, 
@@ -183,12 +195,16 @@ def candidate_spectrograms(
     axs = gs.subplots(sharex='col', sharey='row')
 
     formant_cols = [f"F{x+1}" for x in range(formants)]
-
     for i in range (panel_rows):
         for j in range(panel_columns):
-            axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='Greys')
+            analysis = i*panel_columns+j
+
+            if analysis == self.winner_idx:
+                axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+            else:
+                axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='binary')
+
             axs[i, j].set_ylim([0, spectrogram.ymax])
-            analysis = (i*(panel_columns))+j
 
             data = self.candidates[analysis].to_df()
             formant_cols = [x for x in formant_cols if x in data.columns]
@@ -201,18 +217,13 @@ def candidate_spectrograms(
                     .map_dict(remapping=ptolmap)\
                     .alias("color")
                 )
-            if analysis == self.winner_idx:
-                axs[i,j].spines['bottom'].set(color = "red", linewidth = 2)
-                axs[i,j].spines['top'].set(color = "red", linewidth = 2)
-                axs[i,j].spines['left'].set(color = "red", linewidth = 2)
-                axs[i,j].spines['right'].set(color = "red", linewidth = 2)
-                
-
+            
             axs[i,j].scatter(
                 x = "time",
                 y = "value",
                 c = "color",
-                data = data
+                data = data,
+                marker = "."
             )
 
             axs[i,j].text(
@@ -221,6 +232,22 @@ def candidate_spectrograms(
                 #s = str(analysis)
                 s = str(round(self.candidates[analysis].maximum_formant))
             )
+            
 
+            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[0]):3], 
+                               self.candidates[analysis].smoothed_formants[0][0:len(self.candidates[analysis].formants[0]):3], 
+                               c="red", marker="+", s = 5)
+            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[1]):3], 
+                               self.candidates[analysis].smoothed_formants[1][0:len(self.candidates[analysis].formants[1]):3], 
+                               c="blue", marker="+", s = 5)
+            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[2]):3], 
+                               self.candidates[analysis].smoothed_formants[2][0:len(self.candidates[analysis].formants[2]):3], 
+                               c="green", marker="+", s = 5)
+
+            if formants == 4:
+                axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[3]):3], 
+                               self.candidates[analysis].smoothed_formants[3][0:len(self.candidates[analysis].formants[3]):3], 
+                               c="darkturquoise", marker="+", s = 5)    
+                
     for ax in fig.get_axes():
         ax.label_outer()
