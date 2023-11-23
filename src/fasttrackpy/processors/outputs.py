@@ -154,9 +154,8 @@ def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic
 
     for i in range (panel_rows):
         for j in range(panel_columns):
-            axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+            analysis = i*panel_columns+j
             axs[i, j].set_ylim([0, spectrogram.ymax])
-            analysis = i*3+j
             axs[i, j].scatter (point_times, self.candidates[analysis].formants[0], c="red", s = 5)
             axs[i, j].scatter (point_times, self.candidates[analysis].formants[1], c="blue", s = 5)
             axs[i, j].scatter (point_times, self.candidates[analysis].formants[2], c="green", s = 5)    
