@@ -3,6 +3,8 @@ import polars as pl
 from pathlib import Path
 import matplotlib.pyplot as mp
 
+ptolmap = {"F1" :"#4477AA", "F2": "#EE6677", "F3": "#228833", "F4": "#CCBB44"}
+
 
 def add_metadata(self, out_df):
     if self.file_name:
@@ -112,9 +114,18 @@ def write_data(
     raise ValueError("Either 'file' or 'destination' needs to be set")
 
 
-def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynamic_range=60, figsize = (8,5)):
+def spectrogram(
+        self, 
+        formants = 3, 
+        maximum_frequency=3500, 
+        tracks = True, 
+        dynamic_range=60, 
+        figsize = (8,5)
+    ):
 
-    spctgrm = self.sound.to_spectrogram(maximum_frequency=maximum_frequency)
+    spctgrm = self.sound.to_spectrogram(
+        maximum_frequency=maximum_frequency
+    )
     Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
     db = 10 * np.log10(spctgrm.values)
     min_shown = db.max() - dynamic_range
@@ -122,15 +133,26 @@ def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynam
     point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
     
     mp.figure(figsize=figsize)
-    mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+    mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='Greys')
     mp.ylim([spctgrm.ymin, spctgrm.ymax])
     mp.xlabel("Time (s)")
     mp.ylabel("Frequency (Hz)")
+
+    formant_cols = [f"F{x+1}" for x in range(formants)]
+    data = self.to_df()
+    formant_cols = [x for x in formant_cols if x in data.columns]
+
+    data = data\
+        .select(["time"]+formant_cols)\
+        .melt(id_vars = "time")\
+        .with_columns(
+            pl.col("variable")\
+            .map_dict(remapping=ptolmap)\
+            .alias("color")
+        )
     
     if tracks:
-        mp.scatter (point_times, self.formants[0], c="red",marker='.')
-        mp.scatter (point_times, self.formants[1], c="blue", marker = '.')
-        mp.scatter (point_times, self.formants[2], c="green", marker = '.')
+        mp.scatter(x = "time", y="value", c="color", data=data, marker = '.')    
 
         mp.scatter (point_times[0:len(self.formants[0]):3], 
                     self.smoothed_formants[0][0:len(self.formants[0]):3], c="red", marker="+")
@@ -140,14 +162,24 @@ def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynam
                     self.smoothed_formants[2][0:len(self.formants[2]):3], c="green", marker="+")
 
         if formants == 4:
-            mp.scatter (point_times, self.formants[3], c="darkturquoise",marker='.')    
             mp.scatter (point_times[0:len(self.formants[3]):3], 
                         self.smoothed_formants[3][0:len(self.formants[3]):3], c="darkturquoise", marker="+")
 
-def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic_range=60,figsize=(12,8)):
+def candidate_spectrograms(
+        self, 
+        formants = 3, 
+        maximum_frequency = 3500, 
+        dynamic_range=60,
+        figsize=(12,8)
+    ):
     
-    spectrogram = self.sound.to_spectrogram(maximum_frequency=maximum_frequency,time_step=0.005)
-    Time, Hz = spectrogram.x_grid(), spectrogram.y_grid()
+    spectrogram = self.sound.to_spectrogram(
+        maximum_frequency=maximum_frequency,
+        time_step=0.005
+        )
+    Time = spectrogram.x_grid()
+    Hz = spectrogram.y_grid()
+
     db = 10 * np.log10(spectrogram.values)
     min_shown = db.max() - dynamic_range
     n_time_steps = len(self.candidates[0].formants[0])
@@ -162,6 +194,7 @@ def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic
     gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.05, wspace=0.05)
     axs = gs.subplots(sharex='col', sharey='row')
 
+    formant_cols = [f"F{x+1}" for x in range(formants)]
     for i in range (panel_rows):
         for j in range(panel_columns):
             analysis = i*panel_columns+j
@@ -172,9 +205,34 @@ def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic
                 axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='binary')
 
             axs[i, j].set_ylim([0, spectrogram.ymax])
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[0], c="red", s = 5,marker='.')
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[1], c="blue", s = 5,marker='.')
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[2], c="green", s = 5,marker='.') 
+
+            data = self.candidates[analysis].to_df()
+            formant_cols = [x for x in formant_cols if x in data.columns]
+
+            data = data\
+                .select(["time"]+formant_cols)\
+                .melt(id_vars = "time")\
+                .with_columns(
+                    pl.col("variable")\
+                    .map_dict(remapping=ptolmap)\
+                    .alias("color")
+                )
+            
+            axs[i,j].scatter(
+                x = "time",
+                y = "value",
+                c = "color",
+                data = data,
+                marker = "."
+            )
+
+            axs[i,j].text(
+                x = 0.1,
+                y = spectrogram.ymax * 0.9,
+                #s = str(analysis)
+                s = str(round(self.candidates[analysis].maximum_formant))
+            )
+            
 
             axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[0]):3], 
                                self.candidates[analysis].smoothed_formants[0][0:len(self.candidates[analysis].formants[0]):3], 
@@ -187,10 +245,9 @@ def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic
                                c="green", marker="+", s = 5)
 
             if formants == 4:
-                axs[i, j].scatter (point_times, self.candidates[analysis].formants[3], c="darkturquoise", s = 5,marker='.')
                 axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[3]):3], 
                                self.candidates[analysis].smoothed_formants[3][0:len(self.candidates[analysis].formants[3]):3], 
                                c="darkturquoise", marker="+", s = 5)    
-
+                
     for ax in fig.get_axes():
         ax.label_outer()
