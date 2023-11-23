@@ -3,6 +3,8 @@ import polars as pl
 from pathlib import Path
 import matplotlib.pyplot as mp
 
+ptolmap = {"F1" :"#4477AA", "F2": "#EE6677", "F3": "#228833", "F4": "#CCBB44"}
+
 
 def add_metadata(self, out_df):
     if self.file_name:
