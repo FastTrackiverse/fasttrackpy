@@ -128,11 +128,21 @@ def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynam
     mp.ylabel("Frequency (Hz)")
     
     if tracks:
-        mp.scatter (point_times, self.formants[0], c="red")
-        mp.scatter (point_times, self.formants[1], c="blue")
-        mp.scatter (point_times, self.formants[2], c="green")
+        mp.scatter (point_times, self.formants[0], c="red",marker='.')
+        mp.scatter (point_times, self.formants[1], c="blue", marker = '.')
+        mp.scatter (point_times, self.formants[2], c="green", marker = '.')
+
+        mp.scatter (point_times[0:len(self.formants[0]):3], 
+                    self.smoothed_formants[0][0:len(self.formants[0]):3], c="red", marker="+")
+        mp.scatter (point_times[0:len(self.formants[1]):3], 
+                    self.smoothed_formants[1][0:len(self.formants[1]):3], c="blue", marker="+")
+        mp.scatter (point_times[0:len(self.formants[2]):3], 
+                    self.smoothed_formants[2][0:len(self.formants[2]):3], c="green", marker="+")
+
         if formants == 4:
-            mp.scatter (point_times, self.formants[3], c="darkturquoise")    
+            mp.scatter (point_times, self.formants[3], c="darkturquoise",marker='.')    
+            mp.scatter (point_times[0:len(self.formants[3]):3], 
+                        self.smoothed_formants[3][0:len(self.formants[3]):3], c="darkturquoise", marker="+")
 
 def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic_range=60,figsize=(12,8)):
     
@@ -155,18 +165,32 @@ def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic
     for i in range (panel_rows):
         for j in range(panel_columns):
             analysis = i*panel_columns+j
-            
+
             if analysis == self.winner_idx:
                 axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
             else:
                 axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='binary')
 
             axs[i, j].set_ylim([0, spectrogram.ymax])
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[0], c="red", s = 5)
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[1], c="blue", s = 5)
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[2], c="green", s = 5)    
+            axs[i, j].scatter (point_times, self.candidates[analysis].formants[0], c="red", s = 5,marker='.')
+            axs[i, j].scatter (point_times, self.candidates[analysis].formants[1], c="blue", s = 5,marker='.')
+            axs[i, j].scatter (point_times, self.candidates[analysis].formants[2], c="green", s = 5,marker='.') 
+
+            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[0]):3], 
+                               self.candidates[analysis].smoothed_formants[0][0:len(self.candidates[analysis].formants[0]):3], 
+                               c="red", marker="+", s = 5)
+            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[1]):3], 
+                               self.candidates[analysis].smoothed_formants[1][0:len(self.candidates[analysis].formants[1]):3], 
+                               c="blue", marker="+", s = 5)
+            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[2]):3], 
+                               self.candidates[analysis].smoothed_formants[2][0:len(self.candidates[analysis].formants[2]):3], 
+                               c="green", marker="+", s = 5)
+
             if formants == 4:
-                axs[i, j].scatter (point_times, self.candidates[analysis].formants[3], c="darkturquoise", s = 5)    
+                axs[i, j].scatter (point_times, self.candidates[analysis].formants[3], c="darkturquoise", s = 5,marker='.')
+                axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[3]):3], 
+                               self.candidates[analysis].smoothed_formants[3][0:len(self.candidates[analysis].formants[3]):3], 
+                               c="darkturquoise", marker="+", s = 5)    
 
     for ax in fig.get_axes():
         ax.label_outer()
