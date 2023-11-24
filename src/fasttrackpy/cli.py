@@ -415,5 +415,33 @@ def audio_textgrid(
     loss_fun = Loss(**loss_kwargs)
     agg_fun = Agg()
 
+    entry_classes = entry_classes.split("|")
+
+    all_candidates = process_audio_textgrid(
+        audio_path=audio,
+        textgrid_path=textgrid,
+        textgrid_format=entry_classes,
+        target_tier=target_tier,
+        target_labels=target_labels,
+        min_duration=min_duration,
+        min_max_formant=min_max_formant,
+        max_max_formant=max_max_formant,
+        nstep=nstep,
+        n_formants=n_formants,
+        window_length=window_length,
+        time_step=time_step,
+        pre_emphasis_from=pre_emphasis_from,
+        smoother=smoother,
+        loss_fun=loss_fun,
+        agg_fun=agg_fun
+    )
+
+    write_data(candidates=all_candidates, 
+                file=output, 
+                destination=dest,
+                which=which_output, 
+                output=data_output
+    )
+
 if __name__ == "__main__":
     fasttrack()
