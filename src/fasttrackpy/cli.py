@@ -76,6 +76,7 @@ audio_processing = cloup.option_group(
         help="Pre-emphasis. Defaults to 50(Hz)."
     )    
 )
+
 smoother_options = cloup.option_group(
     "Smoother options",
     cloup.option(
@@ -99,6 +100,7 @@ smoother_options = cloup.option_group(
                "Defaults to lmse (log mean squared error)."
     )
 )
+
 output_options = cloup.option_group(
     "Output Options",
     cloup.option(
