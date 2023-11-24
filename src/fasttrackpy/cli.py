@@ -126,12 +126,12 @@ textgrid_processing = cloup.option_group(
     cloup.option(
         "--entry-classes",
         type = click.STRING,
-        default="SequenceInterval"
+        default="Word|Phone"
     ),
     cloup.option(
         "--target-tier",
         type = click.STRING,
-        default = "phone",
+        default = "Phone",
         required=True
     ),
     cloup.option(
