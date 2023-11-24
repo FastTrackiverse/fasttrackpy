@@ -382,12 +382,6 @@ def audio_textgrid(
         loss_method (str, optional): The loss function comparing formants to 
             smoothed tracks.
             Defaults to lmse (log mean squared error).
-        xmin (float, optional): Start time for beginning analysis.
-            Defaults to 0(s). 
-            Defaults to 0.
-        xmax (float, optional): End time for analysis.
-            If not set, defaults to full duration.
-            Defaults to None.
         min_max_formant (float, optional): Start of possible max-formant range. 
             Defaults to 4000(Hz).
         max_max_formant (float, optional): End of possible max-formant range. 
