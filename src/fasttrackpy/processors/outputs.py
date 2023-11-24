@@ -3,8 +3,14 @@ import polars as pl
 from pathlib import Path
 import matplotlib.pyplot as mp
 
-ptolmap = {"F1" :"#4477AA", "F2": "#EE6677", "F3": "#228833", "F4": "#CCBB44"}
-
+ptolmap = {"F1" :"#4477AA", 
+           "F1_s": "#4477AA", 
+           "F2": "#EE6677", 
+           "F2_s": "#EE6677",
+           "F3": "#228833",
+           "F3_s": "#228833",
+           "F4": "#CCBB44",
+           "F4_s": "#CCBB44"}
 
 def add_metadata(self, out_df):
     if self.file_name:
@@ -139,31 +145,34 @@ def spectrogram(
     mp.ylabel("Frequency (Hz)")
 
     formant_cols = [f"F{x+1}" for x in range(formants)]
+    smooth_cols = [f"F{x+1}_s" for x in range(formants)]
     data = self.to_df()
-    formant_cols = [x for x in formant_cols if x in data.columns]
+    all_cols = [x for x in formant_cols+smooth_cols if x in data.columns]
 
     data = data\
-        .select(["time"]+formant_cols)\
+        .select(["time"]+all_cols)\
         .melt(id_vars = "time")\
         .with_columns(
             pl.col("variable")\
             .map_dict(remapping=ptolmap)\
             .alias("color")
-        )
+            )
     
     if tracks:
-        mp.scatter(x = "time", y="value", c="color", data=data, marker = '.')    
-
-        mp.scatter (point_times[0:len(self.formants[0]):3], 
-                    self.smoothed_formants[0][0:len(self.formants[0]):3], c="red", marker="+")
-        mp.scatter (point_times[0:len(self.formants[1]):3], 
-                    self.smoothed_formants[1][0:len(self.formants[1]):3], c="blue", marker="+")
-        mp.scatter (point_times[0:len(self.formants[2]):3], 
-                    self.smoothed_formants[2][0:len(self.formants[2]):3], c="green", marker="+")
-
-        if formants == 4:
-            mp.scatter (point_times[0:len(self.formants[3]):3], 
-                        self.smoothed_formants[3][0:len(self.formants[3]):3], c="darkturquoise", marker="+")
+        mp.scatter(x = "time",
+                   y="value", 
+                   c="color", 
+                   marker = ".", 
+                   data=data.filter(
+                       ~pl.col("variable").str.contains("_s")
+                   ))    
+        mp.scatter(x = "time",
+                   y="value", 
+                   c="color", 
+                   marker = "+", 
+                   data=data.filter(
+                       pl.col("variable").str.contains("_s")
+                   ))    
 
 def candidate_spectrograms(
         self, 
@@ -195,6 +204,8 @@ def candidate_spectrograms(
     axs = gs.subplots(sharex='col', sharey='row')
 
     formant_cols = [f"F{x+1}" for x in range(formants)]
+    smooth_cols = [f"F{x+1}_s" for x in range(formants)]
+
     for i in range (panel_rows):
         for j in range(panel_columns):
             analysis = i*panel_columns+j
@@ -207,10 +218,11 @@ def candidate_spectrograms(
             axs[i, j].set_ylim([0, spectrogram.ymax])
 
             data = self.candidates[analysis].to_df()
-            formant_cols = [x for x in formant_cols if x in data.columns]
+            all_cols = [x for x in formant_cols+smooth_cols if x in data.columns]
+
 
             data = data\
-                .select(["time"]+formant_cols)\
+                .select(["time"]+all_cols)\
                 .melt(id_vars = "time")\
                 .with_columns(
                     pl.col("variable")\
@@ -222,32 +234,29 @@ def candidate_spectrograms(
                 x = "time",
                 y = "value",
                 c = "color",
-                data = data,
+                data=data.filter(
+                       ~pl.col("variable").str.contains("_s")
+                ),
+                s = 5,
                 marker = "."
+            )
+            axs[i,j].scatter(
+                x = "time",
+                y = "value",
+                c = "color",
+                data = data.filter(
+                    pl.col("variable").str.contains("_s")
+                ),
+                s = 5,
+                marker = "+"
             )
 
             axs[i,j].text(
                 x = 0.1,
                 y = spectrogram.ymax * 0.9,
-                #s = str(analysis)
                 s = str(round(self.candidates[analysis].maximum_formant))
             )
-            
-
-            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[0]):3], 
-                               self.candidates[analysis].smoothed_formants[0][0:len(self.candidates[analysis].formants[0]):3], 
-                               c="red", marker="+", s = 5)
-            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[1]):3], 
-                               self.candidates[analysis].smoothed_formants[1][0:len(self.candidates[analysis].formants[1]):3], 
-                               c="blue", marker="+", s = 5)
-            axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[2]):3], 
-                               self.candidates[analysis].smoothed_formants[2][0:len(self.candidates[analysis].formants[2]):3], 
-                               c="green", marker="+", s = 5)
-
-            if formants == 4:
-                axs[i, j].scatter (point_times[0:len(self.candidates[analysis].formants[3]):3], 
-                               self.candidates[analysis].smoothed_formants[3][0:len(self.candidates[analysis].formants[3]):3], 
-                               c="darkturquoise", marker="+", s = 5)    
+             
                 
     for ax in fig.get_axes():
         ax.label_outer()
