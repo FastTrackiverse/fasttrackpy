@@ -141,6 +141,22 @@ textgrid_processing = cloup.option_group(
     )
 )
 
+output_destinations = cloup.option_group(
+    "Output Destinations",
+    cloup.option(
+        "--output", 
+        type=click.Path(),
+        help = "Name of an output file",
+    ),
+    cloup.option(
+        "--dest", 
+        type=click.Path(),
+        help = "Name of an output directory"
+    ),
+    help = "Output destination options",
+    constraint=cloup.constraints.RequireAtLeast(1)    
+)
+
 @cloup.group(show_subcommand_aliases=True)
 def fasttrack():
     """jawn"""
