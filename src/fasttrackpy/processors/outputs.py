@@ -197,7 +197,7 @@ def candidate_spectrograms(
     panel_rows = dims.min()
     
     fig = mp.figure(figsize=figsize)
-    gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.05, wspace=0.05)
+    gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.18, wspace=0.05)
     axs = gs.subplots(sharex='col', sharey='row')
 
     formant_cols = [f"F{x+1}" for x in range(formants)]
@@ -208,7 +208,7 @@ def candidate_spectrograms(
             analysis = i*panel_columns+j
 
             if analysis == self.winner_idx:
-                axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+                axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='jet')
             else:
                 axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='binary')
 
@@ -248,11 +248,13 @@ def candidate_spectrograms(
                 marker = "+"
             )
 
-            axs[i,j].text(
-                x = 0.1,
-                y = spectrogram.ymax * 0.9,
-                s = str(round(self.candidates[analysis].maximum_formant))
-            )
+            axs[i, j].set_title(str(round(self.candidates[analysis].maximum_formant)),y=0.95)
+            
+            #axs[i,j].text(
+            #    x = 0.1,
+            #    y = spectrogram.ymax * 0.9,
+            #    s = str(round(self.candidates[analysis].maximum_formant))
+            #)
              
                 
     for ax in fig.get_axes():
