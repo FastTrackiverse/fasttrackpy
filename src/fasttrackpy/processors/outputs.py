@@ -21,8 +21,7 @@ def add_metadata(self, out_df):
     
     if isinstance(self.interval, SequenceInterval) :
         out_df = out_df.with_columns(
-            (pl.col("time") + self.interval.start)\
-            .alias("time_abs")
+            label = pl.lit(self.interval.label)
         )
 
     return out_df
@@ -101,16 +100,23 @@ def write_data(
         which: str = "winner",
         output: str = "formants"
 ):
-    df = candidates.to_df(which = which, output = output)
+    if type(candidates) is list:
+        df = pl.concat(
+            [x.to_df(which = which, output = output) for x in candidates],
+            how = "diagonal"
+        )
+    else:
+        df = candidates.to_df(which = which, output = output)
+
     if file:
         df.write_csv(file = file)
         return
     
-    if destination and candidates.file_name:
+    if destination and "file_name" in df.columns:
         if not isinstance(destination, Path):
             destination = Path(destination)
         file = destination.joinpath(
-            candidates.winner.file_name
+            df["file_name"][0]
         ).with_suffix(".csv")
         df.write_csv(file = file)
         return
