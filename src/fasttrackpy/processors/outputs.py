@@ -126,7 +126,8 @@ def spectrogram(
         maximum_frequency=3500, 
         tracks = True, 
         dynamic_range=60, 
-        figsize = (8,5)
+        figsize = (8,5),
+        color_scale="Greys"
     ):
 
     spctgrm = self.sound.to_spectrogram(
@@ -135,11 +136,9 @@ def spectrogram(
     Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
     db = 10 * np.log10(spctgrm.values)
     min_shown = db.max() - dynamic_range
-    n_time_steps = len(self.formants[0])
-    point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
     
     mp.figure(figsize=figsize)
-    mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='Greys')
+    mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap=color_scale)
     mp.ylim([spctgrm.ymin, spctgrm.ymax])
     mp.xlabel("Time (s)")
     mp.ylabel("Frequency (Hz)")
@@ -191,8 +190,6 @@ def candidate_spectrograms(
 
     db = 10 * np.log10(spectrogram.values)
     min_shown = db.max() - dynamic_range
-    n_time_steps = len(self.candidates[0].formants[0])
-    point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
 
     # for plotting layout    
     dims = np.array([4, self.nstep//4])
