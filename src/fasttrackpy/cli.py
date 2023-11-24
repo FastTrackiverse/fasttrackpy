@@ -198,8 +198,9 @@ def fasttrack():
     constraint=cloup.constraints.RequireAtLeast(1)    
 )
 @audio_processing
-@smoother_options
+@output_destinations
 @output_options
+@smoother_options
 def audio(
         file: Union[str, Path] = None,
         dir: Union[str,Path] = None,
@@ -240,12 +241,6 @@ def audio(
         loss_method (str, optional): The loss function comparing formants to 
             smoothed tracks.
             Defaults to lmse (log mean squared error).
-        xmin (float, optional): Start time for beginning analysis.
-            Defaults to 0(s). 
-            Defaults to 0.
-        xmax (float, optional): End time for analysis.
-            If not set, defaults to full duration.
-            Defaults to None.
         min_max_formant (float, optional): Start of possible max-formant range. 
             Defaults to 4000(Hz).
         max_max_formant (float, optional): End of possible max-formant range. 
@@ -277,8 +272,8 @@ def audio(
 
         candidates = process_audio_file(
             path = file,
-            xmin = xmin,
-            xmax = xmax,
+            xmin = 0,
+            xmax = None,
             min_max_formant=min_max_formant,
             max_max_formant=max_max_formant,
             nstep=nstep,
@@ -339,14 +334,17 @@ def audio(
         help = "textgrid file path"
     )
 )
-
 @audio_processing
 @textgrid_processing
-@smoother_options
+@output_destinations
 @output_options
+@smoother_options
 def audio_textgrid(
         audio: Union[str, Path] = None,
         textgrid: Union[str,Path] = None,
+        entry_classes: str = None,
+        target_tier: str = None,
+        target_labels: str = None,
         output: Union[str, Path] = None,
         dest: Union[str, Path] = None,
         which_output: str = "winner",
@@ -354,6 +352,7 @@ def audio_textgrid(
         smoother_method: str = "dct_smooth",
         smoother_order: int = 5,
         loss_method: str = "lmse",
+        min_duration: float = 0.05,
         min_max_formant:float = 4000,
         max_max_formant:float = 7000,
         nstep:int = 20,
@@ -365,9 +364,10 @@ def audio_textgrid(
     """Run fasttrack.
 
     Args:
-        file (Union[str, Path], optional): A single input audio file to process. 
+        audio (Union[str, Path], optional): A single input audio file to process. 
             Defaults to None.
-        dir (Union[str,Path], optional): A directory of input audio files to process. Defaults to None.
+        textgrid (Union[str, Path], optional): A single input audio file to process. 
+            Defaults to None.            
         output (Union[str, Path], optional): Name of an output file. Defaults to None.
         dest (Union[str, Path], optional): "Name of an output directory. Defaults to None.
         which_output (str, optional): Whether to save just the winner, 
