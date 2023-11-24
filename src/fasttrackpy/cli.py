@@ -27,6 +27,12 @@ formatter_settings = HelpFormatter.settings(
 audio_processing = cloup.option_group(
     "Audio processing",
     cloup.option(
+        "--min-duration",
+        type = click.FloatRange(min=0, min_open=True),
+        default=0.05,
+        help = "Minimum vowel duration"
+    ),  
+    cloup.option(
         "--min-max-formant", 
         type=click.FloatRange(min=0, min_open=True), 
         default=4000,
