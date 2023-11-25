@@ -30,6 +30,8 @@ python-magic-bin = {version = "^0.4.14", markers = "sys_platform == 'win32'"}
 click = "^8.1.7"
 cloup = "^3.0.3"
 matplotlib = "^3.8.2"
+aligned-textgrid = "0.5.0"
+tqdm = "^4.66.1"
 
 [tool.poetry.group.dev.dependencies]
 jupyter = "^1.0.0"

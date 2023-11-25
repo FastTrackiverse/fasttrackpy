@@ -1,5 +1,6 @@
 import numpy as np
 import polars as pl
+from aligned_textgrid import SequenceInterval
 from pathlib import Path
 import matplotlib.pyplot as mp
 
@@ -11,6 +12,7 @@ ptolmap = {"F1" :"#4477AA",
            "F3_s": "#228833",
            "F4": "#CCBB44",
            "F4_s": "#CCBB44"}
+import logging
 
 def add_metadata(self, out_df):
     if self.file_name:
@@ -22,6 +24,17 @@ def add_metadata(self, out_df):
         out_df = out_df.with_columns(
             id = pl.lit(self.id)
         )
+
+    if self.group:
+        out_df = out_df.with_columns(
+            group = pl.lit(self.group)
+        )
+    
+    if isinstance(self.interval, SequenceInterval) :
+        out_df = out_df.with_columns(
+            label = pl.lit(self.interval.label)
+        )
+
     return out_df
 
 def formant_to_dataframe(self):
@@ -50,6 +63,7 @@ def formant_to_dataframe(self):
     out_df = pl.concat([orig_df, smooth_df], how = "horizontal")
     
     out_df = out_df.with_columns(
+        error = pl.lit(self.smooth_error),
         time = pl.lit(self.time_domain),
         max_formant = pl.lit(self.maximum_formant),
         n_formant = pl.lit(self.n_formants),
@@ -74,7 +88,11 @@ def param_to_dataframe(self):
     param_df = pl.DataFrame(
         data = self.parameters.T,schema=schema
     )
-       
+    
+    param_df = param_df.with_columns(
+        error = pl.lit(self.smooth_error)
+    )
+
     param_df = add_metadata(self, param_df)    
 
     return param_df
@@ -98,16 +116,23 @@ def write_data(
         which: str = "winner",
         output: str = "formants"
 ):
-    df = candidates.to_df(which = which, output = output)
+    if type(candidates) is list:
+        df = pl.concat(
+            [x.to_df(which = which, output = output) for x in candidates],
+            how = "diagonal"
+        )
+    else:
+        df = candidates.to_df(which = which, output = output)
+
     if file:
         df.write_csv(file = file)
         return
     
-    if destination and candidates.file_name:
+    if destination and "file_name" in df.columns:
         if not isinstance(destination, Path):
             destination = Path(destination)
         file = destination.joinpath(
-            candidates.winner.file_name
+            df["file_name"][0]
         ).with_suffix(".csv")
         df.write_csv(file = file)
         return
