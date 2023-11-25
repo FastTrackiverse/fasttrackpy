@@ -8,6 +8,11 @@ from fasttrackpy import CandidateTracks,\
                         Loss,\
                         Agg
 
+import multiprocessing
+from tqdm import tqdm
+from joblib import Parallel, delayed, wrap_non_picklable_objects
+
+
 try:
     import magic
     no_magic = False
@@ -39,7 +44,7 @@ def create_audio_checker(no_magic:bool = no_magic) -> Callable:
         Returns:
             (bool): Whether or not the file is an audio file
         """
-        file_mime = magic.from_file(path, mime=True)
+        file_mime = magic.from_file(str(path), mime=True)
         return "audio" in file_mime
     
     def sndhdr_checker(path: str)->bool:
@@ -51,7 +56,7 @@ def create_audio_checker(no_magic:bool = no_magic) -> Callable:
         Returns:
             (bool): Whether or not the file is an audio file.
         """
-        hdr_info = sndhdr.what(path)
+        hdr_info = sndhdr.what(str(path))
         return isinstance(hdr_info, SndHeaders)
     
     if no_magic:
@@ -123,6 +128,11 @@ def process_audio_file(
     candidates.file_name = Path(str(path)).name
     return candidates
 
+@delayed
+@wrap_non_picklable_objects
+def wrapped_audio(args_dict):
+    return process_audio_file(**args_dict)
+
 def process_directory(
         path: Union[str, Path],
         min_max_formant:float = 4000,
@@ -159,22 +169,27 @@ def process_directory(
 
     all_files = list(path.glob("*"))
     all_files = [x for x in all_files if x.is_file()]
-    all_audio = [x for x in all_files if is_audio(str(x))]
-    all_candidates = [
-        process_audio_file(
-            path = x,
-            min_max_formant=min_max_formant,
-            max_max_formant=max_max_formant,
-            nstep=nstep,
-            n_formants=n_formants,
-            window_length=window_length,
-            time_step=time_step,
-            pre_emphasis_from=pre_emphasis_from,
-            smoother=smoother,
-            loss_fun=loss_fun,
-            agg_fun=agg_fun
-        ) for x in all_audio
+    all_audio = [x for x in all_files if is_audio(x)]
+    arg_list = [
+            {"path": x,
+            "min_max_formant": min_max_formant,
+            "max_max_formant":max_max_formant,
+            "nstep": nstep,
+            "n_formants": n_formants,
+            "window_length":window_length,
+            "time_step":time_step,
+            "pre_emphasis_from":pre_emphasis_from,
+            "smoother":smoother,
+            "loss_fun":loss_fun,
+            "agg_fun":agg_fun
+            }
+            for x in all_audio
     ]
+    n_jobs = multiprocessing.cpu_count()
+
+    all_candidates = Parallel(n_jobs=n_jobs, prefer="threads")(
+        wrapped_audio(args_dict=arg) for arg in tqdm(arg_list)
+        )
     for x, path in zip(all_candidates, all_audio):
         x.file_name = Path(str(path)).name
 
