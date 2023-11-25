@@ -5,8 +5,10 @@ from fasttrackpy.processors.losses import Loss
 from fasttrackpy.processors.aggs import Agg
 from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            param_to_dataframe,\
-                                           get_big_df
-
+                                           get_big_df,\
+                                           spectrogram,\
+                                           candidate_spectrograms
+import matplotlib.pyplot as mp
 from aligned_textgrid import SequenceInterval
 from aligned_textgrid.sequences.tiers import TierGroup
 
@@ -62,11 +64,9 @@ class OneTrack(Track):
             as initially estimated by praat-parselmouth
         n_measured_formants (int): The total number of formants for which
             formant tracks were estimatable
-        imputed_formants (np.ndarray): Formant tracks for which missing values
-            were imputed using `sklearn.impute.IterativeImputer`
         smoothed_formants (np.ndarray): The smoothed formant values, using 
             the method passed to `smoother`.
-        smooth_error (float): The error term between imputed formants and 
+        smooth_error (float): The error term between formants and 
             smoothed formants.
     """
 
@@ -222,8 +222,11 @@ class OneTrack(Track):
             return self._param_df
         
         raise ValueError("output must be either 'formants' or 'param'")
-        
     
+    def spectrogram(self, **kwargs):
+        spectrogram(self, **kwargs)
+    
+        
 
 class CandidateTracks(Track):
     """A class for candidate tracks for a single formant
@@ -370,4 +373,7 @@ class CandidateTracks(Track):
         
         if output == "param":
             return self._param_df
+            
+    def spectrograms(self, **kwargs):
+        candidate_spectrograms(self, **kwargs)
 
