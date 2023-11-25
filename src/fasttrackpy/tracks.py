@@ -5,14 +5,19 @@ from fasttrackpy.processors.losses import Loss
 from fasttrackpy.processors.aggs import Agg
 from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            param_to_dataframe,\
-                                           get_big_df
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer
+                                           get_big_df,\
+                                           spectrogram,\
+                                           candidate_spectrograms
+import matplotlib.pyplot as mp
+from aligned_textgrid import SequenceInterval
+from aligned_textgrid.sequences.tiers import TierGroup
 
 import polars as pl
 
 from typing import Union
 import warnings
+import logging
+
 
 class Track:
     """A generic track class to set up attribute values
@@ -59,11 +64,9 @@ class OneTrack(Track):
             as initially estimated by praat-parselmouth
         n_measured_formants (int): The total number of formants for which
             formant tracks were estimatable
-        imputed_formants (np.ndarray): Formant tracks for which missing values
-            were imputed using `sklearn.impute.IterativeImputer`
         smoothed_formants (np.ndarray): The smoothed formant values, using 
             the method passed to `smoother`.
-        smooth_error (float): The error term between imputed formants and 
+        smooth_error (float): The error term between formants and 
             smoothed formants.
     """
 
@@ -72,7 +75,7 @@ class OneTrack(Track):
             maximum_formant: float,
             sound: pm.Sound,
             n_formants: int = 4,
-            window_length: float = 0.05,
+            window_length: float = 0.025,
             time_step: float = 0.002,
             pre_emphasis_from: float = 50,
             smoother: Smoother = Smoother(),
@@ -93,12 +96,13 @@ class OneTrack(Track):
 
         self.formants, self.time_domain = self._track_formants()
         self.n_measured_formants = self._get_measured()
-        self.imputed_formants = self._impute_formants()
         self.smoothed_list = self._smooth_formants()
         self._file_name = None
-        self._id = None        
+        self._id = None      
+        self._group = None  
         self._formant_df = None
         self._param_df = None
+        self._interval = None
     
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
@@ -128,35 +132,17 @@ class OneTrack(Track):
     def _smooth_formants(self):
         smoothed_list = [
           self.smoother.smooth(x) 
-            for x in self.imputed_formants
+            for x in self.formants
         ]
-    
         return smoothed_list
     
     def _get_measured(self):
         nan_tracks = np.isnan(self.formants)
-        all_nan = np.all(nan_tracks, axis = 1)
-        if np.any(all_nan):
-            return np.argmax(all_nan)
-        return all_nan.shape[0]
+        mostly_nan = np.mean(nan_tracks, axis = 1) > 0.5
+        if np.any(mostly_nan):
+            return np.argmax(mostly_nan)
+        return mostly_nan.shape[0]
     
-    def _impute_formants(self):     
-        imp = IterativeImputer(max_iter=10, random_state=0)
-        to_impute = self.formants[0:self.n_measured_formants,:]
-        nan_entries = np.isnan(to_impute)
-
-        if not np.any(nan_entries):
-            return to_impute
-        
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")   
-            imp.fit(np.transpose(to_impute))
-        
-        imputed = np.transpose(
-            imp.transform(np.transpose(to_impute))
-        )
-        return imputed
-
     @property
     def smoothed_formants(self):
         return np.array(
@@ -194,6 +180,31 @@ class OneTrack(Track):
     def id(self, x):
         self._id = x
 
+    @property
+    def interval(self):
+        return self._interval
+    
+    @property
+    def group(self):
+        return self._group
+    
+    @group.setter
+    def group(self, groupname):
+        self._group = groupname
+
+    @interval.setter
+    def interval(self, interval: SequenceInterval):
+        self._interval = interval
+        self.label = interval.label
+        self.id = interval.id
+        self.group = self.__get_group(self._interval)
+
+    def __get_group(self, interval):
+        if isinstance(interval.within, TierGroup):
+            return interval.within.name
+        
+        return self.__get_group(interval.within)
+
     def to_df(self, output = "formants"):
         if output == "formants"\
               and not isinstance(self._formant_df, pl.DataFrame):
@@ -211,8 +222,11 @@ class OneTrack(Track):
             return self._param_df
         
         raise ValueError("output must be either 'formants' or 'param'")
-        
     
+    def spectrogram(self, **kwargs):
+        spectrogram(self, **kwargs)
+    
+        
 
 class CandidateTracks(Track):
     """A class for candidate tracks for a single formant
@@ -243,7 +257,7 @@ class CandidateTracks(Track):
         max_max_formant: float = 7000,
         nstep = 20,
         n_formants: int = 4,
-        window_length: float = 0.05,
+        window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
         smoother: Smoother = Smoother(),
@@ -273,7 +287,7 @@ class CandidateTracks(Track):
         self._id = None
         self._formant_df = None
         self._param_df = None
-
+        self._interval = None
 
         self.candidates = [
             OneTrack(
@@ -324,6 +338,16 @@ class CandidateTracks(Track):
         for c in self.candidates:
             c.id = x
 
+    @property
+    def interval(self):
+        return self._interval
+
+    @interval.setter
+    def interval(self, interval):
+        self._interval = interval
+        for c in self.candidates:
+            c.interval = interval
+
     def _normalize_n_measured(self):
         for track in self.candidates:
             track.n_measured_formants = self.min_n_measured
@@ -349,4 +373,7 @@ class CandidateTracks(Track):
         
         if output == "param":
             return self._param_df
+            
+    def spectrograms(self, **kwargs):
+        candidate_spectrograms(self, **kwargs)
 
