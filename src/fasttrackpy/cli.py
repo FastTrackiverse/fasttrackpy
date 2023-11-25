@@ -135,18 +135,23 @@ textgrid_processing = cloup.option_group(
     cloup.option(
         "--entry-classes",
         type = click.STRING,
-        default="Word|Phone"
+        default="Word|Phone",
+        help = "Format of the textgrid tier. Default assumes `Word|Phone` forced"\
+               " alignment. If not forced alignment, pass `SequenceInterval`"
     ),
     cloup.option(
         "--target-tier",
         type = click.STRING,
         default = "Phone",
-        required=True
+        required=True,
+        help = "The tier to target. Pass either the entry class (defaults to `Phone`)"\
+              " or the tier name."
     ),
     cloup.option(
         "--target-labels",
         type=click.STRING,
-        default = "[AEIOU]"
+        default = "[AEIOU]",
+        help="A regex for the intervals to target (defaults to `[AEIOU]`"
     )
 )
 
@@ -168,7 +173,7 @@ output_destinations = cloup.option_group(
 
 @cloup.group(show_subcommand_aliases=True)
 def fasttrack():
-    """jawn"""
+    """Run fastttrack"""
     pass
 
 @fasttrack.command(
@@ -190,21 +195,6 @@ def fasttrack():
     ),
     help="Audio input file options",
     constraint=cloup.constraints.RequireAtLeast(1)
-)
-@cloup.option_group(
-    "Output Destinations",
-    cloup.option(
-        "--output", 
-        type=click.Path(),
-        help = "Name of an output file",
-    ),
-    cloup.option(
-        "--dest", 
-        type=click.Path(),
-        help = "Name of an output directory"
-    ),
-    help = "Output destination options",
-    constraint=cloup.constraints.RequireAtLeast(1)    
 )
 @audio_processing
 @output_destinations
@@ -324,7 +314,7 @@ def audio(
             ) for x in candidate_list]
 
 @fasttrack.command(
-    aliases = ["tg_audio"],
+    aliases = ["audio-tg"],
     formatter_settings=formatter_settings,
     help="run fasttrack with audio + textgrid"
 )
@@ -343,9 +333,9 @@ def audio(
         help = "textgrid file path"
     )
 )
-@audio_processing
-@textgrid_processing
 @output_destinations
+@textgrid_processing
+@audio_processing
 @output_options
 @smoother_options
 def audio_textgrid(
