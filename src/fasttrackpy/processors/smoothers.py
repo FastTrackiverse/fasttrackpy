@@ -123,8 +123,8 @@ def dct_smooth_regression(
             )
         smooth = np.dot(predictors.T, coefs)
     except:
-        smooth = np.zeros(shape=y.shape)
-        coefs = np.zeros(shape = (order,))
+        smooth = np.full(y.shape, np.nan)
+        coefs = np.full((order,), np.nan)
     return Smoothed(
         smoothed=smooth,
         params = coefs
