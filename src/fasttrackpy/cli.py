@@ -14,8 +14,12 @@ from typing import Union
 import click
 import cloup
 from cloup import Context, HelpFormatter, HelpTheme, Style
+from importlib.resources import files
+import yaml
 
 import logging
+
+DEFAULT_CONFIG = str(files("fasttrackpy").joinpath("resources", "config.yml"))
 
 logging.basicConfig(
     filename = "fasttrack.log",
@@ -24,12 +28,31 @@ logging.basicConfig(
     level=logging.DEBUG
 )
 
+def configure(ctx, param, filename):
+    with open(filename) as file:
+        config = yaml.safe_load(file)
+    
+    ctx.default_map = config
+
 formatter_settings = HelpFormatter.settings(
     theme=HelpTheme(
         invoked_command=Style(fg='bright_yellow'),
         heading=Style(fg='bright_white', bold=True),
         constraint=Style(fg='magenta'),
         col1=Style(fg='green'),
+    )
+)
+
+config = cloup.option_group(
+    "config file",
+    cloup.option(
+        "--config",
+        type = click.Path(exists=True, dir_okay=False),
+        default = DEFAULT_CONFIG,
+        callback=configure,
+        is_eager=True,
+        expose_value=False,
+        help="A yaml config file of fasttrack options"
     )
 )
 
@@ -196,9 +219,10 @@ def fasttrack():
     help="Audio input file options",
     constraint=cloup.constraints.RequireAtLeast(1)
 )
-@audio_processing
+@config
 @output_destinations
 @output_options
+@audio_processing
 @smoother_options
 def audio(
         file: Union[str, Path] = None,
@@ -214,6 +238,7 @@ def audio(
         xmax: float = None,
         min_max_formant:float = 4000,
         max_max_formant:float = 7000,
+        min_duration = 0.05,
         nstep:int = 20,
         n_formants: int = 4,
         window_length: float = 0.025,
@@ -333,6 +358,7 @@ def audio(
         help = "textgrid file path"
     )
 )
+@config
 @output_destinations
 @textgrid_processing
 @audio_processing
