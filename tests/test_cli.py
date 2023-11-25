@@ -42,14 +42,18 @@ class TestCLI:
         out_dir.rmdir()
 
     def test_audio_tg(self):
-        out_file = Path("tests", "test_data", "vowels.csv")
+        out_dir = self.sound_path.parent.joinpath("output")
+        if not out_dir.is_dir():
+            out_dir.mkdir()
         runner = CliRunner()
         runner.invoke(
             fasttrack,
-            f"audio-textgrid --audio {str(self.audio_path)} --textgrid {str(self.tg_path)} --target-tier Phone --target-labels AY --output {str(out_file)}"
+            f"audio-textgrid --audio {str(self.audio_path)} --textgrid {str(self.tg_path)} --target-tier Phone --target-labels AY --dest {str(out_dir)}"
         )
 
-        assert out_file.exists()
+        out_files = list(out_dir.glob("*"))
+        assert all([x.is_file() for x in out_files])
 
-        out_file.unlink()
+        [x.unlink() for x in out_files]
+        out_dir.rmdir()
 
