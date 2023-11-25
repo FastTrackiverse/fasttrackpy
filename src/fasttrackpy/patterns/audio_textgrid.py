@@ -32,7 +32,7 @@ def get_interval_classes(
     ):
         return [getattr(aligned_textgrid, x) for x in textgrid_format]
     
-    return SequenceInterval
+    return [SequenceInterval]
 
 def get_target_tiers(
         tg: AlignedTextGrid,
