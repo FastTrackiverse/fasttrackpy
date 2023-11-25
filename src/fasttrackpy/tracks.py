@@ -14,6 +14,8 @@ import polars as pl
 
 from typing import Union
 import warnings
+import logging
+
 
 class Track:
     """A generic track class to set up attribute values
@@ -96,7 +98,8 @@ class OneTrack(Track):
         self.n_measured_formants = self._get_measured()
         self.smoothed_list = self._smooth_formants()
         self._file_name = None
-        self._id = None        
+        self._id = None      
+        self._group = None  
         self._formant_df = None
         self._param_df = None
         self._interval = None
@@ -131,7 +134,6 @@ class OneTrack(Track):
           self.smoother.smooth(x) 
             for x in self.formants
         ]
-    
         return smoothed_list
     
     def _get_measured(self):
@@ -182,6 +184,14 @@ class OneTrack(Track):
     def interval(self):
         return self._interval
     
+    @property
+    def group(self):
+        return self._group
+    
+    @group.setter
+    def group(self, groupname):
+        self._group = groupname
+
     @interval.setter
     def interval(self, interval: SequenceInterval):
         self._interval = interval
