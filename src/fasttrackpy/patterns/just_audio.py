@@ -44,7 +44,7 @@ def create_audio_checker(no_magic:bool = no_magic) -> Callable:
         Returns:
             (bool): Whether or not the file is an audio file
         """
-        file_mime = magic.from_file(path, mime=True)
+        file_mime = magic.from_file(str(path), mime=True)
         return "audio" in file_mime
     
     def sndhdr_checker(path: str)->bool:
@@ -56,7 +56,7 @@ def create_audio_checker(no_magic:bool = no_magic) -> Callable:
         Returns:
             (bool): Whether or not the file is an audio file.
         """
-        hdr_info = sndhdr.what(path)
+        hdr_info = sndhdr.what(str(path))
         return isinstance(hdr_info, SndHeaders)
     
     if no_magic:
