@@ -51,12 +51,12 @@ def formant_to_dataframe(self):
     ]
 
     orig_df = pl.DataFrame(
-        data = self.formants[0:self.n_measured_formants].T,
+        data = self.formants[0:self.n_measured_formants],
         schema=orig_names
     )
 
     smooth_df = pl.DataFrame(
-        data = self.smoothed_formants[0:self.n_measured_formants].T,
+        data = self.smoothed_formants[0:self.n_measured_formants],
         schema=smooth_names
     )
 
@@ -86,7 +86,7 @@ def param_to_dataframe(self):
         np.arange(self.parameters.shape[0])+1
     ]
     param_df = pl.DataFrame(
-        data = self.parameters.T,schema=schema
+        data = self.parameters,schema=schema
     )
     
     param_df = param_df.with_columns(
