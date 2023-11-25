@@ -3,6 +3,14 @@ import polars as pl
 from pathlib import Path
 import matplotlib.pyplot as mp
 
+ptolmap = {"F1" :"#4477AA", 
+           "F1_s": "#4477AA", 
+           "F2": "#EE6677", 
+           "F2_s": "#EE6677",
+           "F3": "#228833",
+           "F3_s": "#228833",
+           "F4": "#CCBB44",
+           "F4_s": "#CCBB44"}
 
 def add_metadata(self, out_df):
     if self.file_name:
@@ -112,36 +120,76 @@ def write_data(
     raise ValueError("Either 'file' or 'destination' needs to be set")
 
 
-def spectrogram(self, formants = 3, maximum_frequency=3500, tracks = True, dynamic_range=60, figsize = (8,5)):
+def spectrogram(
+        self, 
+        formants = 3, 
+        maximum_frequency=3500, 
+        tracks = True, 
+        dynamic_range=60, 
+        figsize = (8,5),
+        color_scale="Greys"
+    ):
 
-    spctgrm = self.sound.to_spectrogram(maximum_frequency=maximum_frequency)
+    spctgrm = self.sound.to_spectrogram(
+        maximum_frequency=maximum_frequency
+    )
     Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
     db = 10 * np.log10(spctgrm.values)
     min_shown = db.max() - dynamic_range
-    n_time_steps = len(self.formants[0])
-    point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
     
     mp.figure(figsize=figsize)
-    mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
+    mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap=color_scale)
     mp.ylim([spctgrm.ymin, spctgrm.ymax])
     mp.xlabel("Time (s)")
     mp.ylabel("Frequency (Hz)")
+
+    formant_cols = [f"F{x+1}" for x in range(formants)]
+    smooth_cols = [f"F{x+1}_s" for x in range(formants)]
+    data = self.to_df()
+    all_cols = [x for x in formant_cols+smooth_cols if x in data.columns]
+
+    data = data\
+        .select(["time"]+all_cols)\
+        .melt(id_vars = "time")\
+        .with_columns(
+            pl.col("variable")\
+            .map_dict(remapping=ptolmap)\
+            .alias("color")
+            )
     
     if tracks:
-        mp.scatter (point_times, self.formants[0], c="red")
-        mp.scatter (point_times, self.formants[1], c="blue")
-        mp.scatter (point_times, self.formants[2], c="green")
-        if formants == 4:
-            mp.scatter (point_times, self.formants[3], c="darkturquoise")    
+        mp.scatter(x = "time",
+                   y="value", 
+                   c="color", 
+                   marker = ".", 
+                   data=data.filter(
+                       ~pl.col("variable").str.contains("_s")
+                   ))    
+        mp.scatter(x = "time",
+                   y="value", 
+                   c="color", 
+                   marker = "+", 
+                   data=data.filter(
+                       pl.col("variable").str.contains("_s")
+                   ))    
 
-def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic_range=60,figsize=(12,8)):
+def candidate_spectrograms(
+        self, 
+        formants = 3, 
+        maximum_frequency = 3500, 
+        dynamic_range=60,
+        figsize=(12,8)
+    ):
     
-    spectrogram = self.sound.to_spectrogram(maximum_frequency=maximum_frequency,time_step=0.005)
-    Time, Hz = spectrogram.x_grid(), spectrogram.y_grid()
+    spectrogram = self.sound.to_spectrogram(
+        maximum_frequency=maximum_frequency,
+        time_step=0.005
+        )
+    Time = spectrogram.x_grid()
+    Hz = spectrogram.y_grid()
+
     db = 10 * np.log10(spectrogram.values)
     min_shown = db.max() - dynamic_range
-    n_time_steps = len(self.candidates[0].formants[0])
-    point_times = [0.025 + time_step*0.002 for time_step in range(n_time_steps)]    
 
     # for plotting layout    
     dims = np.array([4, self.nstep//4])
@@ -149,22 +197,65 @@ def candidate_spectrograms(self, formants = 3, maximum_frequency = 3500, dynamic
     panel_rows = dims.min()
     
     fig = mp.figure(figsize=figsize)
-    gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.05, wspace=0.05)
+    gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.18, wspace=0.05)
     axs = gs.subplots(sharex='col', sharey='row')
 
-    #gs = fig.add_gridspec(3, hspace=0)
-    #axs = gs.subplots(sharex=True, sharey=True)
+    formant_cols = [f"F{x+1}" for x in range(formants)]
+    smooth_cols = [f"F{x+1}_s" for x in range(formants)]
 
     for i in range (panel_rows):
         for j in range(panel_columns):
-            axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='magma')
-            axs[i, j].set_ylim([0, spectrogram.ymax])
-            analysis = i*3+j
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[0], c="red", s = 5)
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[1], c="blue", s = 5)
-            axs[i, j].scatter (point_times, self.candidates[analysis].formants[2], c="green", s = 5)    
-            if formants == 4:
-                axs[i, j].scatter (point_times, self.candidates[analysis].formants[3], c="darkturquoise", s = 5)    
+            analysis = i*panel_columns+j
 
+            if analysis == self.winner_idx:
+                axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='jet')
+            else:
+                axs[i, j].pcolormesh(Time, Hz, db, vmin=min_shown, cmap='binary')
+
+            axs[i, j].set_ylim([0, spectrogram.ymax])
+
+            data = self.candidates[analysis].to_df()
+            all_cols = [x for x in formant_cols+smooth_cols if x in data.columns]
+
+
+            data = data\
+                .select(["time"]+all_cols)\
+                .melt(id_vars = "time")\
+                .with_columns(
+                    pl.col("variable")\
+                    .map_dict(remapping=ptolmap)\
+                    .alias("color")
+                )
+            
+            axs[i,j].scatter(
+                x = "time",
+                y = "value",
+                c = "color",
+                data=data.filter(
+                       ~pl.col("variable").str.contains("_s")
+                ),
+                s = 5,
+                marker = "."
+            )
+            axs[i,j].scatter(
+                x = "time",
+                y = "value",
+                c = "color",
+                data = data.filter(
+                    pl.col("variable").str.contains("_s")
+                ),
+                s = 5,
+                marker = "+"
+            )
+
+            axs[i, j].set_title(str(round(self.candidates[analysis].maximum_formant)),y=0.95)
+            
+            #axs[i,j].text(
+            #    x = 0.1,
+            #    y = spectrogram.ymax * 0.9,
+            #    s = str(round(self.candidates[analysis].maximum_formant))
+            #)
+             
+                
     for ax in fig.get_axes():
         ax.label_outer()
