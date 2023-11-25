@@ -2,6 +2,7 @@ import numpy as np
 import polars as pl
 from aligned_textgrid import SequenceInterval
 from pathlib import Path
+import logging
 
 def add_metadata(self, out_df):
     if self.file_name:
@@ -52,6 +53,7 @@ def formant_to_dataframe(self):
     out_df = pl.concat([orig_df, smooth_df], how = "horizontal")
     
     out_df = out_df.with_columns(
+        error = pl.lit(self.smooth_error),
         time = pl.lit(self.time_domain),
         max_formant = pl.lit(self.maximum_formant),
         n_formant = pl.lit(self.n_formants),
@@ -76,7 +78,11 @@ def param_to_dataframe(self):
     param_df = pl.DataFrame(
         data = self.parameters.T,schema=schema
     )
-       
+    
+    param_df = param_df.with_columns(
+        error = pl.lit(self.smooth_error)
+    )
+
     param_df = add_metadata(self, param_df)    
 
     return param_df
