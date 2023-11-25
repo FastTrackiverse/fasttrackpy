@@ -2,7 +2,7 @@ from fasttrackpy.cli import fasttrack
 from pathlib import Path
 from click.testing import CliRunner
 import pytest
-
+import yaml
 
 class TestCLI:
     sound_path = Path("tests", "test_data", "ay.wav")
@@ -22,6 +22,25 @@ class TestCLI:
         assert all([x.is_file() for x in out_files])
         [x.unlink() for x in out_files]
         out_dir.rmdir()
+
+    def test_config_file(self):
+        with open("tests/test_data/config.yml") as file:
+            params = yaml.safe_load(file)
+
+        sound_path = Path(params["file"])
+        dest = Path(params["dest"])
+        if not dest.is_dir():
+            dest.mkdir()
+
+        runner = CliRunner()
+        runner.invoke(
+            fasttrack,
+            f"audio --config tests/test_data/config.yml"
+        )
+        out_files = list(dest.glob("*"))
+        assert all([x.is_file() for x in out_files])
+        [x.unlink() for x in out_files]
+        dest.rmdir()
 
 
     def test_dir_usage(self):
