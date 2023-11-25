@@ -22,7 +22,7 @@ python = ">=3.10,<3.13"
 praat-parselmouth = "^0.4.3"
 scipy = {version = "^1.11.3", python = ">=3.10,<3.13"}
 numpy = {version = "^1.26.1", python = ">=3.10,<3.13"}
-polars = "^0.19.13"
+polars = "^0.19.16"
 pytest-cov = "^4.1.0"
 pytest = "^7.4.3"
 python-magic = {version = "^0.4.27", markers = "sys_platform != 'win32'"}
