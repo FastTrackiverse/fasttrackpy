@@ -15,6 +15,15 @@ import click
 import cloup
 from cloup import Context, HelpFormatter, HelpTheme, Style
 
+import logging
+
+logging.basicConfig(
+    filename = "fasttrack.log",
+    filemode="a",
+    #format="%(message)",
+    level=logging.DEBUG
+)
+
 formatter_settings = HelpFormatter.settings(
     theme=HelpTheme(
         invoked_command=Style(fg='bright_yellow'),
@@ -82,8 +91,8 @@ smoother_options = cloup.option_group(
     cloup.option(
         "--smoother-method", 
         type=click.Choice(["dct_smooth", "dct_smooth_regression"]),
-        default="dct_smooth",
-        help="Smoother method to use. Defaults to 'dct_smooth' "\
+        default="dct_smooth_regression",
+        help="Smoother method to use. Defaults to 'dct_smooth_regression' "\
              "(Discrete Cosine Transform)"
     ),
     cloup.option(
@@ -208,7 +217,7 @@ def audio(
         dest: Union[str, Path] = None,
         which_output: str = "winner",
         data_output: str = "formants",
-        smoother_method: str = "dct_smooth",
+        smoother_method: str = "dct_smooth_regression",
         smoother_order: int = 5,
         loss_method: str = "lmse",
         xmin:float = 0,
@@ -234,7 +243,7 @@ def audio(
         data_output (str, optional): Whether to save the formant data,
             or smoothing parameter data.
             Defaults to "formants".
-        smoother_method (str, optional): Smoother method to use. Defaults to 'dct_smooth'
+        smoother_method (str, optional): Smoother method to use. Defaults to 'dct_smooth_regression'
             (Discrete Cosine Transform)
         smoother_order (int, optional): Order of the smooth. 
             Defaults to 5. (More is wigglier.)
@@ -349,7 +358,7 @@ def audio_textgrid(
         dest: Union[str, Path] = None,
         which_output: str = "winner",
         data_output: str = "formants",
-        smoother_method: str = "dct_smooth",
+        smoother_method: str = "dct_smooth_regression",
         smoother_order: int = 5,
         loss_method: str = "lmse",
         min_duration: float = 0.05,
@@ -375,7 +384,7 @@ def audio_textgrid(
         data_output (str, optional): Whether to save the formant data,
             or smoothing parameter data.
             Defaults to "formants".
-        smoother_method (str, optional): Smoother method to use. Defaults to 'dct_smooth'
+        smoother_method (str, optional): Smoother method to use. Defaults to 'dct_smooth_regression'
             (Discrete Cosine Transform)
         smoother_order (int, optional): Order of the smooth. 
             Defaults to 5. (More is wigglier.)
