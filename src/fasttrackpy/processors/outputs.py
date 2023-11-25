@@ -125,7 +125,7 @@ def write_data(
         df = candidates.to_df(which = which, output = output)
 
     if file:
-        df.write_csv(file = file)
+        df.write_csv(file = str(file))
         return
     
     if destination and "file_name" in df.columns:
@@ -134,12 +134,12 @@ def write_data(
         file = destination.joinpath(
             df["file_name"][0]
         ).with_suffix(".csv")
-        df.write_csv(file = file)
+        df.write_csv(file = str(file))
         return
 
     if destination:
         file = destination.joinpath("output.csv")
-        df.write_csv(file = file)
+        df.write_csv(file = str(file))
         return
     
     raise ValueError("Either 'file' or 'destination' needs to be set")
