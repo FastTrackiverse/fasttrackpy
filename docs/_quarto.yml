@@ -52,7 +52,7 @@ quartodoc:
   parser: google
   render_interlinks: false
   sections:
-    - title: functions
+    - title: Processing Functions
       desc: functions
       contents:
         - process_audio_file
@@ -61,8 +61,11 @@ quartodoc:
     - title: Classes
       desc: Classes
       contents:
-        - OneTrack
-        - CandidateTracks
+        - name: OneTrack
+          children: embedded
+        - name: CandidateTracks
+          children: embedded
+
     - title: Smoothers
       desc: Smoother
       contents:

@@ -4,22 +4,74 @@
 
 A class for candidate tracks for a single formant
 
-This takes the same arguments as `OneTrack` except for `max_formant.
-
 ## Parameters
 
-| Name              | Type   | Description                                                  | Default   |
-|-------------------|--------|--------------------------------------------------------------|-----------|
-| `min_max_formant` | float  | The floor for the `max_formant` setting.  Defaults to 4000.  | `4000`    |
-| `max_max_formant` | float  | The cieling for the `max_formant` setting. Defaults to 7000. | `7000`    |
-| `nstep`           | int    | The number of steps for the grid search. Defaults to 20.     | `20`      |
+| Name                | Type     | Description                                                               | Default      |
+|---------------------|----------|---------------------------------------------------------------------------|--------------|
+| `sound`             | pm.Sound | A `parselmouth.Sound` object.                                             | _required_   |
+| `min_max_formant`   | float    | The lowest max-formant value to try.  Defaults to 4000.                   | `4000`       |
+| `max_max_formant`   | float    | The highest max formant to try.  Defaults to 7000.                        | `7000`       |
+| `nstep`             | int      | The number of steps from the min to the max max formant.  Defaults to 20. | `20`         |
+| `n_formants`        | int      | The number of formants to track. Defaults to 4.                           | `4`          |
+| `window_length`     | float    | Window length of the formant analysis.  Defaults to 0.025.                | `0.025`      |
+| `time_step`         | float    | Time step of the formant analyusis window.  Defaults to 0.002.            | `0.002`      |
+| `pre_emphasis_from` | float    | Pre-emphasis threshold.  Defaults to 50.                                  | `50`         |
+| `smoother`          | Smoother | The smoother method to use.  Defaults to `Smoother()`.                    | `Smoother()` |
+| `loss_fun`          | Loss     | The loss function to use.  Defaults to Loss().                            | `Loss()`     |
+| `agg_fun`           | Agg      | The loss aggregation function to use.  Defaults to Agg().                 | `Agg()`      |
 
 ## Attributes
 
-| Name           | Type                  | Description                                                                    |
-|----------------|-----------------------|--------------------------------------------------------------------------------|
-| candidates     | list\[OneTrack, ...\] | A list of `OneTrack` tracks.                                                   |
-| min_n_measured | int                   | The smallest number of successfully measured  formants across all `candidates` |
-| smooth_errors  | np.array              | The error terms for each treack in `candidates`                                |
-| winner_idx     | int                   | The candidate track with the smallest error term                               |
-| winner         | OneTrack              | The winning `OneTrack` track,                                                  |
+| Name           | Type                              | Description                                                                    |
+|----------------|-----------------------------------|--------------------------------------------------------------------------------|
+| candidates     | list\[OneTrack, ...\]             | A list of `OneTrack` tracks.                                                   |
+| min_n_measured | int                               | The smallest number of successfully measured  formants across all `candidates` |
+| smooth_errors  | np.array                          | The error terms for each treack in `candidates`                                |
+| winner_idx     | int                               | The candidate track with the smallest error term                               |
+| winner         | OneTrack                          | The winning `OneTrack` track.                                                  |
+| file_name      | str                               | The filename of the audio file, if set.                                        |
+| interval       | aligned_textgrid.SequenceInterval | The textgrid interval of the sound, if set.                                    |
+| id             | str                               | The interval id of the sound, if set.                                          |
+| group          | str                               | The tier group name of the sound, if set.                                      |
+
+## Methods
+
+| Name | Description |
+| --- | --- |
+| [spectrograms](#fasttrackpy.CandidateTracks.spectrograms) | Generate a spectrogram with formant tracks for the candidate tracks |
+| [to_df](#fasttrackpy.CandidateTracks.to_df) | Return a polars dataframe of the candidate tracks |
+
+### spectrograms { #fasttrackpy.CandidateTracks.spectrograms }
+
+`CandidateTracks.spectrograms(**kwargs)`
+
+Generate a spectrogram with formant tracks for the candidate tracks
+
+#### Parameters
+
+| Name                | Type   | Description                                               | Default    |
+|---------------------|--------|-----------------------------------------------------------|------------|
+| `formants`          | int    | Number of formants to plot.  Defaults to 3.               | _required_ |
+| `maximum_frequency` | int    | Maximum frequency for the spectrogram.  Defaults to 3500. | _required_ |
+| `tracks`            | bool   | Whether or not to plot the tracks.  Defaults to True.     | _required_ |
+| `dynamic_range`     | int    | Dynamic range of the spectrogram.  Defaults to 60.        | _required_ |
+| `figsize`           | tuple  | Figure size.  Defaults to (12,8).                         | _required_ |
+
+### to_df { #fasttrackpy.CandidateTracks.to_df }
+
+`CandidateTracks.to_df(which='winner', output='formants')`
+
+Return a polars dataframe of the candidate tracks
+
+#### Parameters
+
+| Name     | Type                           | Description                                                                          | Default      |
+|----------|--------------------------------|--------------------------------------------------------------------------------------|--------------|
+| `which`  | Literal\['winner', 'all'\]     | Return just the winner track data, or all candidates. Defaults to "winner".          | `'winner'`   |
+| `output` | Literal\['formants', 'param'\] | Whether to output the formants or the smoothing parameters.  Defaults to "formants". | `'formants'` |
+
+#### Returns
+
+| Type         | Description          |
+|--------------|----------------------|
+| pl.DataFrame | A `polars.DataFrame` |
