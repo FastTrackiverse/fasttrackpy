@@ -1,6 +1,6 @@
 # CandidateTracks { #fasttrackpy.CandidateTracks }
 
-`CandidateTracks(self, sound, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
+`CandidateTracks(self, sound, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
 
 A class for candidate tracks for a single formant
 

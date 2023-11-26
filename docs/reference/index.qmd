@@ -8,6 +8,7 @@ functions
 | --- | --- |
 | [process_audio_file](process_audio_file.qmd#fasttrackpy.process_audio_file) | _summary_ |
 | [process_directory](process_directory.qmd#fasttrackpy.process_directory) | _summary_ |
+| [process_audio_textgrid](process_audio_textgrid.qmd#fasttrackpy.process_audio_textgrid) | _summary_ |
 
 ## Classes
 

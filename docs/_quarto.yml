@@ -4,6 +4,8 @@ project:
 
 website:
   title: "fasttrackpy"
+  favicon: assets/logo_f2.png
+  page-navigation: true
   navbar:
     left:
       - href: index.qmd
@@ -15,12 +17,14 @@ website:
         href: https://github.com/JoFrhwld/fasttrackpy
   sidebar:
       - id: get-started
+        logo: assets/logo_f2.png
         title: Get Started
         style: floating
         align: left
         contents:
           - index.qmd
-          - getting_started.qmd
+          - usage/getting_started.qmd
+          - usage/all_arguments.qmd
 
 metadata-files:
   - reference/_sidebar.yml
@@ -53,6 +57,7 @@ quartodoc:
       contents:
         - process_audio_file
         - process_directory
+        - process_audio_textgrid
     - title: Classes
       desc: Classes
       contents:

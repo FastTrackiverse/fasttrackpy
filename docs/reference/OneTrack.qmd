@@ -1,6 +1,6 @@
 # OneTrack { #fasttrackpy.OneTrack }
 
-`OneTrack(self, maximum_formant, sound, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
+`OneTrack(self, maximum_formant, sound, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
 
 _summary_
 
@@ -11,7 +11,7 @@ _summary_
 | `maximum_formant`   | float    | max formant                                        | _required_   |
 | `sound`             | pm.Sound | A `parselmouth.Sound` object.                      | _required_   |
 | `n_formants`        | int      | Number of formants to track. Defaults to 4.        | `4`          |
-| `window_length`     | float    | Defaults to 0.05.                                  | `0.05`       |
+| `window_length`     | float    | Defaults to 0.05.                                  | `0.025`      |
 | `time_step`         | float    | Defaults to 0.002.                                 | `0.002`      |
 | `pre_emphasis_from` | float    | Defaults to 50.                                    | `50`         |
 | `smoother`          | Smoother | Smoother function. Defaults to `Smoother` default. | `Smoother()` |
@@ -26,6 +26,5 @@ _summary_
 | time_domain         | np.array   | The time domain of the formant estimates                                                     |
 | formants            | np.ndarray | A (formants, time) array of values. The formants as initially estimated by praat-parselmouth |
 | n_measured_formants | int        | The total number of formants for which formant tracks were estimatable                       |
-| imputed_formants    | np.ndarray | Formant tracks for which missing values were imputed using `sklearn.impute.IterativeImputer` |
 | smoothed_formants   | np.ndarray | The smoothed formant values, using  the method passed to `smoother`.                         |
-| smooth_error        | float      | The error term between imputed formants and  smoothed formants.                              |
+| smooth_error        | float      | The error term between formants and  smoothed formants.                                      |
