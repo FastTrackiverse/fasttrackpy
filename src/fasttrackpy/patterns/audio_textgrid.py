@@ -93,6 +93,32 @@ def process_audio_textgrid(
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg()
 )->list[CandidateTracks]:
+    """_summary_
+
+    Args:
+        audio_path (str | Path): _description_
+        textgrid_path (str | Path): _description_
+        textgrid_format (list, optional): _description_. Defaults to ["Word", "Phone"].
+        target_tier (str, optional): _description_. Defaults to "Phone".
+        target_labels (str, optional): _description_. Defaults to "[AEIOU]".
+        min_duration (float, optional): _description_. Defaults to 0.05.
+        min_max_formant (float, optional): _description_. Defaults to 4000.
+        max_max_formant (float, optional): _description_. Defaults to 7000.
+        nstep (int, optional): _description_. Defaults to 20.
+        n_formants (int, optional): _description_. Defaults to 4.
+        window_length (float, optional): _description_. Defaults to 0.025.
+        time_step (float, optional): _description_. Defaults to 0.002.
+        pre_emphasis_from (float, optional): _description_. Defaults to 50.
+        smoother (Smoother, optional): _description_. Defaults to Smoother().
+        loss_fun (Loss, optional): _description_. Defaults to Loss().
+        agg_fun (Agg, optional): _description_. Defaults to Agg().
+
+    Raises:
+        TypeError: _description_
+
+    Returns:
+        list[CandidateTracks]: _description_
+    """
     
     if not is_audio(str(audio_path)):
         raise TypeError(f"The file at {str(audio_path)} is not an audio file")
