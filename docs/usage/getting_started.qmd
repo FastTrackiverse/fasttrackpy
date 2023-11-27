@@ -3,7 +3,7 @@ title: Quickstart
 engine: jupyter
 ---
 
-After installing `fasttrackpy`, you can use the `fasttrack` commandline executable in one of two ways.
+After installing `fasttrackpy`, you can use the `fasttrack` commandline executable. For a full list of all settable options, see [All FastTrack Options](all_arguments.qmd)
 
 ## Audio File Only Processing
 

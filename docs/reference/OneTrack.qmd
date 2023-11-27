@@ -2,7 +2,7 @@
 
 `OneTrack(self, maximum_formant, sound, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
 
-_summary_
+A single formant track.
 
 ## Parameters
 

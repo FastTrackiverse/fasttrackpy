@@ -16,7 +16,7 @@ Classes
 
 | | |
 | --- | --- |
-| [OneTrack](OneTrack.qmd#fasttrackpy.OneTrack) | _summary_ |
+| [OneTrack](OneTrack.qmd#fasttrackpy.OneTrack) | A single formant track. |
 | [CandidateTracks](CandidateTracks.qmd#fasttrackpy.CandidateTracks) | A class for candidate tracks for a single formant |
 
 ## Smoothers

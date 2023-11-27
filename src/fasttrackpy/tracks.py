@@ -44,7 +44,7 @@ class Track:
         self.agg_fun = agg_fun
 
 class OneTrack(Track):
-    """_summary_
+    """A single formant track.
 
     Args:
         sound (pm.Sound): A `parselmouth.Sound` object.
