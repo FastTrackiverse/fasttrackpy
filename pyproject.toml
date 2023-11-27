@@ -48,6 +48,7 @@ kaleido = "0.2.1"
 quartodoc = "^0.6.5"
 nbformat = "^5.9.2"
 jupyter = "^1.0.0"
+ipython = "^8.18.0"
 
 [build-system]
 requires = ["poetry-core"]

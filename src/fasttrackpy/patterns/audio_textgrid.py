@@ -78,7 +78,7 @@ def get_candidates(args_dict):
 def process_audio_textgrid(
         audio_path: str|Path,
         textgrid_path: str|Path,
-        textgrid_format: list = ["Word", "Phone"],
+        entry_classes: list = ["Word", "Phone"],
         target_tier: str = "Phone",
         target_labels: str = "[AEIOU]",
         min_duration: float = 0.05,
@@ -93,31 +93,37 @@ def process_audio_textgrid(
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg()
 )->list[CandidateTracks]:
-    """_summary_
+    """Process an audio and TextGrid file together.
 
     Args:
-        audio_path (str | Path): _description_
-        textgrid_path (str | Path): _description_
-        textgrid_format (list, optional): _description_. Defaults to ["Word", "Phone"].
+        audio_path (str | Path): Path to an audio file.
+        textgrid_path (str | Path): Path to a TextGrid
+        entry_classes (list, optional): _description_. Defaults to ["Word", "Phone"].
         target_tier (str, optional): _description_. Defaults to "Phone".
         target_labels (str, optional): _description_. Defaults to "[AEIOU]".
         min_duration (float, optional): _description_. Defaults to 0.05.
-        min_max_formant (float, optional): _description_. Defaults to 4000.
-        max_max_formant (float, optional): _description_. Defaults to 7000.
-        nstep (int, optional): _description_. Defaults to 20.
-        n_formants (int, optional): _description_. Defaults to 4.
-        window_length (float, optional): _description_. Defaults to 0.025.
-        time_step (float, optional): _description_. Defaults to 0.002.
-        pre_emphasis_from (float, optional): _description_. Defaults to 50.
-        smoother (Smoother, optional): _description_. Defaults to Smoother().
-        loss_fun (Loss, optional): _description_. Defaults to Loss().
-        agg_fun (Agg, optional): _description_. Defaults to Agg().
-
-    Raises:
-        TypeError: _description_
+        min_max_formant (float, optional): The lowest max-formant value to try. 
+            Defaults to 4000.
+        max_max_formant (float, optional): The highest max formant to try. 
+            Defaults to 7000.
+        nstep (int, optional): The number of steps from the min to the max max formant. 
+            Defaults to 20.
+        n_formants (int, optional): The number of formants to track. Defaults to 4.
+        window_length (float, optional): Window length of the formant analysis. 
+            Defaults to 0.025.
+        time_step (float, optional): Time step of the formant analyusis window. 
+            Defaults to 0.002.
+        pre_emphasis_from (float, optional): Pre-emphasis threshold. 
+            Defaults to 50.
+        smoother (Smoother, optional): The smoother method to use. 
+            Defaults to `Smoother()`.
+        loss_fun (Loss, optional): The loss function to use. 
+            Defaults to Loss().
+        agg_fun (Agg, optional): The loss aggregation function to use. 
+            Defaults to Agg().
 
     Returns:
-        list[CandidateTracks]: _description_
+        (list[CandidateTracks]): A list of candidate tracks.
     """
     
     if not is_audio(str(audio_path)):
@@ -125,7 +131,7 @@ def process_audio_textgrid(
     
     sound = pm.Sound(str(audio_path))
 
-    entry_classes = get_interval_classes(textgrid_format=textgrid_format)
+    entry_classes = get_interval_classes(textgrid_format=entry_classes)
     
     tg = AlignedTextGrid(textgrid_path=textgrid_path, entry_classes=entry_classes)
     target_tiers = get_target_tiers(tg, target_tier=target_tier)

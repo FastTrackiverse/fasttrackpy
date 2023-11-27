@@ -342,6 +342,8 @@ class CandidateTracks(Track):
         )
         self._file_name = None
         self._id = None
+        self._label = None
+        self._group = None
         self._formant_df = None
         self._param_df = None
         self._interval = None
@@ -394,6 +396,21 @@ class CandidateTracks(Track):
         self._id = x
         for c in self.candidates:
             c.id = x
+    
+    @property
+    def group(self):
+        return self._group
+    
+    @group.setter
+    def group(self, name):
+        self._group = name
+
+    def __get_group(self, interval):
+        if isinstance(interval.within, TierGroup):
+            return interval.within.name
+        
+        return self.__get_group(interval.within)
+
 
     @property
     def interval(self):
@@ -402,6 +419,9 @@ class CandidateTracks(Track):
     @interval.setter
     def interval(self, interval):
         self._interval = interval
+        self.id = interval.id
+        self.label = interval.label
+        self.group = self.__get_group(interval)
         for c in self.candidates:
             c.interval = interval
 

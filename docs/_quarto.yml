@@ -7,7 +7,7 @@ website:
   favicon: assets/logo_f2.png
   page-navigation: true
   navbar:
-    left:
+    left: 
       - href: index.qmd
         text: Home
       - href: reference/
@@ -25,6 +25,7 @@ website:
           - index.qmd
           - usage/getting_started.qmd
           - usage/all_arguments.qmd
+          - usage/pythonic_use.ipynb
 
 metadata-files:
   - reference/_sidebar.yml
@@ -43,6 +44,7 @@ format:
       dark: darkly
     css: styles.css
     toc: true
+    toc-depth: 4
 
 quartodoc:
   style: pkgdown
