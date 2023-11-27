@@ -5,7 +5,8 @@ website:
     - contents:
       - reference/process_audio_file.qmd
       - reference/process_directory.qmd
-      section: functions
+      - reference/process_audio_textgrid.qmd
+      section: Processing Functions
     - contents:
       - reference/OneTrack.qmd
       - reference/CandidateTracks.qmd

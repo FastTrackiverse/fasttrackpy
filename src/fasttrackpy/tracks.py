@@ -14,7 +14,7 @@ from aligned_textgrid.sequences.tiers import TierGroup
 
 import polars as pl
 
-from typing import Union
+from typing import Union, Literal
 import warnings
 import logging
 
@@ -44,19 +44,25 @@ class Track:
         self.agg_fun = agg_fun
 
 class OneTrack(Track):
-    """_summary_
+    """A single formant track.
 
     Args:
-        maximum_formant (float): max formant
         sound (pm.Sound): A `parselmouth.Sound` object.
-        n_formants (int, optional): Number of formants to track. Defaults to 4.
-        window_length (float, optional): Defaults to 0.05.
-        time_step (float, optional):Defaults to 0.002.
-        pre_emphasis_from (float, optional): Defaults to 50.
-        smoother (Smoother, optional): Smoother function. Defaults to `Smoother` default.
-        loss_fun (_type_, optional): Loss function
-        agg_fun (_type_, optional): Aggregation function
-    
+        maximum_formant (float): max formant
+        n_formants (int, optional): The number of formants to track. Defaults to 4.
+        window_length (float, optional): Window length of the formant analysis. 
+            Defaults to 0.025.
+        time_step (float, optional): Time step of the formant analyusis window. 
+            Defaults to 0.002.
+        pre_emphasis_from (float, optional): Pre-emphasis threshold. 
+            Defaults to 50.
+        smoother (Smoother, optional): The smoother method to use. 
+            Defaults to `Smoother()`.
+        loss_fun (Loss, optional): The loss function to use. 
+            Defaults to Loss().
+        agg_fun (Agg, optional): The loss aggregation function to use. 
+            Defaults to Agg().    
+
     Attributes:
         maximum_formant (float): The max formant
         time_domain (np.array): The time domain of the formant estimates
@@ -66,8 +72,13 @@ class OneTrack(Track):
             formant tracks were estimatable
         smoothed_formants (np.ndarray): The smoothed formant values, using 
             the method passed to `smoother`.
+        parameters (np.ndarray): The smoothing parameters.
         smooth_error (float): The error term between formants and 
             smoothed formants.
+        file_name (str): The filename of the audio file, if set.
+        interval (aligned_textgrid.SequenceInterval): The textgrid interval of the sound, if set.
+        id (str): The interval id of the sound, if set.
+        group (str): The tier group name of the sound, if set.
     """
 
     def __init__(
@@ -205,7 +216,21 @@ class OneTrack(Track):
         
         return self.__get_group(interval.within)
 
-    def to_df(self, output = "formants"):
+    def to_df(
+            self, 
+            output:Literal["formants", "param"] = "formants"
+            ) -> pl.DataFrame:
+        """Output either the formant values or the formant smoothing parameters \
+        as a polars dataframe
+
+        Args:
+            output (Literal['formants', 'param'], optional): Whether
+                to output the formants or the smoothing parameters. 
+                Defaults to "formants".
+
+        Returns:
+            (pl.DataFrame): A `polars.DataFrame`
+        """
         if output == "formants"\
               and not isinstance(self._formant_df, pl.DataFrame):
             df =  formant_to_dataframe(self)
@@ -224,6 +249,22 @@ class OneTrack(Track):
         raise ValueError("output must be either 'formants' or 'param'")
     
     def spectrogram(self, **kwargs):
+        """Generate a spectrogram with tracked formants overlaid
+
+        Args:
+            formants (int, optional): Number of formants to plot. 
+                Defaults to 3.
+            maximum_frequency (int, optional): Maximum frequency for the spectrogram. 
+                Defaults to 3500.
+            tracks (bool, optional): Whether or not to plot the tracks. 
+                Defaults to True.
+            dynamic_range (int, optional): Dynamic range of the spectrogram. 
+                Defaults to 60.
+            figsize (tuple, optional): Figure size. 
+                Defaults to (8,5).
+            color_scale (str, optional): Color scale for the spectrogram. 
+                Defaults to "Greys".
+        """        
         spectrogram(self, **kwargs)
     
         
@@ -231,15 +272,27 @@ class OneTrack(Track):
 class CandidateTracks(Track):
     """A class for candidate tracks for a single formant
     
-    This takes the same arguments as `OneTrack` except for `max_formant.
-
     Args:
-        min_max_formant (float, optional): The floor for the `max_formant` setting. 
+        sound (pm.Sound): A `parselmouth.Sound` object.
+        min_max_formant (float, optional): The lowest max-formant value to try. 
             Defaults to 4000.
-        max_max_formant (float, optional): The cieling for the `max_formant` setting.
+        max_max_formant (float, optional): The highest max formant to try. 
             Defaults to 7000.
-        nstep (int, optional): The number of steps for the grid search.
+        nstep (int, optional): The number of steps from the min to the max max formant. 
             Defaults to 20.
+        n_formants (int, optional): The number of formants to track. Defaults to 4.
+        window_length (float, optional): Window length of the formant analysis. 
+            Defaults to 0.025.
+        time_step (float, optional): Time step of the formant analyusis window. 
+            Defaults to 0.002.
+        pre_emphasis_from (float, optional): Pre-emphasis threshold. 
+            Defaults to 50.
+        smoother (Smoother, optional): The smoother method to use. 
+            Defaults to `Smoother()`.
+        loss_fun (Loss, optional): The loss function to use. 
+            Defaults to Loss().
+        agg_fun (Agg, optional): The loss aggregation function to use. 
+            Defaults to Agg().
 
     Attributes:
         candidates (list[OneTrack,...]): A list of `OneTrack` tracks.
@@ -247,7 +300,11 @@ class CandidateTracks(Track):
             formants across all `candidates`
         smooth_errors (np.array): The error terms for each treack in `candidates`
         winner_idx (int): The candidate track with the smallest error term
-        winner (OneTrack): The winning `OneTrack` track,
+        winner (OneTrack): The winning `OneTrack` track.
+        file_name (str): The filename of the audio file, if set.
+        interval (aligned_textgrid.SequenceInterval): The textgrid interval of the sound, if set.
+        id (str): The interval id of the sound, if set.
+        group (str): The tier group name of the sound, if set.
     """
 
     def __init__(
@@ -285,6 +342,8 @@ class CandidateTracks(Track):
         )
         self._file_name = None
         self._id = None
+        self._label = None
+        self._group = None
         self._formant_df = None
         self._param_df = None
         self._interval = None
@@ -337,6 +396,21 @@ class CandidateTracks(Track):
         self._id = x
         for c in self.candidates:
             c.id = x
+    
+    @property
+    def group(self):
+        return self._group
+    
+    @group.setter
+    def group(self, name):
+        self._group = name
+
+    def __get_group(self, interval):
+        if isinstance(interval.within, TierGroup):
+            return interval.within.name
+        
+        return self.__get_group(interval.within)
+
 
     @property
     def interval(self):
@@ -345,6 +419,9 @@ class CandidateTracks(Track):
     @interval.setter
     def interval(self, interval):
         self._interval = interval
+        self.id = interval.id
+        self.label = interval.label
+        self.group = self.__get_group(interval)
         for c in self.candidates:
             c.interval = interval
 
@@ -352,7 +429,23 @@ class CandidateTracks(Track):
         for track in self.candidates:
             track.n_measured_formants = self.min_n_measured
     
-    def to_df(self, which = "winner", output = "formants"):
+    def to_df(
+            self, 
+            which: Literal["winner", "all"] = "winner",
+            output: Literal["formants", "param"] = "formants"
+            ) -> pl.DataFrame:
+        """Return a polars dataframe of the candidate tracks
+
+        Args:
+            which (Literal['winner', 'all'], optional): Return just the winner
+                track data, or all candidates. Defaults to "winner".
+            output (Literal['formants', 'param'], optional): Whether
+                to output the formants or the smoothing parameters. 
+                Defaults to "formants".
+
+        Returns:
+            (pl.DataFrame): A `polars.DataFrame`
+        """
         if which == "winner":
             return self.winner.to_df(output=output)
         
@@ -375,5 +468,20 @@ class CandidateTracks(Track):
             return self._param_df
             
     def spectrograms(self, **kwargs):
+        """Generate a spectrogram with formant tracks for the candidate tracks
+
+        Args:
+            formants (int, optional): Number of formants to plot. 
+                Defaults to 3.
+            maximum_frequency (int, optional): Maximum frequency for the spectrogram. 
+                Defaults to 3500.
+            tracks (bool, optional): Whether or not to plot the tracks. 
+                Defaults to True.
+            dynamic_range (int, optional): Dynamic range of the spectrogram. 
+                Defaults to 60.
+            figsize (tuple, optional): Figure size. 
+                Defaults to (12,8).
+        """
+
         candidate_spectrograms(self, **kwargs)
 

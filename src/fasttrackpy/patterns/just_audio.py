@@ -67,42 +67,49 @@ def create_audio_checker(no_magic:bool = no_magic) -> Callable:
 is_audio = create_audio_checker(no_magic=no_magic)
 
 def process_audio_file(
-        path: Union[str, Path],
+        path: str|Path,
         xmin:float = 0,
         xmax: float = None,
         min_max_formant:float = 4000,
         max_max_formant:float = 7000,
         nstep:int = 20,
         n_formants: int = 4,
-        window_length: float = 0.05,
+        window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg()
 )->CandidateTracks:
-    """_summary_
+    """Given the path to a single audio file, return a candidates track object.
 
     Args:
-        path (Union[str, Path]): _description_
-        xmin (float, optional): _description_. Defaults to 0.
-        xmax (float, optional): _description_. Defaults to None.
-        min_max_formant (float, optional): _description_. Defaults to 4000.
-        max_max_formant (float, optional): _description_. Defaults to 7000.
-        nstep (int, optional): _description_. Defaults to 20.
-        n_formants (int, optional): _description_. Defaults to 4.
-        window_length (float, optional): _description_. Defaults to 0.05.
-        time_step (float, optional): _description_. Defaults to 0.002.
-        pre_emphasis_from (float, optional): _description_. Defaults to 50.
-        smoother (Smoother, optional): _description_. Defaults to Smoother().
-        loss_fun (Loss, optional): _description_. Defaults to Loss().
-        agg_fun (Agg, optional): _description_. Defaults to Agg().
-
-    Raises:
-        TypeError: _description_
+        path (str|Path): Path to the audio file
+        xmin (float, optional): Start time to process the audio. Defaults to 0.
+        xmax (float, optional): End tome for processing audio. If None, defaults to the
+            maximum time. Defaults to None.
+        min_max_formant (float, optional): The lowest max-formant value to try. 
+            Defaults to 4000.
+        max_max_formant (float, optional): The highest max formant to try. 
+            Defaults to 7000.
+        nstep (int, optional): The number of steps from the min to the max max formant. 
+            Defaults to 20.
+        n_formants (int, optional): The number of formants to track. Defaults to 4.
+        window_length (float, optional): Window length of the formant analysis. 
+            Defaults to 0.025.
+        time_step (float, optional): Time step of the formant analyusis window. 
+            Defaults to 0.002.
+        pre_emphasis_from (float, optional): Pre-emphasis threshold. 
+            Defaults to 50.
+        smoother (Smoother, optional): The smoother method to use. 
+            Defaults to `Smoother()`.
+        loss_fun (Loss, optional): The loss function to use. 
+            Defaults to Loss().
+        agg_fun (Agg, optional): The loss aggregation function to use. 
+            Defaults to Agg().
 
     Returns:
-        CandidateTracks: _description_
+        (CandidateTracks): A `CandidateTracks` object to use.
     """
     if not is_audio(str(path)):
         raise TypeError(f"The file at {str(path)} is not an audio file")
@@ -134,7 +141,7 @@ def wrapped_audio(args_dict):
     return process_audio_file(**args_dict)
 
 def process_directory(
-        path: Union[str, Path],
+        path: str|Path,
         min_max_formant:float = 4000,
         max_max_formant:float = 7000,
         nstep:int = 20,
@@ -146,23 +153,32 @@ def process_directory(
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg()
 )->list[CandidateTracks]:
-    """_summary_
+    """Given a path to a directoy of audio files, process them all.
 
     Args:
-        path (Union[str, Path]): _description_
-        min_max_formant (float, optional): _description_. Defaults to 4000.
-        max_max_formant (float, optional): _description_. Defaults to 7000.
-        nstep (int, optional): _description_. Defaults to 20.
-        n_formants (int, optional): _description_. Defaults to 4.
-        window_length (float, optional): _description_. Defaults to 0.05.
-        time_step (float, optional): _description_. Defaults to 0.002.
-        pre_emphasis_from (float, optional): _description_. Defaults to 50.
-        smoother (Smoother, optional): _description_. Defaults to Smoother().
-        loss_fun (Loss, optional): _description_. Defaults to Loss().
-        agg_fun (Agg, optional): _description_. Defaults to Agg().
+        path (str|Path): Path to the directory to process.
+        min_max_formant (float, optional): The lowest max-formant value to try. 
+            Defaults to 4000.
+        max_max_formant (float, optional): The highest max formant to try. 
+            Defaults to 7000.
+        nstep (int, optional): The number of steps from the min to the max max formant. 
+            Defaults to 20.
+        n_formants (int, optional): The number of formants to track. Defaults to 4.
+        window_length (float, optional): Window length of the formant analysis. 
+            Defaults to 0.025.
+        time_step (float, optional): Time step of the formant analyusis window. 
+            Defaults to 0.002.
+        pre_emphasis_from (float, optional): Pre-emphasis threshold. 
+            Defaults to 50.
+        smoother (Smoother, optional): The smoother method to use. 
+            Defaults to `Smoother()`.
+        loss_fun (Loss, optional): The loss function to use. 
+            Defaults to Loss().
+        agg_fun (Agg, optional): The loss aggregation function to use. 
+            Defaults to Agg().
 
     Returns:
-        list[CandidateTracks]: _description_
+        (list[CandidateTracks]): A list of `CandidateTracks` objects.
     """
     if not isinstance(path, Path) and isinstance(path, str):
         path = Path(path)

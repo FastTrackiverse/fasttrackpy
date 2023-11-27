@@ -1,0 +1,79 @@
+---
+title: Quickstart
+engine: jupyter
+---
+
+After installing `fasttrackpy`, you can use the `fasttrack` commandline executable. For a full list of all settable options, see [All FastTrack Options](all_arguments.qmd)
+
+## Audio File Only Processing
+
+You can process either a single audio file or a directory of audio files with `fasttrack audio`. To use the `fasttrack` defaults, just provide `fasttrack audio` with the path to the input file or directory, and an output file or directory.
+
+
+```bash
+fasttrack audio --file assets/audio/ay.wav --dest assets/audio
+```
+
+This will save the formant tracks for this single wav file to `assets/audio/ay.csv/`.
+
+To process an entire directory of files, instead pass the directory to `--dir`.
+
+```bash
+fasttrack audio --dir assets/audio/ --dest assets/audio
+```
+
+This will save the formant tracks for each audio file with the same file name to the output directory.
+
+## Audio File + TextGrid Processing
+
+You can process an audio file + textgrid combination with `fasttrack audio-textgrid`. The defaults assume you are passing a textgrid with a Word and Phone tier from forced alignment, but this can be overriden.
+
+```bash
+fasttrack audio-textgrid --audio speaker.wav \
+    --textgrid speaker.TextGrid \
+    --dest output
+```
+
+### Adjusting the assumed TextGrid format
+
+If your textgrid is *not* formatted as force aligned textgrid, you need to pass `--textgrid-format` the value `SequenceInterval` and `--target-tier` the name of the tier you want to analyze.
+
+
+```bash
+fasttrack audio-textgrid --audio speaker.wav \
+    --textgrid speaker.TextGrid \
+    --dest output \
+    --textgrid-format SequenceInterval \
+    --target-tier phones
+```
+
+### Adjusting the target intervals
+
+You can configure fasttrack to only process certain intervals by passing `--target-labels` a regular expression matching values in your textgrid. For example, if you have segmented only the vowels you want to analyze, you can pass `--target-labels` the value `"."`.
+
+```bash
+fasttrack audio-textgrid --audio speaker.wav \
+    --textgrid speaker.TextGrid \
+    --dest output \
+    --textgrid-format SequenceInterval \
+    --target-tier phones \
+    --target-labels "."
+```
+
+
+## Using a config file
+
+There are many possible options to set for both `fasttrack audio` and `fasttrack audio-textgrid`. Instead of passing them all at the commandline, you can pass either command a yaml config file.
+
+```yaml
+# config.yml
+min_max_formant: 3000
+max_max_formant: 6000
+nstep: 10
+```
+
+```bash
+fasttrack audio --file ay.wav \
+    --dest output \
+    --config config.yml
+```

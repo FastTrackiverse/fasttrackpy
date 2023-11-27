@@ -360,9 +360,9 @@ def audio(
 )
 @config
 @output_destinations
+@output_options
 @textgrid_processing
 @audio_processing
-@output_options
 @smoother_options
 def audio_textgrid(
         audio: Union[str, Path] = None,
@@ -439,7 +439,7 @@ def audio_textgrid(
     all_candidates = process_audio_textgrid(
         audio_path=audio,
         textgrid_path=textgrid,
-        textgrid_format=entry_classes,
+        entry_classes=entry_classes,
         target_tier=target_tier,
         target_labels=target_labels,
         min_duration=min_duration,
