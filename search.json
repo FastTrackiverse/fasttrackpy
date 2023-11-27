@@ -277,7 +277,7 @@
     "href": "index.html#usage",
     "title": "Home",
     "section": "Usage",
-    "text": "Usage\nThe fasttrack executable has two commands\nfasttrack audio ...\nand\nfasttrack audio-textgrid ...\nFore more info, see the quickstart."
+    "text": "Usage\nThe fasttrack executable has two commands\nfasttrack audio ...\nand\nfasttrack audio-textgrid ...\nFor more info, see the quickstart."
   },
   {
     "objectID": "reference/process_audio_textgrid.html",
