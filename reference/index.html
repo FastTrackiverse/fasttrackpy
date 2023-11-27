@@ -30,6 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../reference/process_audio_file.html" rel="next">
+<link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -84,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
+    <a class="nav-link active" href="../index.html" rel="" target="" aria-current="page">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -120,6 +122,11 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/logo_f2.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -131,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">functions</span></a>
+ <span class="menu-text">Processing Functions</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -147,6 +154,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../reference/process_directory.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">process_directory</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/process_audio_textgrid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">process_audio_textgrid</span></a>
   </div>
 </li>
       </ul>
@@ -272,8 +285,8 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#function-reference" id="toc-function-reference" class="nav-link active" data-scroll-target="#function-reference">Function reference</a>
-  <ul class="collapse">
-  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">functions</a></li>
+  <ul>
+  <li><a href="#processing-functions" id="toc-processing-functions" class="nav-link" data-scroll-target="#processing-functions">Processing Functions</a></li>
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a></li>
   <li><a href="#smoothers" id="toc-smoothers" class="nav-link" data-scroll-target="#smoothers">Smoothers</a></li>
   <li><a href="#losses" id="toc-losses" class="nav-link" data-scroll-target="#losses">Losses</a></li>
@@ -289,18 +302,22 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="function-reference" class="level1">
 <h1>Function reference</h1>
-<section id="functions" class="level2">
-<h2 class="anchored" data-anchor-id="functions">functions</h2>
+<section id="processing-functions" class="level2">
+<h2 class="anchored" data-anchor-id="processing-functions">Processing Functions</h2>
 <p>functions</p>
 <table class="table">
 <tbody>
 <tr class="odd">
 <td><a href="../reference/process_audio_file.html#fasttrackpy.process_audio_file">process_audio_file</a></td>
-<td><em>summary</em></td>
+<td>Given the path to a single audio file, return a candidates track object.</td>
 </tr>
 <tr class="even">
 <td><a href="../reference/process_directory.html#fasttrackpy.process_directory">process_directory</a></td>
-<td><em>summary</em></td>
+<td>Given a path to a directoy of audio files, process them all.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/process_audio_textgrid.html#fasttrackpy.process_audio_textgrid">process_audio_textgrid</a></td>
+<td>Process an audio and TextGrid file together.</td>
 </tr>
 </tbody>
 </table>
@@ -312,7 +329,7 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td><a href="../reference/OneTrack.html#fasttrackpy.OneTrack">OneTrack</a></td>
-<td><em>summary</em></td>
+<td>A single formant track.</td>
 </tr>
 <tr class="even">
 <td><a href="../reference/CandidateTracks.html#fasttrackpy.CandidateTracks">CandidateTracks</a></td>
@@ -734,6 +751,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../reference/process_audio_file.html" class="pagination-link">
+        <span class="nav-page-text">process_audio_file</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

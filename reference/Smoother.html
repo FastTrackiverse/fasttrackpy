@@ -30,6 +30,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../reference/processors.smoothers.Smoothed.html" rel="next">
+<link href="../reference/CandidateTracks.html" rel="prev">
+<link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -84,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
+    <a class="nav-link active" href="../index.html" rel="" target="" aria-current="page">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -120,6 +123,11 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/logo_f2.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -131,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">functions</span></a>
+ <span class="menu-text">Processing Functions</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -147,6 +155,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../reference/process_directory.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">process_directory</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/process_audio_textgrid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">process_audio_textgrid</span></a>
   </div>
 </li>
       </ul>
@@ -272,11 +286,15 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#fasttrackpy.Smoother" id="toc-fasttrackpy.Smoother" class="nav-link active" data-scroll-target="#fasttrackpy.Smoother">Smoother</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
   <ul class="collapse">
-  <li><a href="#fasttrackpy.Smoother.smooth" id="toc-fasttrackpy.Smoother.smooth" class="nav-link" data-scroll-target="#fasttrackpy.Smoother.smooth">smooth</a></li>
+  <li><a href="#fasttrackpy.Smoother.smooth" id="toc-fasttrackpy.Smoother.smooth" class="nav-link" data-scroll-target="#fasttrackpy.Smoother.smooth">smooth</a>
+  <ul class="collapse">
+  <li><a href="#parameters-1" id="toc-parameters-1" class="nav-link" data-scroll-target="#parameters-1">Parameters</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
+  </ul></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -289,7 +307,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="fasttrackpy.Smoother" class="level1">
 <h1>Smoother</h1>
-<p><code>Smoother(self, method='dct_smooth', **kwargs)</code></p>
+<p><code>Smoother(self, method='dct_smooth_regression', **kwargs)</code></p>
 <p>A smoother function factory</p>
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
@@ -297,8 +315,8 @@ ul.task-list li input[type="checkbox"] {
 <colgroup>
 <col style="width: 4%">
 <col style="width: 11%">
-<col style="width: 75%">
-<col style="width: 7%">
+<col style="width: 71%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -313,7 +331,7 @@ ul.task-list li input[type="checkbox"] {
 <td><code>method</code></td>
 <td>Union[str, Callable]</td>
 <td>The smoothing method to use. Defaults to “dct_smooth”. Can be a custom smoother such that it takes a 1D array as input and returns a <code>Smoothed</code> class.</td>
-<td><code>'dct_smooth'</code></td>
+<td><code>'dct_smooth_regression'</code></td>
 </tr>
 <tr class="even">
 <td><code>kwargs</code></td>
@@ -737,6 +755,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../reference/CandidateTracks.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">CandidateTracks</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../reference/processors.smoothers.Smoothed.html" class="pagination-link">
+        <span class="nav-page-text">processors.smoothers.Smoothed</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

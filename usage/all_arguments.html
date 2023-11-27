@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>fasttrackpy – processors.aggs.agg_sum</title>
+<title>fasttrackpy - All FastTrack Options</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../reference/Agg.html" rel="prev">
+<link href="../usage/pythonic_use.html" rel="next">
+<link href="../usage/getting_started.html" rel="prev">
 <link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -112,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/Agg.html">Aggs</a></li><li class="breadcrumb-item"><a href="../reference/processors.aggs.agg_sum.html">processors.aggs.agg_sum</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../usage/all_arguments.html">All FastTrack Options</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -122,7 +157,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="../index.html" class="sidebar-logo-link">
       <img src="../assets/logo_f2.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
@@ -131,149 +166,28 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Function reference</span></a>
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
   </div>
 </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Processing Functions</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/process_audio_file.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">process_audio_file</span></a>
+  <a href="../usage/getting_started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quickstart</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/process_directory.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">process_directory</span></a>
+  <a href="../usage/all_arguments.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">All FastTrack Options</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/process_audio_textgrid.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">process_audio_textgrid</span></a>
+  <a href="../usage/pythonic_use.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pythonic Use</span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text">Classes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/OneTrack.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">OneTrack</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/CandidateTracks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">CandidateTracks</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
- <span class="menu-text">Smoothers</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/Smoother.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Smoother</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/processors.smoothers.Smoothed.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">processors.smoothers.Smoothed</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/processors.smoothers.dct_smooth.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">processors.smoothers.dct_smooth</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/processors.smoothers.dct_smooth_regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">processors.smoothers.dct_smooth_regression</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
- <span class="menu-text">Losses</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/Loss.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Loss</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/processors.losses.lmse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">processors.losses.lmse</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/processors.losses.mse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">processors.losses.mse</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
- <span class="menu-text">Aggs</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/Agg.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Agg</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/processors.aggs.agg_sum.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">processors.aggs.agg_sum</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
     </ul>
     </div>
 </nav>
@@ -284,21 +198,295 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#fasttrackpy.processors.aggs.agg_sum" id="toc-fasttrackpy.processors.aggs.agg_sum" class="nav-link active" data-scroll-target="#fasttrackpy.processors.aggs.agg_sum">processors.aggs.agg_sum</a></li>
+  <li><a href="#use-of-a-config-file" id="toc-use-of-a-config-file" class="nav-link active" data-scroll-target="#use-of-a-config-file">Use of a config file</a></li>
+  <li><a href="#command-specific-options" id="toc-command-specific-options" class="nav-link" data-scroll-target="#command-specific-options">Command specific options</a>
+  <ul>
+  <li><a href="#just-audio-options" id="toc-just-audio-options" class="nav-link" data-scroll-target="#just-audio-options">Just Audio Options</a></li>
+  <li><a href="#audio-textgrid-options" id="toc-audio-textgrid-options" class="nav-link" data-scroll-target="#audio-textgrid-options">Audio + TextGrid Options</a></li>
+  </ul></li>
+  <li><a href="#shared-options" id="toc-shared-options" class="nav-link" data-scroll-target="#shared-options">Shared Options</a>
+  <ul>
+  <li><a href="#output-destinations" id="toc-output-destinations" class="nav-link" data-scroll-target="#output-destinations">Output Destinations</a></li>
+  <li><a href="#output-options" id="toc-output-options" class="nav-link" data-scroll-target="#output-options">Output Options</a></li>
+  <li><a href="#textgrid-processing-options" id="toc-textgrid-processing-options" class="nav-link" data-scroll-target="#textgrid-processing-options">TextGrid Processing Options</a>
+  <ul class="collapse">
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes:</a></li>
+  </ul></li>
+  <li><a href="#audio-processing-options" id="toc-audio-processing-options" class="nav-link" data-scroll-target="#audio-processing-options">Audio Processing Options</a></li>
+  <li><a href="#smoother-options" id="toc-smoother-options" class="nav-link" data-scroll-target="#smoother-options">Smoother Options</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">All FastTrack Options</h1>
+</div>
 
 
-<section id="fasttrackpy.processors.aggs.agg_sum" class="level1">
-<h1>processors.aggs.agg_sum</h1>
-<p><code>processors.aggs.agg_sum(error, axis=0)</code></p>
-<p>Sum the error</p>
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="use-of-a-config-file" class="level2">
+<h2 class="anchored" data-anchor-id="use-of-a-config-file">Use of a config file</h2>
+<p>Instead of needing to include every option you wish to cusotomize as a command line entry, you can set them in a config file, and pass it to the <code>fasttrack</code> command with config. For example</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># config.yml file</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">audio</span><span class="kw">:</span><span class="at"> speaker.wav</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">textgrid</span><span class="kw">:</span><span class="at"> speaker.TextGrid</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dest</span><span class="kw">:</span><span class="at"> results</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">entry_classes</span><span class="kw">:</span><span class="at"> SequenceInterval</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">target_tier</span><span class="kw">:</span><span class="at"> phones</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">target_labels</span><span class="kw">:</span><span class="at"> </span><span class="st">"..1"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">smoother_order</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># at the command line: </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio-textgrid <span class="at">--config</span> config.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="command-specific-options" class="level2">
+<h2 class="anchored" data-anchor-id="command-specific-options">Command specific options</h2>
+<section id="just-audio-options" class="level3">
+<h3 class="anchored" data-anchor-id="just-audio-options">Just Audio Options</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>file</code></td>
+<td style="text-align: left;">A single audio file to process</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>dir</code></td>
+<td style="text-align: left;">A directory of audio files to process</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="audio-textgrid-options" class="level3">
+<h3 class="anchored" data-anchor-id="audio-textgrid-options">Audio + TextGrid Options</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>audio</code></td>
+<td style="text-align: left;">Path to an audio file to process</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>textgrid</code></td>
+<td style="text-align: left;">Path to a textgrid to process</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="shared-options" class="level2">
+<h2 class="anchored" data-anchor-id="shared-options">Shared Options</h2>
+<p>The Following options are general across most fasttrack commands.</p>
+<section id="output-destinations" class="level3">
+<h3 class="anchored" data-anchor-id="output-destinations">Output Destinations</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>output</code></td>
+<td style="text-align: left;">Output file name</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>dest</code></td>
+<td style="text-align: left;">Output directory</td>
+</tr>
+</tbody>
+</table>
+<p>If an <code>output</code> file name is not provided, <code>fasttrack</code> will try to use a reasonable name based on the input audio file name.</p>
+</section>
+<section id="output-options" class="level3">
+<h3 class="anchored" data-anchor-id="output-options">Output Options</h3>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>which_output</code></td>
+<td style="text-align: left;">Whether to save just the winning track (<code>winner</code>) or all candidates (<code>all</code>)</td>
+<td style="text-align: left;"><code>winner</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>data_output</code></td>
+<td style="text-align: left;">Whether to save the formant tracks (<code>formants</code>) or the smoothing parameters (<code>param</code>)</td>
+<td style="text-align: left;"><code>formants</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="textgrid-processing-options" class="level3">
+<h3 class="anchored" data-anchor-id="textgrid-processing-options">TextGrid Processing Options</h3>
+<table class="table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 40%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: right;">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>entry_classes</code></td>
+<td style="text-align: left;">Format of the TextGrid.</td>
+<td style="text-align: right;"><code>"Word|Phone"</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>target_tier</code></td>
+<td style="text-align: left;">The tier to target for processing</td>
+<td style="text-align: right;"><code>Phone</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>target_labels</code></td>
+<td style="text-align: left;">A regex for the labels to target for processing</td>
+<td style="text-align: right;"><code>"[AEIOU]"</code></td>
+</tr>
+</tbody>
+</table>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes:</h4>
+<ul>
+<li>If your textgrid is not the output of a forced-aligner, change the <code>entry_classes</code> value to <code>SequenceInterval</code> and the value of <code>target_tier</code> to whatever the tier name is that you want to process.</li>
+<li>Any string that can be interpreted as a regular expression can be passed to <code>processing</code>.</li>
+</ul>
+</section>
+</section>
+<section id="audio-processing-options" class="level3">
+<h3 class="anchored" data-anchor-id="audio-processing-options">Audio Processing Options</h3>
+<table class="table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 40%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: right;">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>min_duration</code></td>
+<td style="text-align: left;">The minumum duration segment to analyze</td>
+<td style="text-align: right;">0.05 (s)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>min_max_formant</code></td>
+<td style="text-align: left;">The lowest maximum formant to try</td>
+<td style="text-align: right;">4000(hz)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>max_max_formant</code></td>
+<td style="text-align: left;">The highest maximum formant to try</td>
+<td style="text-align: right;">7000(hz)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>nstep</code></td>
+<td style="text-align: left;">The number of steps between the lowest and the highest maximum formant</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>n_formants</code></td>
+<td style="text-align: left;">The number of formants to try to track in the audio</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>window_length</code></td>
+<td style="text-align: left;">The formant analysis window length</td>
+<td style="text-align: right;">0.025 (s)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>time_step</code></td>
+<td style="text-align: left;">The formant analysis step size</td>
+<td style="text-align: right;">0.002 (s)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pre_emphasis_from</code></td>
+<td style="text-align: left;">Pre-emphasis to be applied before formant tracking</td>
+<td style="text-align: right;">50 (hz)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="smoother-options" class="level3">
+<h3 class="anchored" data-anchor-id="smoother-options">Smoother Options</h3>
+<table class="table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 40%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: right;">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>smoother_method</code></td>
+<td style="text-align: left;">The smoothing method to use. It’s not recommended you change this from the default.</td>
+<td style="text-align: right;"><code>dct_smooth_regression</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>smoother_order</code></td>
+<td style="text-align: left;">The “order” of the smooth. More is wigglier.</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>loss_method</code></td>
+<td style="text-align: left;">Method for calculating the error between the smooth and measured formants. It’s not recommended that you change the default</td>
+<td style="text-align: right;"><code>lmse</code></td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -652,11 +840,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../reference/Agg.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Agg</span>
+      <a href="../usage/getting_started.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Quickstart</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../usage/pythonic_use.html" class="pagination-link">
+        <span class="nav-page-text">Pythonic Use</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

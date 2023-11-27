@@ -2,66 +2,78 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/Smoother.html</loc>
-    <lastmod>2023-11-22T01:59:58.049Z</lastmod>
+    <lastmod>2023-11-27T01:38:07.486Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.losses.lmse.html</loc>
-    <lastmod>2023-11-22T01:59:57.394Z</lastmod>
+    <lastmod>2023-11-27T01:38:06.695Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/process_directory.html</loc>
-    <lastmod>2023-11-22T01:59:56.774Z</lastmod>
+    <lastmod>2023-11-27T01:38:06.094Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/OneTrack.html</loc>
-    <lastmod>2023-11-22T01:59:56.143Z</lastmod>
+    <lastmod>2023-11-27T01:38:05.426Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/index.html</loc>
-    <lastmod>2023-11-22T01:59:55.472Z</lastmod>
+    <lastmod>2023-11-27T01:38:04.654Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.smoothers.dct_smooth.html</loc>
-    <lastmod>2023-11-22T01:59:54.804Z</lastmod>
+    <lastmod>2023-11-27T01:38:04.000Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.aggs.agg_sum.html</loc>
-    <lastmod>2023-11-22T01:59:54.194Z</lastmod>
-  </url>
-  <url>
-    <loc>https://FastTrackiverse.github.io/fasttrackpy/index.html</loc>
-    <lastmod>2023-11-22T01:59:53.523Z</lastmod>
-  </url>
-  <url>
-    <loc>https://FastTrackiverse.github.io/fasttrackpy/getting_started.html</loc>
-    <lastmod>2023-11-22T01:59:53.215Z</lastmod>
+    <lastmod>2023-11-27T01:38:03.396Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/process_audio_file.html</loc>
-    <lastmod>2023-11-22T01:59:53.906Z</lastmod>
+    <lastmod>2023-11-27T01:38:02.715Z</lastmod>
+  </url>
+  <url>
+    <loc>https://FastTrackiverse.github.io/fasttrackpy/usage/all_arguments.html</loc>
+    <lastmod>2023-11-27T01:38:02.020Z</lastmod>
+  </url>
+  <url>
+    <loc>https://FastTrackiverse.github.io/fasttrackpy/usage/getting_started.html</loc>
+    <lastmod>2023-11-27T01:38:00.734Z</lastmod>
+  </url>
+  <url>
+    <loc>https://FastTrackiverse.github.io/fasttrackpy/usage/pythonic_use.html</loc>
+    <lastmod>2023-11-27T01:38:01.576Z</lastmod>
+  </url>
+  <url>
+    <loc>https://FastTrackiverse.github.io/fasttrackpy/index.html</loc>
+    <lastmod>2023-11-27T01:38:02.321Z</lastmod>
+  </url>
+  <url>
+    <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/process_audio_textgrid.html</loc>
+    <lastmod>2023-11-27T01:38:03.104Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/Loss.html</loc>
-    <lastmod>2023-11-22T01:59:54.505Z</lastmod>
+    <lastmod>2023-11-27T01:38:03.698Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.losses.mse.html</loc>
-    <lastmod>2023-11-22T01:59:55.122Z</lastmod>
+    <lastmod>2023-11-27T01:38:04.315Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.smoothers.Smoothed.html</loc>
-    <lastmod>2023-11-22T01:59:55.778Z</lastmod>
+    <lastmod>2023-11-27T01:38:04.964Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.smoothers.dct_smooth_regression.html</loc>
-    <lastmod>2023-11-22T01:59:56.437Z</lastmod>
+    <lastmod>2023-11-27T01:38:05.725Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/Agg.html</loc>
-    <lastmod>2023-11-22T01:59:57.085Z</lastmod>
+    <lastmod>2023-11-27T01:38:06.383Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/CandidateTracks.html</loc>
-    <lastmod>2023-11-22T01:59:57.725Z</lastmod>
+    <lastmod>2023-11-27T01:38:07.157Z</lastmod>
   </url>
 </urlset>

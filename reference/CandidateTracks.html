@@ -30,6 +30,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../reference/Smoother.html" rel="next">
+<link href="../reference/OneTrack.html" rel="prev">
+<link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -84,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
+    <a class="nav-link active" href="../index.html" rel="" target="" aria-current="page">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -120,6 +123,11 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/logo_f2.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -131,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">functions</span></a>
+ <span class="menu-text">Processing Functions</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -147,6 +155,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../reference/process_directory.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">process_directory</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/process_audio_textgrid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">process_audio_textgrid</span></a>
   </div>
 </li>
       </ul>
@@ -272,9 +286,21 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#fasttrackpy.CandidateTracks" id="toc-fasttrackpy.CandidateTracks" class="nav-link active" data-scroll-target="#fasttrackpy.CandidateTracks">CandidateTracks</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
   <li><a href="#attributes" id="toc-attributes" class="nav-link" data-scroll-target="#attributes">Attributes</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#fasttrackpy.CandidateTracks.spectrograms" id="toc-fasttrackpy.CandidateTracks.spectrograms" class="nav-link" data-scroll-target="#fasttrackpy.CandidateTracks.spectrograms">spectrograms</a>
+  <ul class="collapse">
+  <li><a href="#parameters-1" id="toc-parameters-1" class="nav-link" data-scroll-target="#parameters-1">Parameters</a></li>
+  </ul></li>
+  <li><a href="#fasttrackpy.CandidateTracks.to_df" id="toc-fasttrackpy.CandidateTracks.to_df" class="nav-link" data-scroll-target="#fasttrackpy.CandidateTracks.to_df">to_df</a>
+  <ul class="collapse">
+  <li><a href="#parameters-2" id="toc-parameters-2" class="nav-link" data-scroll-target="#parameters-2">Parameters</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
+  </ul></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -286,14 +312,13 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="fasttrackpy.CandidateTracks" class="level1">
 <h1>CandidateTracks</h1>
-<p><code>CandidateTracks(self, sound, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())</code></p>
+<p><code>CandidateTracks(self, sound, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())</code></p>
 <p>A class for candidate tracks for a single formant</p>
-<p>This takes the same arguments as <code>OneTrack</code> except for `max_formant.</p>
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
 <colgroup>
-<col style="width: 19%">
+<col style="width: 17%">
 <col style="width: 8%">
 <col style="width: 62%">
 <col style="width: 11%">
@@ -308,22 +333,70 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>min_max_formant</code></td>
-<td>float</td>
-<td>The floor for the <code>max_formant</code> setting. Defaults to 4000.</td>
-<td><code>4000</code></td>
+<td><code>sound</code></td>
+<td>pm.Sound</td>
+<td>A <code>parselmouth.Sound</code> object.</td>
+<td><em>required</em></td>
 </tr>
 <tr class="even">
-<td><code>max_max_formant</code></td>
+<td><code>min_max_formant</code></td>
 <td>float</td>
-<td>The cieling for the <code>max_formant</code> setting. Defaults to 7000.</td>
-<td><code>7000</code></td>
+<td>The lowest max-formant value to try. Defaults to 4000.</td>
+<td><code>4000</code></td>
 </tr>
 <tr class="odd">
+<td><code>max_max_formant</code></td>
+<td>float</td>
+<td>The highest max formant to try. Defaults to 7000.</td>
+<td><code>7000</code></td>
+</tr>
+<tr class="even">
 <td><code>nstep</code></td>
 <td>int</td>
-<td>The number of steps for the grid search. Defaults to 20.</td>
+<td>The number of steps from the min to the max max formant. Defaults to 20.</td>
 <td><code>20</code></td>
+</tr>
+<tr class="odd">
+<td><code>n_formants</code></td>
+<td>int</td>
+<td>The number of formants to track. Defaults to 4.</td>
+<td><code>4</code></td>
+</tr>
+<tr class="even">
+<td><code>window_length</code></td>
+<td>float</td>
+<td>Window length of the formant analysis. Defaults to 0.025.</td>
+<td><code>0.025</code></td>
+</tr>
+<tr class="odd">
+<td><code>time_step</code></td>
+<td>float</td>
+<td>Time step of the formant analyusis window. Defaults to 0.002.</td>
+<td><code>0.002</code></td>
+</tr>
+<tr class="even">
+<td><code>pre_emphasis_from</code></td>
+<td>float</td>
+<td>Pre-emphasis threshold. Defaults to 50.</td>
+<td><code>50</code></td>
+</tr>
+<tr class="odd">
+<td><code>smoother</code></td>
+<td>Smoother</td>
+<td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
+<td><code>Smoother()</code></td>
+</tr>
+<tr class="even">
+<td><code>loss_fun</code></td>
+<td>Loss</td>
+<td>The loss function to use. Defaults to Loss().</td>
+<td><code>Loss()</code></td>
+</tr>
+<tr class="odd">
+<td><code>agg_fun</code></td>
+<td>Agg</td>
+<td>The loss aggregation function to use. Defaults to Agg().</td>
+<td><code>Agg()</code></td>
 </tr>
 </tbody>
 </table>
@@ -332,9 +405,9 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="attributes">Attributes</h2>
 <table class="table">
 <colgroup>
-<col style="width: 13%">
-<col style="width: 19%">
-<col style="width: 67%">
+<col style="width: 12%">
+<col style="width: 26%">
+<col style="width: 61%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -367,12 +440,164 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>winner</td>
 <td>OneTrack</td>
-<td>The winning <code>OneTrack</code> track,</td>
+<td>The winning <code>OneTrack</code> track.</td>
+</tr>
+<tr class="even">
+<td>file_name</td>
+<td>str</td>
+<td>The filename of the audio file, if set.</td>
+</tr>
+<tr class="odd">
+<td>interval</td>
+<td>aligned_textgrid.SequenceInterval</td>
+<td>The textgrid interval of the sound, if set.</td>
+</tr>
+<tr class="even">
+<td>id</td>
+<td>str</td>
+<td>The interval id of the sound, if set.</td>
+</tr>
+<tr class="odd">
+<td>group</td>
+<td>str</td>
+<td>The tier group name of the sound, if set.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#fasttrackpy.CandidateTracks.spectrograms">spectrograms</a></td>
+<td>Generate a spectrogram with formant tracks for the candidate tracks</td>
+</tr>
+<tr class="even">
+<td><a href="#fasttrackpy.CandidateTracks.to_df">to_df</a></td>
+<td>Return a polars dataframe of the candidate tracks</td>
+</tr>
+</tbody>
+</table>
+<section id="fasttrackpy.CandidateTracks.spectrograms" class="level3">
+<h3 class="anchored" data-anchor-id="fasttrackpy.CandidateTracks.spectrograms">spectrograms</h3>
+<p><code>CandidateTracks.spectrograms(**kwargs)</code></p>
+<p>Generate a spectrogram with formant tracks for the candidate tracks</p>
+<section id="parameters-1" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
+<table class="table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 8%">
+<col style="width: 59%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>formants</code></td>
+<td>int</td>
+<td>Number of formants to plot. Defaults to 3.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td><code>maximum_frequency</code></td>
+<td>int</td>
+<td>Maximum frequency for the spectrogram. Defaults to 3500.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td><code>tracks</code></td>
+<td>bool</td>
+<td>Whether or not to plot the tracks. Defaults to True.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td><code>dynamic_range</code></td>
+<td>int</td>
+<td>Dynamic range of the spectrogram. Defaults to 60.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td><code>figsize</code></td>
+<td>tuple</td>
+<td>Figure size. Defaults to (12,8).</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="fasttrackpy.CandidateTracks.to_df" class="level3">
+<h3 class="anchored" data-anchor-id="fasttrackpy.CandidateTracks.to_df">to_df</h3>
+<p><code>CandidateTracks.to_df(which='winner', output='formants')</code></p>
+<p>Return a polars dataframe of the candidate tracks</p>
+<section id="parameters-2" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-2">Parameters</h4>
+<table class="table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 22%">
+<col style="width: 60%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>which</code></td>
+<td>Literal[‘winner’, ‘all’]</td>
+<td>Return just the winner track data, or all candidates. Defaults to “winner”.</td>
+<td><code>'winner'</code></td>
+</tr>
+<tr class="even">
+<td><code>output</code></td>
+<td>Literal[‘formants’, ‘param’]</td>
+<td>Whether to output the formants or the smoothing parameters. Defaults to “formants”.</td>
+<td><code>'formants'</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns" class="level4">
+<h4 class="anchored" data-anchor-id="returns">Returns</h4>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>pl.DataFrame</td>
+<td>A <code>polars.DataFrame</code></td>
 </tr>
 </tbody>
 </table>
 
 
+</section>
+</section>
 </section>
 </section>
 
@@ -725,6 +950,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../reference/OneTrack.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">OneTrack</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../reference/Smoother.html" class="pagination-link">
+        <span class="nav-page-text">Smoother</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

@@ -30,6 +30,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../reference/process_audio_textgrid.html" rel="next">
+<link href="../reference/process_audio_file.html" rel="prev">
+<link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -84,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
+    <a class="nav-link active" href="../index.html" rel="" target="" aria-current="page">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -110,7 +113,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/process_audio_file.html">functions</a></li><li class="breadcrumb-item"><a href="../reference/process_directory.html">process_directory</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/process_audio_file.html">Processing Functions</a></li><li class="breadcrumb-item"><a href="../reference/process_directory.html">process_directory</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -120,6 +123,11 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/logo_f2.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -131,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">functions</span></a>
+ <span class="menu-text">Processing Functions</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -147,6 +155,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../reference/process_directory.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">process_directory</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/process_audio_textgrid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">process_audio_textgrid</span></a>
   </div>
 </li>
       </ul>
@@ -272,7 +286,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#fasttrackpy.process_directory" id="toc-fasttrackpy.process_directory" class="nav-link active" data-scroll-target="#fasttrackpy.process_directory">process_directory</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
   <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
   </ul></li>
@@ -287,15 +301,15 @@ ul.task-list li input[type="checkbox"] {
 <section id="fasttrackpy.process_directory" class="level1">
 <h1>process_directory</h1>
 <p><code>process_directory(path, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())</code></p>
-<p><em>summary</em></p>
+<p>Given a path to a directoy of audio files, process them all.</p>
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
 <colgroup>
-<col style="width: 22%">
-<col style="width: 21%">
-<col style="width: 42%">
-<col style="width: 14%">
+<col style="width: 17%">
+<col style="width: 10%">
+<col style="width: 60%">
+<col style="width: 11%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -308,68 +322,68 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td><code>path</code></td>
-<td>Union[str, Path]</td>
-<td><em>description</em></td>
+<td>str | Path</td>
+<td>Path to the directory to process.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td><code>min_max_formant</code></td>
 <td>float</td>
-<td><em>description</em>. Defaults to 4000.</td>
+<td>The lowest max-formant value to try. Defaults to 4000.</td>
 <td><code>4000</code></td>
 </tr>
 <tr class="odd">
 <td><code>max_max_formant</code></td>
 <td>float</td>
-<td><em>description</em>. Defaults to 7000.</td>
+<td>The highest max formant to try. Defaults to 7000.</td>
 <td><code>7000</code></td>
 </tr>
 <tr class="even">
 <td><code>nstep</code></td>
 <td>int</td>
-<td><em>description</em>. Defaults to 20.</td>
+<td>The number of steps from the min to the max max formant. Defaults to 20.</td>
 <td><code>20</code></td>
 </tr>
 <tr class="odd">
 <td><code>n_formants</code></td>
 <td>int</td>
-<td><em>description</em>. Defaults to 4.</td>
+<td>The number of formants to track. Defaults to 4.</td>
 <td><code>4</code></td>
 </tr>
 <tr class="even">
 <td><code>window_length</code></td>
 <td>float</td>
-<td><em>description</em>. Defaults to 0.05.</td>
+<td>Window length of the formant analysis. Defaults to 0.025.</td>
 <td><code>0.05</code></td>
 </tr>
 <tr class="odd">
 <td><code>time_step</code></td>
 <td>float</td>
-<td><em>description</em>. Defaults to 0.002.</td>
+<td>Time step of the formant analyusis window. Defaults to 0.002.</td>
 <td><code>0.002</code></td>
 </tr>
 <tr class="even">
 <td><code>pre_emphasis_from</code></td>
 <td>float</td>
-<td><em>description</em>. Defaults to 50.</td>
+<td>Pre-emphasis threshold. Defaults to 50.</td>
 <td><code>50</code></td>
 </tr>
 <tr class="odd">
 <td><code>smoother</code></td>
 <td>Smoother</td>
-<td><em>description</em>. Defaults to Smoother().</td>
+<td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
 <td><code>Smoother()</code></td>
 </tr>
 <tr class="even">
 <td><code>loss_fun</code></td>
 <td>Loss</td>
-<td><em>description</em>. Defaults to Loss().</td>
+<td>The loss function to use. Defaults to Loss().</td>
 <td><code>Loss()</code></td>
 </tr>
 <tr class="odd">
 <td><code>agg_fun</code></td>
 <td>Agg</td>
-<td><em>description</em>. Defaults to Agg().</td>
+<td>The loss aggregation function to use. Defaults to Agg().</td>
 <td><code>Agg()</code></td>
 </tr>
 </tbody>
@@ -387,7 +401,7 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td>list[CandidateTracks]</td>
-<td>list[CandidateTracks]: <em>description</em></td>
+<td>A list of <code>CandidateTracks</code> objects.</td>
 </tr>
 </tbody>
 </table>
@@ -745,6 +759,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../reference/process_audio_file.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">process_audio_file</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../reference/process_audio_textgrid.html" class="pagination-link">
+        <span class="nav-page-text">process_audio_textgrid</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

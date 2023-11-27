@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>fasttrackpy - Getting Started</title>
+<title>fasttrackpy - Quickstart</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +144,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./getting_started.html">Getting Started</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./getting_started.html">Quickstart</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -154,6 +154,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./assets/logo_f2.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -165,7 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./getting_started.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Getting Started</span></a>
+ <span class="menu-text">Quickstart</span></a>
   </div>
 </li>
     </ul>
@@ -174,14 +179,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#audio-file-only-processing" id="toc-audio-file-only-processing" class="nav-link active" data-scroll-target="#audio-file-only-processing">Audio File Only Processing</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Getting Started</h1>
+<h1 class="title">Quickstart</h1>
 </div>
 
 
@@ -196,72 +207,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>Install fasttrackpy</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ot">! </span><span class="ex">pip</span> install fasttrackpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Run fasttrack</p>
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> fasttrack <span class="op">--</span><span class="bu">help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Usage: fasttrack [OPTIONS]
-
-  Run fasttrack
-
-Inputs: [at least 1 required]
-  Input file options
-  --file PATH                     A single input audio file to process.
-  --dir PATH                      A directory of input audio files to process.
-
-Output Destinations: [at least 1 required]
-  Output destination options
-  --output PATH                   Name of an output file
-  --dest PATH                     Name of an output directory
-
-Output Options:
-  Options for what data should be saved.
-  --which-output [winner|all]     Whether to save just the winner, or all
-                                  candidates. Defaults to 'winner'
-  --data-output [formants|param]  Whether to save the formant data, or
-                                  smoothing parameter data. Defaults to
-                                  'formants'.
-
-Audio processing:
-  --xmin FLOAT RANGE              Start time for beginning analysis. Defaults
-                                  to 0(s). (Ignored for multi-file input.)
-                                  [x&gt;=0]
-  --xmax FLOAT RANGE              End time for analysis. If not set, defaults
-                                  to full duration. (Ignored for multi-file
-                                  input.)  [x&gt;0]
-  --min-max-formant FLOAT RANGE   Start of possible max-formant range. Defaults
-                                  to 4000(Hz).  [x&gt;0]
-  --max-max-formant FLOAT RANGE   End of possible max-formant range. Defaults
-                                  to 7000(Hz).  [x&gt;0]
-  --nstep INTEGER RANGE           Number of max-formant steps to be evaluated.
-                                  Defaults to 20.  [x&gt;=1]
-  --n-formants INTEGER RANGE      Number of formants to track. Defaults to 4.
-                                  [x&gt;=1]
-  --window-length FLOAT RANGE     Formant analysis window length. Defaults to
-                                  0.05(s).  [x&gt;0]
-  --time-step FLOAT RANGE         Formant analysis window step size. Defaults
-                                  to 0.002(s).  [x&gt;0]
-  --pre-emphasis-from FLOAT RANGE
-                                  Pre-emphasis. Defaults to 50(Hz).  [x&gt;=0]
-
-Smoother options:
-  --smoother-method [dct_smooth|dct_smooth_regression]
-                                  Smoother method to use. Defaults to
-                                  'dct_smooth' (Discrete Cosine Transform)
-  --smoother-order INTEGER RANGE  Order of the smooth. Defaults to 5. (More is
-                                  wigglier.)  [x&gt;=1]
-  --loss-method [lmse|mse]        The loss function comparing formants to
-                                  smoothed tracks. Defaults to lmse (log mean
-                                  squared error).
-
-Other options:
-  --help                          Show this message and exit.</code></pre>
-</div>
-</div>
+<p>After installing <code>fasttrackpy</code>, you can use the <code>fasttrack</code> commandline executable in one of two ways.</p>
+<section id="audio-file-only-processing" class="level2">
+<h2 class="anchored" data-anchor-id="audio-file-only-processing">Audio File Only Processing</h2>
+<p>You can process either a single audio file or a directory of audio files with <code>fasttrack audio</code>. To use the <code>fasttrack</code> defaults, just provide <code>fasttrack audio</code> with the path to the input file or directory, and an output file or directory.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio <span class="at">--file</span> assets/audio/ay.wav <span class="at">--dest</span> assets/audio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will save the formant tracks for this single wav file to <code>assets/audio/ay.csv/</code>.</p>
+<p>To process an entire directory of files, instead pass the directory to <code>--dir</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio <span class="at">--dir</span> assets/audio/ <span class="at">--dest</span> assets/audio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will save the formant tracks for each audio file with the same file name to the output directory.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

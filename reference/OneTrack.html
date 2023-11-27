@@ -30,6 +30,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../reference/CandidateTracks.html" rel="next">
+<link href="../reference/process_audio_textgrid.html" rel="prev">
+<link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -84,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
+    <a class="nav-link active" href="../index.html" rel="" target="" aria-current="page">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -120,6 +123,11 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/logo_f2.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -131,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">functions</span></a>
+ <span class="menu-text">Processing Functions</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -147,6 +155,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../reference/process_directory.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">process_directory</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/process_audio_textgrid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">process_audio_textgrid</span></a>
   </div>
 </li>
       </ul>
@@ -272,9 +286,21 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#fasttrackpy.OneTrack" id="toc-fasttrackpy.OneTrack" class="nav-link active" data-scroll-target="#fasttrackpy.OneTrack">OneTrack</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
   <li><a href="#attributes" id="toc-attributes" class="nav-link" data-scroll-target="#attributes">Attributes</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#fasttrackpy.OneTrack.spectrogram" id="toc-fasttrackpy.OneTrack.spectrogram" class="nav-link" data-scroll-target="#fasttrackpy.OneTrack.spectrogram">spectrogram</a>
+  <ul class="collapse">
+  <li><a href="#parameters-1" id="toc-parameters-1" class="nav-link" data-scroll-target="#parameters-1">Parameters</a></li>
+  </ul></li>
+  <li><a href="#fasttrackpy.OneTrack.to_df" id="toc-fasttrackpy.OneTrack.to_df" class="nav-link" data-scroll-target="#fasttrackpy.OneTrack.to_df">to_df</a>
+  <ul class="collapse">
+  <li><a href="#parameters-2" id="toc-parameters-2" class="nav-link" data-scroll-target="#parameters-2">Parameters</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
+  </ul></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -286,16 +312,16 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="fasttrackpy.OneTrack" class="level1">
 <h1>OneTrack</h1>
-<p><code>OneTrack(self, maximum_formant, sound, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())</code></p>
-<p><em>summary</em></p>
+<p><code>OneTrack(self, maximum_formant, sound, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())</code></p>
+<p>A single formant track.</p>
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
 <colgroup>
-<col style="width: 21%">
-<col style="width: 10%">
-<col style="width: 53%">
-<col style="width: 14%">
+<col style="width: 19%">
+<col style="width: 9%">
+<col style="width: 58%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -307,57 +333,57 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>maximum_formant</code></td>
-<td>float</td>
-<td>max formant</td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
 <td><code>sound</code></td>
 <td>pm.Sound</td>
 <td>A <code>parselmouth.Sound</code> object.</td>
 <td><em>required</em></td>
 </tr>
+<tr class="even">
+<td><code>maximum_formant</code></td>
+<td>float</td>
+<td>max formant</td>
+<td><em>required</em></td>
+</tr>
 <tr class="odd">
 <td><code>n_formants</code></td>
 <td>int</td>
-<td>Number of formants to track. Defaults to 4.</td>
+<td>The number of formants to track. Defaults to 4.</td>
 <td><code>4</code></td>
 </tr>
 <tr class="even">
 <td><code>window_length</code></td>
 <td>float</td>
-<td>Defaults to 0.05.</td>
-<td><code>0.05</code></td>
+<td>Window length of the formant analysis. Defaults to 0.025.</td>
+<td><code>0.025</code></td>
 </tr>
 <tr class="odd">
 <td><code>time_step</code></td>
 <td>float</td>
-<td>Defaults to 0.002.</td>
+<td>Time step of the formant analyusis window. Defaults to 0.002.</td>
 <td><code>0.002</code></td>
 </tr>
 <tr class="even">
 <td><code>pre_emphasis_from</code></td>
 <td>float</td>
-<td>Defaults to 50.</td>
+<td>Pre-emphasis threshold. Defaults to 50.</td>
 <td><code>50</code></td>
 </tr>
 <tr class="odd">
 <td><code>smoother</code></td>
 <td>Smoother</td>
-<td>Smoother function. Defaults to <code>Smoother</code> default.</td>
+<td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
 <td><code>Smoother()</code></td>
 </tr>
 <tr class="even">
 <td><code>loss_fun</code></td>
-<td><em>type</em></td>
-<td>Loss function</td>
+<td>Loss</td>
+<td>The loss function to use. Defaults to Loss().</td>
 <td><code>Loss()</code></td>
 </tr>
 <tr class="odd">
 <td><code>agg_fun</code></td>
-<td><em>type</em></td>
-<td>Aggregation function</td>
+<td>Agg</td>
+<td>The loss aggregation function to use. Defaults to Agg().</td>
 <td><code>Agg()</code></td>
 </tr>
 </tbody>
@@ -367,9 +393,9 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="attributes">Attributes</h2>
 <table class="table">
 <colgroup>
-<col style="width: 16%">
-<col style="width: 9%">
-<col style="width: 74%">
+<col style="width: 14%">
+<col style="width: 23%">
+<col style="width: 62%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -400,24 +426,176 @@ ul.task-list li input[type="checkbox"] {
 <td>The total number of formants for which formant tracks were estimatable</td>
 </tr>
 <tr class="odd">
-<td>imputed_formants</td>
-<td>np.ndarray</td>
-<td>Formant tracks for which missing values were imputed using <code>sklearn.impute.IterativeImputer</code></td>
-</tr>
-<tr class="even">
 <td>smoothed_formants</td>
 <td>np.ndarray</td>
 <td>The smoothed formant values, using the method passed to <code>smoother</code>.</td>
 </tr>
+<tr class="even">
+<td>parameters</td>
+<td>np.ndarray</td>
+<td>The smoothing parameters.</td>
+</tr>
 <tr class="odd">
 <td>smooth_error</td>
 <td>float</td>
-<td>The error term between imputed formants and smoothed formants.</td>
+<td>The error term between formants and smoothed formants.</td>
+</tr>
+<tr class="even">
+<td>file_name</td>
+<td>str</td>
+<td>The filename of the audio file, if set.</td>
+</tr>
+<tr class="odd">
+<td>interval</td>
+<td>aligned_textgrid.SequenceInterval</td>
+<td>The textgrid interval of the sound, if set.</td>
+</tr>
+<tr class="even">
+<td>id</td>
+<td>str</td>
+<td>The interval id of the sound, if set.</td>
+</tr>
+<tr class="odd">
+<td>group</td>
+<td>str</td>
+<td>The tier group name of the sound, if set.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#fasttrackpy.OneTrack.spectrogram">spectrogram</a></td>
+<td>Generate a spectrogram with tracked formants overlaid</td>
+</tr>
+<tr class="even">
+<td><a href="#fasttrackpy.OneTrack.to_df">to_df</a></td>
+<td>Output either the formant values or the formant smoothing parameters as a polars dataframe</td>
+</tr>
+</tbody>
+</table>
+<section id="fasttrackpy.OneTrack.spectrogram" class="level3">
+<h3 class="anchored" data-anchor-id="fasttrackpy.OneTrack.spectrogram">spectrogram</h3>
+<p><code>OneTrack.spectrogram(**kwargs)</code></p>
+<p>Generate a spectrogram with tracked formants overlaid</p>
+<section id="parameters-1" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
+<table class="table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 8%">
+<col style="width: 59%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>formants</code></td>
+<td>int</td>
+<td>Number of formants to plot. Defaults to 3.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td><code>maximum_frequency</code></td>
+<td>int</td>
+<td>Maximum frequency for the spectrogram. Defaults to 3500.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td><code>tracks</code></td>
+<td>bool</td>
+<td>Whether or not to plot the tracks. Defaults to True.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td><code>dynamic_range</code></td>
+<td>int</td>
+<td>Dynamic range of the spectrogram. Defaults to 60.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td><code>figsize</code></td>
+<td>tuple</td>
+<td>Figure size. Defaults to (8,5).</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td><code>color_scale</code></td>
+<td>str</td>
+<td>Color scale for the spectrogram. Defaults to “Greys”.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="fasttrackpy.OneTrack.to_df" class="level3">
+<h3 class="anchored" data-anchor-id="fasttrackpy.OneTrack.to_df">to_df</h3>
+<p><code>OneTrack.to_df(output='formants')</code></p>
+<p>Output either the formant values or the formant smoothing parameters as a polars dataframe</p>
+<section id="parameters-2" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-2">Parameters</h4>
+<table class="table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 22%">
+<col style="width: 60%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>output</code></td>
+<td>Literal[‘formants’, ‘param’]</td>
+<td>Whether to output the formants or the smoothing parameters. Defaults to “formants”.</td>
+<td><code>'formants'</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns" class="level4">
+<h4 class="anchored" data-anchor-id="returns">Returns</h4>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>pl.DataFrame</td>
+<td>A <code>polars.DataFrame</code></td>
 </tr>
 </tbody>
 </table>
 
 
+</section>
+</section>
 </section>
 </section>
 
@@ -770,6 +948,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../reference/process_audio_textgrid.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">process_audio_textgrid</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../reference/CandidateTracks.html" class="pagination-link">
+        <span class="nav-page-text">CandidateTracks</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
