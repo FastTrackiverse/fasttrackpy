@@ -74,10 +74,11 @@ class TestHelpers:
                 entry_classes=[SequenceInterval]
                 ) 
             for pair in corpus
+            if "josef" in pair.wav.stem
             ]
         
         all_tiers2 = get_target_tiers(
-            all_tg2[1], 
+            all_tg2[0], 
             target_tier="phones"
             )
 
