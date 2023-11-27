@@ -9,8 +9,11 @@ from collections import namedtuple
 from pathlib import Path
 import multiprocessing
 from tqdm import tqdm
+from functools import reduce
+from operator import add
 from joblib import Parallel, delayed, wrap_non_picklable_objects
 import warnings
+
 
 
 try:
@@ -98,10 +101,11 @@ def get_target_intervals(
 
 @delayed
 @wrap_non_picklable_objects
-def get_candidates(args_dict):
+def get_candidates(args_dict, progress_bar:tqdm):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         candidates =  CandidateTracks(**args_dict)
+        progress_bar.update()
     if candidates.winner.formants.shape[1] == 1:
         warnings.warn("formant tracking error")
     return candidates
@@ -128,10 +132,14 @@ def process_corpus(
 
     Args:
         corpus_path (str | Path): A path to the corpus
-        entry_classes (list, optional): _description_. Defaults to ["Word", "Phone"].
-        target_tier (str, optional): _description_. Defaults to "Phone".
-        target_labels (str, optional): _description_. Defaults to "[AEIOU]".
-        min_duration (float, optional): _description_. Defaults to 0.05.
+        entry_classes (list, optional): Entry classes for the textgrid tiers. 
+            Defaults to ["Word", "Phone"].
+        target_tier (str, optional): The tier to target. 
+            Defaults to "Phone".
+        target_labels (str, optional): A regex that will match intervals to target. 
+            Defaults to "[AEIOU]".
+        min_duration (float, optional): Minimum vowel duration to mention.
+            Defaults to 0.05.
         min_max_formant (float, optional): The lowest max-formant value to try. 
             Defaults to 4000.
         max_max_formant (float, optional): The highest max formant to try. 
@@ -170,10 +178,12 @@ def process_corpus(
             for tiers in all_tiers
         ]
     all_candidates = []
-    for intervals in tqdm(all_intervals):
+    progress_bar = tqdm(total=reduce(add, [len(x) for x in all_intervals]))
+    for intervals in all_intervals:
         sound = pm.Sound(str(intervals[0].wav))
         sound_parts = [
-            sound.extract_part(from_time = interval.start-(window_length/2), to_time = interval.end+(window_length/2))
+            sound.extract_part(from_time = interval.start-(window_length/2), 
+            to_time = interval.end+(window_length/2))
             for interval in intervals
         ]
 
@@ -196,7 +206,7 @@ def process_corpus(
 
         n_jobs = multiprocessing.cpu_count()
         candidate_list = Parallel(n_jobs=n_jobs, prefer="threads")(
-            get_candidates(args_dict=arg) for arg in tqdm(arg_list)
+            get_candidates(args_dict=arg, progress_bar=progress_bar) for arg in arg_list
             )
 
         for cand, interval in zip(candidate_list, intervals):

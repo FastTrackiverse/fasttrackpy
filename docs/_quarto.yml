@@ -60,6 +60,7 @@ quartodoc:
         - process_audio_file
         - process_directory
         - process_audio_textgrid
+        - process_corpus
     - title: Classes
       desc: Classes
       contents:

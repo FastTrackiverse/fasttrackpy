@@ -1,0 +1,31 @@
+# process_corpus { #fasttrackpy.process_corpus }
+
+`process_corpus(corpus_path, entry_classes=['Word', 'Phone'], target_tier='Phone', target_labels='[AEIOU]', min_duration=0.05, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
+
+Given a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.
+
+## Parameters
+
+| Name                | Type        | Description                                                               | Default             |
+|---------------------|-------------|---------------------------------------------------------------------------|---------------------|
+| `corpus_path`       | str \| Path | A path to the corpus                                                      | _required_          |
+| `entry_classes`     | list        | Entry classes for the textgrid tiers.  Defaults to ["Word", "Phone"].     | `['Word', 'Phone']` |
+| `target_tier`       | str         | The tier to target.  Defaults to "Phone".                                 | `'Phone'`           |
+| `target_labels`     | str         | A regex that will match intervals to target.  Defaults to "[AEIOU]".      | `'[AEIOU]'`         |
+| `min_duration`      | float       | Minimum vowel duration to mention. Defaults to 0.05.                      | `0.05`              |
+| `min_max_formant`   | float       | The lowest max-formant value to try.  Defaults to 4000.                   | `4000`              |
+| `max_max_formant`   | float       | The highest max formant to try.  Defaults to 7000.                        | `7000`              |
+| `nstep`             | int         | The number of steps from the min to the max max formant.  Defaults to 20. | `20`                |
+| `n_formants`        | int         | The number of formants to track. Defaults to 4.                           | `4`                 |
+| `window_length`     | float       | Window length of the formant analysis.  Defaults to 0.025.                | `0.025`             |
+| `time_step`         | float       | Time step of the formant analyusis window.  Defaults to 0.002.            | `0.002`             |
+| `pre_emphasis_from` | float       | Pre-emphasis threshold.  Defaults to 50.                                  | `50`                |
+| `smoother`          | Smoother    | The smoother method to use.  Defaults to `Smoother()`.                    | `Smoother()`        |
+| `loss_fun`          | Loss        | The loss function to use.  Defaults to Loss().                            | `Loss()`            |
+| `agg_fun`           | Agg         | The loss aggregation function to use.  Defaults to Agg().                 | `Agg()`             |
+
+## Returns
+
+| Type                    | Description                 |
+|-------------------------|-----------------------------|
+| list\[CandidateTracks\] | A list of candidate tracks. |
