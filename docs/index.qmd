@@ -1,5 +1,32 @@
 ---
 title: "Home"
 ---
+[![PyPI](https://img.shields.io/pypi/v/fasttrackpy)](https://pypi.org/project/fasttrackpy/)
+[![Python CI](https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml/badge.svg)](https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml) [![codecov](https://codecov.io/gh/FastTrackiverse/fasttrackpy/graph/badge.svg?token=GOAWY4B5C8)](https://codecov.io/gh/FastTrackiverse/fasttrackpy) 
 
 These are the docs for `fasttrackpy`
+
+## Installation
+
+You can install `fasttrackpy` with pip.
+
+```bash
+pip install fasttrackpy
+```
+
+In addition to making the python modules available, this will also make the `fasttrack` command line executable available.
+
+## Usage
+The `fasttrack` executable has two commands
+
+```bash
+fasttrack audio ...
+```
+
+and 
+
+```bash
+fasttrack audio-textgrid ...
+```
+
+Fore more info, see [the quickstart](usage/getting_started.qmd).

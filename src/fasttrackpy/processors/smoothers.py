@@ -33,7 +33,7 @@ class Smoother:
     """
     def __init__(
         self,
-        method: Union[str, Callable] = "dct_smooth",
+        method: Union[str, Callable] = "dct_smooth_regression",
         **kwargs
     ):
         self.smooth_fun = self._get_fun(method)
@@ -83,7 +83,6 @@ def dct_smooth(
     )
 
 
-
 def dct_smooth_regression(
         x:np.array, 
         order:int = 5
@@ -101,10 +100,31 @@ def dct_smooth_regression(
 
     y = np.array (x)
     N = x.size
-    predictors = np.array ([(np.cos(np.pi * (np.array(range(N))/N) * k)) for k in range(order)])
-    predictors = predictors.T
-    coefs = np.dot((np.linalg.inv(np.dot(predictors.T,predictors))), np.dot(predictors.T,y))
-    smooth = np.dot(predictors, coefs)
+    predictors = np.array (
+        [(np.cos(np.pi * (np.arange(N)/N) * k)) 
+         for k in range(order)]
+        )
+
+    nan_entries = np.isnan(y)
+    
+    y_to_fit = y[~nan_entries]
+    predictors_to_use = predictors[:,~nan_entries].T
+
+    try:
+        coefs = np.dot(
+            (np.linalg.inv(
+                np.dot(predictors_to_use.T,
+                    predictors_to_use)
+                )
+            ), 
+            np.dot(
+                predictors_to_use.T,
+                y_to_fit)
+            )
+        smooth = np.dot(predictors.T, coefs)
+    except:
+        smooth = np.full(y.shape, np.nan)
+        coefs = np.full((order,), np.nan)
     return Smoothed(
         smoothed=smooth,
         params = coefs

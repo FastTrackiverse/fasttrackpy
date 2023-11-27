@@ -1,15 +1,15 @@
 # Smoother { #fasttrackpy.Smoother }
 
-`Smoother(self, method='dct_smooth', **kwargs)`
+`Smoother(self, method='dct_smooth_regression', **kwargs)`
 
 A smoother function factory
 
 ## Parameters
 
-| Name     | Type                   | Description                                                                                                                                            | Default        |
-|----------|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
-| `method` | Union\[str, Callable\] | The smoothing method to use. Defaults to "dct_smooth". Can be a custom smoother such that it takes a 1D array as input and returns a `Smoothed` class. | `'dct_smooth'` |
-| `kwargs` |                        | Any additional arguments or parameters for the `method`.                                                                                               | `{}`           |
+| Name     | Type                   | Description                                                                                                                                            | Default                   |
+|----------|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| `method` | Union\[str, Callable\] | The smoothing method to use. Defaults to "dct_smooth". Can be a custom smoother such that it takes a 1D array as input and returns a `Smoothed` class. | `'dct_smooth_regression'` |
+| `kwargs` |                        | Any additional arguments or parameters for the `method`.                                                                                               | `{}`                      |
 
 ## Methods
 

@@ -1,0 +1,2 @@
+file: "tests/test_data/ay.wav"
+dest: "tests/test_data/output"

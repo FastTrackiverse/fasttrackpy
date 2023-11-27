@@ -1,31 +1,77 @@
 # OneTrack { #fasttrackpy.OneTrack }
 
-`OneTrack(self, maximum_formant, sound, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
+`OneTrack(self, maximum_formant, sound, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())`
 
-_summary_
+A single formant track.
 
 ## Parameters
 
-| Name                | Type     | Description                                        | Default      |
-|---------------------|----------|----------------------------------------------------|--------------|
-| `maximum_formant`   | float    | max formant                                        | _required_   |
-| `sound`             | pm.Sound | A `parselmouth.Sound` object.                      | _required_   |
-| `n_formants`        | int      | Number of formants to track. Defaults to 4.        | `4`          |
-| `window_length`     | float    | Defaults to 0.05.                                  | `0.05`       |
-| `time_step`         | float    | Defaults to 0.002.                                 | `0.002`      |
-| `pre_emphasis_from` | float    | Defaults to 50.                                    | `50`         |
-| `smoother`          | Smoother | Smoother function. Defaults to `Smoother` default. | `Smoother()` |
-| `loss_fun`          | _type_   | Loss function                                      | `Loss()`     |
-| `agg_fun`           | _type_   | Aggregation function                               | `Agg()`      |
+| Name                | Type     | Description                                                    | Default      |
+|---------------------|----------|----------------------------------------------------------------|--------------|
+| `sound`             | pm.Sound | A `parselmouth.Sound` object.                                  | _required_   |
+| `maximum_formant`   | float    | max formant                                                    | _required_   |
+| `n_formants`        | int      | The number of formants to track. Defaults to 4.                | `4`          |
+| `window_length`     | float    | Window length of the formant analysis.  Defaults to 0.025.     | `0.025`      |
+| `time_step`         | float    | Time step of the formant analyusis window.  Defaults to 0.002. | `0.002`      |
+| `pre_emphasis_from` | float    | Pre-emphasis threshold.  Defaults to 50.                       | `50`         |
+| `smoother`          | Smoother | The smoother method to use.  Defaults to `Smoother()`.         | `Smoother()` |
+| `loss_fun`          | Loss     | The loss function to use.  Defaults to Loss().                 | `Loss()`     |
+| `agg_fun`           | Agg      | The loss aggregation function to use.  Defaults to Agg().      | `Agg()`      |
 
 ## Attributes
 
-| Name                | Type       | Description                                                                                  |
-|---------------------|------------|----------------------------------------------------------------------------------------------|
-| maximum_formant     | float      | The max formant                                                                              |
-| time_domain         | np.array   | The time domain of the formant estimates                                                     |
-| formants            | np.ndarray | A (formants, time) array of values. The formants as initially estimated by praat-parselmouth |
-| n_measured_formants | int        | The total number of formants for which formant tracks were estimatable                       |
-| imputed_formants    | np.ndarray | Formant tracks for which missing values were imputed using `sklearn.impute.IterativeImputer` |
-| smoothed_formants   | np.ndarray | The smoothed formant values, using  the method passed to `smoother`.                         |
-| smooth_error        | float      | The error term between imputed formants and  smoothed formants.                              |
+| Name                | Type                              | Description                                                                                  |
+|---------------------|-----------------------------------|----------------------------------------------------------------------------------------------|
+| maximum_formant     | float                             | The max formant                                                                              |
+| time_domain         | np.array                          | The time domain of the formant estimates                                                     |
+| formants            | np.ndarray                        | A (formants, time) array of values. The formants as initially estimated by praat-parselmouth |
+| n_measured_formants | int                               | The total number of formants for which formant tracks were estimatable                       |
+| smoothed_formants   | np.ndarray                        | The smoothed formant values, using  the method passed to `smoother`.                         |
+| parameters          | np.ndarray                        | The smoothing parameters.                                                                    |
+| smooth_error        | float                             | The error term between formants and  smoothed formants.                                      |
+| file_name           | str                               | The filename of the audio file, if set.                                                      |
+| interval            | aligned_textgrid.SequenceInterval | The textgrid interval of the sound, if set.                                                  |
+| id                  | str                               | The interval id of the sound, if set.                                                        |
+| group               | str                               | The tier group name of the sound, if set.                                                    |
+
+## Methods
+
+| Name | Description |
+| --- | --- |
+| [spectrogram](#fasttrackpy.OneTrack.spectrogram) | Generate a spectrogram with tracked formants overlaid |
+| [to_df](#fasttrackpy.OneTrack.to_df) | Output either the formant values or the formant smoothing parameters         as a polars dataframe |
+
+### spectrogram { #fasttrackpy.OneTrack.spectrogram }
+
+`OneTrack.spectrogram(**kwargs)`
+
+Generate a spectrogram with tracked formants overlaid
+
+#### Parameters
+
+| Name                | Type   | Description                                               | Default    |
+|---------------------|--------|-----------------------------------------------------------|------------|
+| `formants`          | int    | Number of formants to plot.  Defaults to 3.               | _required_ |
+| `maximum_frequency` | int    | Maximum frequency for the spectrogram.  Defaults to 3500. | _required_ |
+| `tracks`            | bool   | Whether or not to plot the tracks.  Defaults to True.     | _required_ |
+| `dynamic_range`     | int    | Dynamic range of the spectrogram.  Defaults to 60.        | _required_ |
+| `figsize`           | tuple  | Figure size.  Defaults to (8,5).                          | _required_ |
+| `color_scale`       | str    | Color scale for the spectrogram.  Defaults to "Greys".    | _required_ |
+
+### to_df { #fasttrackpy.OneTrack.to_df }
+
+`OneTrack.to_df(output='formants')`
+
+Output either the formant values or the formant smoothing parameters         as a polars dataframe
+
+#### Parameters
+
+| Name     | Type                           | Description                                                                          | Default      |
+|----------|--------------------------------|--------------------------------------------------------------------------------------|--------------|
+| `output` | Literal\['formants', 'param'\] | Whether to output the formants or the smoothing parameters.  Defaults to "formants". | `'formants'` |
+
+#### Returns
+
+| Type         | Description          |
+|--------------|----------------------|
+| pl.DataFrame | A `polars.DataFrame` |

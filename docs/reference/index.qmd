@@ -1,13 +1,14 @@
 # Function reference
 
-## functions
+## Processing Functions
 
 functions
 
 | | |
 | --- | --- |
-| [process_audio_file](process_audio_file.qmd#fasttrackpy.process_audio_file) | _summary_ |
-| [process_directory](process_directory.qmd#fasttrackpy.process_directory) | _summary_ |
+| [process_audio_file](process_audio_file.qmd#fasttrackpy.process_audio_file) | Given the path to a single audio file, return a candidates track object. |
+| [process_directory](process_directory.qmd#fasttrackpy.process_directory) | Given a path to a directoy of audio files, process them all. |
+| [process_audio_textgrid](process_audio_textgrid.qmd#fasttrackpy.process_audio_textgrid) | Process an audio and TextGrid file together. |
 
 ## Classes
 
@@ -15,7 +16,7 @@ Classes
 
 | | |
 | --- | --- |
-| [OneTrack](OneTrack.qmd#fasttrackpy.OneTrack) | _summary_ |
+| [OneTrack](OneTrack.qmd#fasttrackpy.OneTrack) | A single formant track. |
 | [CandidateTracks](CandidateTracks.qmd#fasttrackpy.CandidateTracks) | A class for candidate tracks for a single formant |
 
 ## Smoothers
