@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>fasttrackpy – index</title>
+<title>fasttrackpy – process_corpus</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../reference/process_audio_file.html" rel="next">
+<link href="../reference/OneTrack.html" rel="next">
+<link href="../reference/process_audio_textgrid.html" rel="prev">
 <link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -112,7 +113,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html">Function reference</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/process_audio_file.html">Processing Functions</a></li><li class="breadcrumb-item"><a href="../reference/process_corpus.html">process_corpus</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -131,7 +132,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../reference/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Function reference</span></a>
   </div>
 </li>
@@ -164,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/process_corpus.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/process_corpus.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">process_corpus</span></a>
   </div>
 </li>
@@ -290,13 +291,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#function-reference" id="toc-function-reference" class="nav-link active" data-scroll-target="#function-reference">Function reference</a>
+  <li><a href="#fasttrackpy.process_corpus" id="toc-fasttrackpy.process_corpus" class="nav-link active" data-scroll-target="#fasttrackpy.process_corpus">process_corpus</a>
   <ul>
-  <li><a href="#processing-functions" id="toc-processing-functions" class="nav-link" data-scroll-target="#processing-functions">Processing Functions</a></li>
-  <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a></li>
-  <li><a href="#smoothers" id="toc-smoothers" class="nav-link" data-scroll-target="#smoothers">Smoothers</a></li>
-  <li><a href="#losses" id="toc-losses" class="nav-link" data-scroll-target="#losses">Losses</a></li>
-  <li><a href="#aggs" id="toc-aggs" class="nav-link" data-scroll-target="#aggs">Aggs</a></li>
+  <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -306,104 +304,134 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="function-reference" class="level1">
-<h1>Function reference</h1>
-<section id="processing-functions" class="level2">
-<h2 class="anchored" data-anchor-id="processing-functions">Processing Functions</h2>
-<p>functions</p>
+<section id="fasttrackpy.process_corpus" class="level1">
+<h1>process_corpus</h1>
+<p><code>process_corpus(corpus_path, entry_classes=['Word', 'Phone'], target_tier='Phone', target_labels='[AEIOU]', min_duration=0.05, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())</code></p>
+<p>Given a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.</p>
+<section id="parameters" class="level2">
+<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 10%">
+<col style="width: 57%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td><a href="../reference/process_audio_file.html#fasttrackpy.process_audio_file">process_audio_file</a></td>
-<td>Given the path to a single audio file, return a candidates track object.</td>
+<td><code>corpus_path</code></td>
+<td>str | Path</td>
+<td>A path to the corpus</td>
+<td><em>required</em></td>
 </tr>
 <tr class="even">
-<td><a href="../reference/process_directory.html#fasttrackpy.process_directory">process_directory</a></td>
-<td>Given a path to a directoy of audio files, process them all.</td>
+<td><code>entry_classes</code></td>
+<td>list</td>
+<td>Entry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].</td>
+<td><code>['Word', 'Phone']</code></td>
 </tr>
 <tr class="odd">
-<td><a href="../reference/process_audio_textgrid.html#fasttrackpy.process_audio_textgrid">process_audio_textgrid</a></td>
-<td>Process an audio and TextGrid file together.</td>
+<td><code>target_tier</code></td>
+<td>str</td>
+<td>The tier to target. Defaults to “Phone”.</td>
+<td><code>'Phone'</code></td>
 </tr>
 <tr class="even">
-<td><a href="../reference/process_corpus.html#fasttrackpy.process_corpus">process_corpus</a></td>
-<td>Given a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.</td>
+<td><code>target_labels</code></td>
+<td>str</td>
+<td>A regex that will match intervals to target. Defaults to “[AEIOU]”.</td>
+<td><code>'[AEIOU]'</code></td>
+</tr>
+<tr class="odd">
+<td><code>min_duration</code></td>
+<td>float</td>
+<td>Minimum vowel duration to mention. Defaults to 0.05.</td>
+<td><code>0.05</code></td>
+</tr>
+<tr class="even">
+<td><code>min_max_formant</code></td>
+<td>float</td>
+<td>The lowest max-formant value to try. Defaults to 4000.</td>
+<td><code>4000</code></td>
+</tr>
+<tr class="odd">
+<td><code>max_max_formant</code></td>
+<td>float</td>
+<td>The highest max formant to try. Defaults to 7000.</td>
+<td><code>7000</code></td>
+</tr>
+<tr class="even">
+<td><code>nstep</code></td>
+<td>int</td>
+<td>The number of steps from the min to the max max formant. Defaults to 20.</td>
+<td><code>20</code></td>
+</tr>
+<tr class="odd">
+<td><code>n_formants</code></td>
+<td>int</td>
+<td>The number of formants to track. Defaults to 4.</td>
+<td><code>4</code></td>
+</tr>
+<tr class="even">
+<td><code>window_length</code></td>
+<td>float</td>
+<td>Window length of the formant analysis. Defaults to 0.025.</td>
+<td><code>0.025</code></td>
+</tr>
+<tr class="odd">
+<td><code>time_step</code></td>
+<td>float</td>
+<td>Time step of the formant analyusis window. Defaults to 0.002.</td>
+<td><code>0.002</code></td>
+</tr>
+<tr class="even">
+<td><code>pre_emphasis_from</code></td>
+<td>float</td>
+<td>Pre-emphasis threshold. Defaults to 50.</td>
+<td><code>50</code></td>
+</tr>
+<tr class="odd">
+<td><code>smoother</code></td>
+<td>Smoother</td>
+<td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
+<td><code>Smoother()</code></td>
+</tr>
+<tr class="even">
+<td><code>loss_fun</code></td>
+<td>Loss</td>
+<td>The loss function to use. Defaults to Loss().</td>
+<td><code>Loss()</code></td>
+</tr>
+<tr class="odd">
+<td><code>agg_fun</code></td>
+<td>Agg</td>
+<td>The loss aggregation function to use. Defaults to Agg().</td>
+<td><code>Agg()</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="classes" class="level2">
-<h2 class="anchored" data-anchor-id="classes">Classes</h2>
-<p>Classes</p>
+<section id="returns" class="level2">
+<h2 class="anchored" data-anchor-id="returns">Returns</h2>
 <table class="table">
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td><a href="../reference/OneTrack.html#fasttrackpy.OneTrack">OneTrack</a></td>
-<td>A single formant track.</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/CandidateTracks.html#fasttrackpy.CandidateTracks">CandidateTracks</a></td>
-<td>A class for candidate tracks for a single formant</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="smoothers" class="level2">
-<h2 class="anchored" data-anchor-id="smoothers">Smoothers</h2>
-<p>Smoother</p>
-<table class="table">
-<tbody>
-<tr class="odd">
-<td><a href="../reference/Smoother.html#fasttrackpy.Smoother">Smoother</a></td>
-<td>A smoother function factory</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/processors.smoothers.Smoothed.html#fasttrackpy.processors.smoothers.Smoothed">processors.smoothers.Smoothed</a></td>
-<td>Smooothed formant tracks</td>
-</tr>
-<tr class="odd">
-<td><a href="../reference/processors.smoothers.dct_smooth.html#fasttrackpy.processors.smoothers.dct_smooth">processors.smoothers.dct_smooth</a></td>
-<td>A DCT Smoother</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/processors.smoothers.dct_smooth_regression.html#fasttrackpy.processors.smoothers.dct_smooth_regression">processors.smoothers.dct_smooth_regression</a></td>
-<td>A DCT Smoother using regression</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="losses" class="level2">
-<h2 class="anchored" data-anchor-id="losses">Losses</h2>
-<p>Losses</p>
-<table class="table">
-<tbody>
-<tr class="odd">
-<td><a href="../reference/Loss.html#fasttrackpy.Loss">Loss</a></td>
-<td><em>summary</em></td>
-</tr>
-<tr class="even">
-<td><a href="../reference/processors.losses.lmse.html#fasttrackpy.processors.losses.lmse">processors.losses.lmse</a></td>
-<td><em>summary</em></td>
-</tr>
-<tr class="odd">
-<td><a href="../reference/processors.losses.mse.html#fasttrackpy.processors.losses.mse">processors.losses.mse</a></td>
-<td><em>summary</em></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="aggs" class="level2">
-<h2 class="anchored" data-anchor-id="aggs">Aggs</h2>
-<p>Aggs</p>
-<table class="table">
-<tbody>
-<tr class="odd">
-<td><a href="../reference/Agg.html#fasttrackpy.Agg">Agg</a></td>
-<td><em>summary</em></td>
-</tr>
-<tr class="even">
-<td><a href="../reference/processors.aggs.agg_sum.html#fasttrackpy.processors.aggs.agg_sum">processors.aggs.agg_sum</a></td>
-<td>Sum the error</td>
+<td>list[CandidateTracks]</td>
+<td>A list of candidate tracks.</td>
 </tr>
 </tbody>
 </table>
@@ -763,10 +791,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../reference/process_audio_textgrid.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">process_audio_textgrid</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../reference/process_audio_file.html" class="pagination-link">
-        <span class="nav-page-text">process_audio_file</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../reference/OneTrack.html" class="pagination-link">
+        <span class="nav-page-text">OneTrack</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

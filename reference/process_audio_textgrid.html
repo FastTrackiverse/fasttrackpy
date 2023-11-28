@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../reference/OneTrack.html" rel="next">
+<link href="../reference/process_corpus.html" rel="next">
 <link href="../reference/process_directory.html" rel="prev">
 <link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
@@ -161,6 +161,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../reference/process_audio_textgrid.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">process_audio_textgrid</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/process_corpus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">process_corpus</span></a>
   </div>
 </li>
       </ul>
@@ -335,25 +341,25 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td><code>entry_classes</code></td>
 <td>list</td>
-<td><em>description</em>. Defaults to [“Word”, “Phone”].</td>
+<td>Entry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].</td>
 <td><code>['Word', 'Phone']</code></td>
 </tr>
 <tr class="even">
 <td><code>target_tier</code></td>
 <td>str</td>
-<td><em>description</em>. Defaults to “Phone”.</td>
+<td>The tier to target. Defaults to “Phone”.</td>
 <td><code>'Phone'</code></td>
 </tr>
 <tr class="odd">
 <td><code>target_labels</code></td>
 <td>str</td>
-<td><em>description</em>. Defaults to “[AEIOU]”.</td>
+<td>A regex that will match intervals to target. Defaults to “[AEIOU]”.</td>
 <td><code>'[AEIOU]'</code></td>
 </tr>
 <tr class="even">
 <td><code>min_duration</code></td>
 <td>float</td>
-<td><em>description</em>. Defaults to 0.05.</td>
+<td>Minimum vowel duration to mention. Defaults to 0.05.</td>
 <td><code>0.05</code></td>
 </tr>
 <tr class="odd">
@@ -796,8 +802,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../reference/OneTrack.html" class="pagination-link">
-        <span class="nav-page-text">OneTrack</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../reference/process_corpus.html" class="pagination-link">
+        <span class="nav-page-text">process_corpus</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

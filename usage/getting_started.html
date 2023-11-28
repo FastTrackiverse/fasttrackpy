@@ -204,6 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#adjusting-the-assumed-textgrid-format" id="toc-adjusting-the-assumed-textgrid-format" class="nav-link" data-scroll-target="#adjusting-the-assumed-textgrid-format">Adjusting the assumed TextGrid format</a></li>
   <li><a href="#adjusting-the-target-intervals" id="toc-adjusting-the-target-intervals" class="nav-link" data-scroll-target="#adjusting-the-target-intervals">Adjusting the target intervals</a></li>
   </ul></li>
+  <li><a href="#processing-a-corpus" id="toc-processing-a-corpus" class="nav-link" data-scroll-target="#processing-a-corpus">Processing a corpus</a></li>
   <li><a href="#using-a-config-file" id="toc-using-a-config-file" class="nav-link" data-scroll-target="#using-a-config-file">Using a config file</a></li>
   </ul>
 </nav>
@@ -246,11 +247,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--dest</span> output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="adjusting-the-assumed-textgrid-format" class="level3">
 <h3 class="anchored" data-anchor-id="adjusting-the-assumed-textgrid-format">Adjusting the assumed TextGrid format</h3>
-<p>If your textgrid is <em>not</em> formatted as force aligned textgrid, you need to pass <code>--textgrid-format</code> the value <code>SequenceInterval</code> and <code>--target-tier</code> the name of the tier you want to analyze.</p>
+<p>If your textgrid is <em>not</em> formatted as force aligned textgrid, you need to pass <code>--entry-classes</code> the value <code>SequenceInterval</code> and <code>--target-tier</code> the name of the tier you want to analyze.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio-textgrid <span class="at">--audio</span> speaker.wav <span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--textgrid</span> speaker.TextGrid <span class="dt">\</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--dest</span> output <span class="dt">\</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--textgrid-format</span> SequenceInterval <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--entry-classes</span> SequenceInterval <span class="dt">\</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--target-tier</span> phones</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="adjusting-the-target-intervals" class="level3">
@@ -259,21 +260,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio-textgrid <span class="at">--audio</span> speaker.wav <span class="dt">\</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--textgrid</span> speaker.TextGrid <span class="dt">\</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--dest</span> output <span class="dt">\</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--textgrid-format</span> SequenceInterval <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--entry-classes</span> SequenceInterval <span class="dt">\</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--target-tier</span> phones <span class="dt">\</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--target-labels</span> <span class="st">"."</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
+<section id="processing-a-corpus" class="level2">
+<h2 class="anchored" data-anchor-id="processing-a-corpus">Processing a corpus</h2>
+<p>If you have a corpus of audio + textgrid pairs, you can process them with <code>fasttrack corpus</code>. You can either write the output to one large file, or have it separated by original file name &amp; speaker with the <code>--separate-output</code> flag.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> corpus <span class="at">--corpus</span> data <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--dest</span> output <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--separate-output</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 <section id="using-a-config-file" class="level2">
 <h2 class="anchored" data-anchor-id="using-a-config-file">Using a config file</h2>
 <p>There are many possible options to set for both <code>fasttrack audio</code> and <code>fasttrack audio-textgrid</code>. Instead of passing them all at the commandline, you can pass either command a yaml config file.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># config.yml</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">min_max_formant</span><span class="kw">:</span><span class="at"> </span><span class="dv">3000</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">max_max_formant</span><span class="kw">:</span><span class="at"> </span><span class="dv">6000</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nstep</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio <span class="at">--file</span> ay.wav <span class="dt">\</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--dest</span> output <span class="dt">\</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--config</span> config.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># config.yml</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">min_max_formant</span><span class="kw">:</span><span class="at"> </span><span class="dv">3000</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">max_max_formant</span><span class="kw">:</span><span class="at"> </span><span class="dv">6000</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nstep</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio <span class="at">--file</span> ay.wav <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--dest</span> output <span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--config</span> config.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
