@@ -98,10 +98,14 @@ def process_audio_textgrid(
     Args:
         audio_path (str | Path): Path to an audio file.
         textgrid_path (str | Path): Path to a TextGrid
-        entry_classes (list, optional): _description_. Defaults to ["Word", "Phone"].
-        target_tier (str, optional): _description_. Defaults to "Phone".
-        target_labels (str, optional): _description_. Defaults to "[AEIOU]".
-        min_duration (float, optional): _description_. Defaults to 0.05.
+        entry_classes (list, optional): Entry classes for the textgrid tiers. 
+            Defaults to ["Word", "Phone"].
+        target_tier (str, optional): The tier to target. 
+            Defaults to "Phone".
+        target_labels (str, optional): A regex that will match intervals to target. 
+            Defaults to "[AEIOU]".
+        min_duration (float, optional): Minimum vowel duration to mention.
+            Defaults to 0.05.
         min_max_formant (float, optional): The lowest max-formant value to try. 
             Defaults to 4000.
         max_max_formant (float, optional): The highest max formant to try. 

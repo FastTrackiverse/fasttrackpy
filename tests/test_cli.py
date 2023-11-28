@@ -8,6 +8,8 @@ class TestCLI:
     sound_path = Path("tests", "test_data", "ay.wav")
     audio_path = Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.wav")
     tg_path = Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.TextGrid")
+    corpus_path = Path("tests", "test_data", "corpus")
+
     def test_file_usage(self):
         out_dir = self.sound_path.parent.joinpath("output")
         if not out_dir.is_dir():
@@ -76,3 +78,19 @@ class TestCLI:
         [x.unlink() for x in out_files]
         out_dir.rmdir()
 
+    def test_corpus(self):
+        out_dir = self.corpus_path.parent.joinpath("output")
+        if not out_dir.is_dir():
+            out_dir.mkdir()
+        runner = CliRunner()
+        runner.invoke(
+            fasttrack,
+            f"corpus --corpus {str(self.corpus_path)} --target-labels AY --dest {str(out_dir)} --separate-output"
+        )
+
+        out_files = list(out_dir.iterdir())
+        assert all([x.is_file() for x in out_files])
+        #assert len(out_files) > 1
+
+        [x.unlink() for x in out_files]
+        out_dir.rmdir()

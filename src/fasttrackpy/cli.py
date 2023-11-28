@@ -7,6 +7,7 @@ from fasttrackpy.patterns.just_audio import process_audio_file, \
                                             process_directory,\
                                             is_audio
 from fasttrackpy.patterns.audio_textgrid import process_audio_textgrid
+from fasttrackpy.patterns.corpus import process_corpus
 import parselmouth as pm
 from pathlib import Path
 from typing import Union
@@ -149,6 +150,13 @@ output_options = cloup.option_group(
         help = "Whether to save the formant data, "\
                "or smoothing parameter data."\
                " Defaults to 'formants'."   
+    ),
+    cloup.option(
+        "--separate-output",
+        is_flag=True,
+        default=False,
+        help = "When processing a corpus, save each file/group to a "\
+               "separate file?"
     ),
     help = "Options for what data should be saved."
 )
@@ -460,6 +468,89 @@ def audio_textgrid(
                 destination=dest,
                 which=which_output, 
                 output=data_output
+    )
+
+@fasttrack.command(
+    formatter_settings=formatter_settings,
+    help="run fasttrack with on a corpus directory"
+)
+@cloup.option_group(
+    "Inputs",
+    cloup.option(
+        "--corpus",
+        type = click.Path(exists=True),
+        required=True,
+        help = "corpus path"
+    )
+)
+@config
+@output_destinations
+@output_options
+@textgrid_processing
+@audio_processing
+@smoother_options
+def corpus(
+        corpus: str|Path = None,
+        entry_classes: str = None,
+        target_tier: str = None,
+        target_labels: str = None,
+        output: str|Path = None,
+        separate_output: bool = False,
+        dest: str|Path = None,
+        which_output: str = "winner",
+        data_output: str = "formants",
+        smoother_method: str = "dct_smooth_regression",
+        smoother_order: int = 5,
+        loss_method: str = "lmse",
+        min_duration: float = 0.05,
+        min_max_formant:float = 4000,
+        max_max_formant:float = 7000,
+        nstep:int = 20,
+        n_formants: int = 4,
+        window_length: float = 0.025,
+        time_step: float = 0.002,
+        pre_emphasis_from: float = 50
+):
+    smoother_kwargs = {
+        "method": smoother_method,
+        "order": smoother_order
+    }
+
+    loss_kwargs = {
+        "method": loss_method
+    }
+
+    smoother = Smoother(**smoother_kwargs)
+    loss_fun = Loss(**loss_kwargs)
+    agg_fun = Agg()
+
+    entry_classes = entry_classes.split("|")
+
+    all_candidates = process_corpus(
+        corpus_path = corpus,
+        entry_classes = entry_classes,
+        target_tier = target_tier,
+        target_labels = target_labels,
+        min_duration = min_duration,
+        min_max_formant = min_max_formant,
+        max_max_formant = max_max_formant,
+        nstep = nstep,
+        n_formants = n_formants,
+        window_length = window_length,
+        time_step = time_step,
+        pre_emphasis_from = pre_emphasis_from,
+        smoother = smoother,
+        loss_fun = loss_fun,
+        agg_fun = agg_fun
+    )
+
+    write_data(
+        all_candidates,
+        file=output, 
+        destination=dest,
+        which=which_output, 
+        output=data_output,
+        separate=separate_output
     )
 
 if __name__ == "__main__":
