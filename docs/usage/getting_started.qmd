@@ -36,14 +36,14 @@ fasttrack audio-textgrid --audio speaker.wav \
 
 ### Adjusting the assumed TextGrid format
 
-If your textgrid is *not* formatted as force aligned textgrid, you need to pass `--textgrid-format` the value `SequenceInterval` and `--target-tier` the name of the tier you want to analyze.
+If your textgrid is *not* formatted as force aligned textgrid, you need to pass `--entry-classes` the value `SequenceInterval` and `--target-tier` the name of the tier you want to analyze.
 
 
 ```bash
 fasttrack audio-textgrid --audio speaker.wav \
     --textgrid speaker.TextGrid \
     --dest output \
-    --textgrid-format SequenceInterval \
+    --entry-classes SequenceInterval \
     --target-tier phones
 ```
 
@@ -55,11 +55,20 @@ You can configure fasttrack to only process certain intervals by passing `--targ
 fasttrack audio-textgrid --audio speaker.wav \
     --textgrid speaker.TextGrid \
     --dest output \
-    --textgrid-format SequenceInterval \
+    --entry-classes SequenceInterval \
     --target-tier phones \
     --target-labels "."
 ```
 
+## Processing a corpus
+
+If you have a corpus of audio + textgrid pairs, you can process them with `fasttrack corpus`. You can either write the output to one large file, or have it separated by original file name & speaker with the `--separate-output` flag.
+
+```bash
+fasttrack corpus --corpus data \
+    --dest output \
+    --separate-output
+```
 
 ## Using a config file
 

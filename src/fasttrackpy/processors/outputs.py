@@ -114,8 +114,15 @@ def write_data(
         file: Path = None,
         destination: Path = None,
         which: str = "winner",
-        output: str = "formants"
+        output: str = "formants", 
+        separate: bool = False
 ):
+    if destination and not isinstance(destination, Path):
+        destination = Path(destination)
+    
+    if file and not isinstance(file, Path):
+        file = Path(file)
+    
     if type(candidates) is list:
         df = pl.concat(
             [x.to_df(which = which, output = output) for x in candidates],
@@ -125,21 +132,44 @@ def write_data(
         df = candidates.to_df(which = which, output = output)
 
     if file:
-        df.write_csv(file = str(file))
+        df.write_csv(file = str(file.resolve()))
         return
     
-    if destination and "file_name" in df.columns:
-        if not isinstance(destination, Path):
-            destination = Path(destination)
+    if destination and "file_name" in df.columns and not separate:
         file = destination.joinpath(
             df["file_name"][0]
         ).with_suffix(".csv")
-        df.write_csv(file = str(file))
+        df.write_csv(file = str(file.resolve()))
+        return
+
+    if destination and "file_name" in df.columns:
+        unique_entries = df \
+            .select("file_name", "group")\
+            .unique()\
+            .with_columns(
+                pl.concat_str(
+                    [pl.col("file_name"),
+                     pl.col("group")],
+                     separator="_"
+                ).alias("newname")
+            ) \
+            .rows_by_key("newname", named = True)
+        
+        for newname in unique_entries:
+            out_df = df \
+                .filter(
+                    (pl.col("file_name") == unique_entries[newname][0]["file_name"]) &
+                    (pl.col("group") == unique_entries[newname][0]["group"])
+                )
+            
+            out_df.write_csv(
+                file = str(destination.joinpath(newname).with_suffix(".csv").resolve())
+            )
         return
 
     if destination:
         file = destination.joinpath("output.csv")
-        df.write_csv(file = str(file))
+        df.write_csv(file = str(file.resolve()))
         return
     
     raise ValueError("Either 'file' or 'destination' needs to be set")
