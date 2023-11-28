@@ -123,3 +123,4 @@ class TestCorpus:
         all_candidates = process_corpus(Path("tests", "test_data", "corpus"))
 
         assert [isinstance(cand, CandidateTracks) for cand in all_candidates]
+        assert len(all_candidates) > 0

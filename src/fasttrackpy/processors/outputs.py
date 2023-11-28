@@ -120,6 +120,9 @@ def write_data(
     if destination and not isinstance(destination, Path):
         destination = Path(destination)
     
+    if file and not isinstance(file, Path):
+        file = Path(file)
+    
     if type(candidates) is list:
         df = pl.concat(
             [x.to_df(which = which, output = output) for x in candidates],
@@ -129,14 +132,14 @@ def write_data(
         df = candidates.to_df(which = which, output = output)
 
     if file:
-        df.write_csv(file = str(file))
+        df.write_csv(file = str(file.resolve()))
         return
     
     if destination and "file_name" in df.columns and not separate:
         file = destination.joinpath(
             df["file_name"][0]
         ).with_suffix(".csv")
-        df.write_csv(file = str(file))
+        df.write_csv(file = str(file.resolve()))
         return
 
     if destination and "file_name" in df.columns:
@@ -160,13 +163,13 @@ def write_data(
                 )
             
             out_df.write_csv(
-                file = str(destination.joinpath(newname).with_suffix(".csv"))
+                file = str(destination.joinpath(newname).with_suffix(".csv").resolve())
             )
         return
 
     if destination:
         file = destination.joinpath("output.csv")
-        df.write_csv(file = str(file))
+        df.write_csv(file = str(file.resolve()))
         return
     
     raise ValueError("Either 'file' or 'destination' needs to be set")
