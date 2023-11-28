@@ -58,6 +58,7 @@ If an `output` file name is not provided, `fasttrack` will try to use a reasonab
 | :----  | :---- | :----  |
 | `which_output` | Whether to save just the winning track (`winner`) or all candidates (`all`) | `winner` |
 | `data_output` | Whether to save the formant tracks (`formants`) or the smoothing parameters (`param`) | `formants` |
+| `separate_output` | When processing a corpus, save each file/group to a separate file? | `False` |
 
 ### TextGrid Processing Options
 

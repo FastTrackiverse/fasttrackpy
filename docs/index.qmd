@@ -29,4 +29,4 @@ and
 fasttrack audio-textgrid ...
 ```
 
-Fore more info, see [the quickstart](usage/getting_started.qmd).
+For more info, see [the quickstart](usage/getting_started.qmd).
