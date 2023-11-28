@@ -88,7 +88,7 @@ class TestCLI:
             f"corpus --corpus {str(self.corpus_path)} --target-labels AY --dest {str(out_dir)} --separate-output"
         )
 
-        out_files = list(out_dir.glob("*"))
+        out_files = list(out_dir.iterdir())
         assert all([x.is_file() for x in out_files])
         assert len(out_files) > 1
 
