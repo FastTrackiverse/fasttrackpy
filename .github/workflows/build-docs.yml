@@ -17,7 +17,7 @@ jobs:
           python -m pip install -r requirements/docs.txt
           python -m pip install .
       - name: Quartodoc Build
-        run: quartodoc build --config doc/_quarto.yml
+        run: quartodoc build --config docs/_quarto.yml
       - uses: quarto-dev/quarto-actions/setup@v2
       - name: Render and publish to gh pages
         uses: quarto-dev/quarto-actions/publish@v2
