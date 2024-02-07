@@ -182,7 +182,9 @@ def spectrogram(
         tracks = True, 
         dynamic_range=60, 
         figsize = (8,5),
-        color_scale="Greys"
+        color_scale="Greys",
+        file_name = None,
+        dpi = 100
     ):
 
     spctgrm = self.sound.to_spectrogram(
@@ -203,6 +205,7 @@ def spectrogram(
     data = self.to_df()
     all_cols = [x for x in formant_cols+smooth_cols if x in data.columns]
 
+    print (data)
     data = data\
         .select(["time"]+all_cols)\
         .melt(id_vars = "time")\
@@ -228,12 +231,18 @@ def spectrogram(
                        pl.col("variable").str.contains("_s")
                    ))    
 
+    if file_name:
+        mp.savefig(file_name, dpi=dpi)
+    
+
 def candidate_spectrograms(
         self, 
         formants = 3, 
         maximum_frequency = 3500, 
         dynamic_range=60,
-        figsize=(12,8)
+        figsize=(12,8),
+        file_name = None,
+        dpi = 75
     ):
     
     spectrogram = self.sound.to_spectrogram(
@@ -272,7 +281,6 @@ def candidate_spectrograms(
             data = self.candidates[analysis].to_df()
             all_cols = [x for x in formant_cols+smooth_cols if x in data.columns]
 
-
             data = data\
                 .select(["time"]+all_cols)\
                 .melt(id_vars = "time")\
@@ -310,6 +318,9 @@ def candidate_spectrograms(
             #    y = spectrogram.ymax * 0.9,
             #    s = str(round(self.candidates[analysis].maximum_formant))
             #)
+    
+    if file_name:
+        mp.savefig(file_name, dpi=dpi, bbox_inches='tight')
              
                 
     for ax in fig.get_axes():
