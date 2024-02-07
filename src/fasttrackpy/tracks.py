@@ -427,7 +427,8 @@ class CandidateTracks(Track):
 
     def _normalize_n_measured(self):
         for track in self.candidates:
-            track.n_measured_formants = self.min_n_measured
+            #track.n_measured_formants = self.min_n_measured
+            pass
     
     def to_df(
             self, 
