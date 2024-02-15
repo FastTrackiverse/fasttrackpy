@@ -1,0 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: fasttrackpy
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Josef
+    family-names: Fruehwald
+    orcid: 'https://orcid.org/0000-0001-8480-9461'
+    affiliation: University of Kentucky
+  - given-names: Santiago
+    family-names: Barreda
+    affiliation: UC Davis
+    orcid: 'https://orcid.org/0000-0002-1552-083X'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.10212100
+    description: zenodo
+repository-code: 'https://github.com/FastTrackiverse/fasttrackpy'
+url: 'https://fasttrackiverse.github.io/fasttrackpy/'
+abstract: A python implementation of FastTrack
+license: MIT
