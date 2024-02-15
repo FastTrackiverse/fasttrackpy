@@ -251,7 +251,8 @@ def audio(
         n_formants: int = 4,
         window_length: float = 0.025,
         time_step: float = 0.002,
-        pre_emphasis_from: float = 50
+        pre_emphasis_from: float = 50,
+        **kwargs
 ):
     """Run fasttrack.
 
@@ -392,7 +393,8 @@ def audio_textgrid(
         n_formants: int = 4,
         window_length: float = 0.025,
         time_step: float = 0.002,
-        pre_emphasis_from: float = 50
+        pre_emphasis_from: float = 50,
+        **kwargs
 ):
     """Run fasttrack.
 
