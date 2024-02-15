@@ -18,10 +18,10 @@ homepage = "https://fasttrackiverse.github.io/fasttrackpy/"
 repository = "https://github.com/FastTrackiverse/fasttrackpy"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.13"
+python = ">=3.10,<3.12"
 praat-parselmouth = "^0.4.3"
-scipy = {version = "^1.11.3", python = ">=3.10,<3.13"}
-numpy = {version = "^1.26.1", python = ">=3.10,<3.13"}
+scipy = {version = "^1.11.3", python = ">=3.10,<3.12"}
+numpy = {version = "^1.26.1", python = ">=3.10,<3.12"}
 polars = "^0.19.16"
 pytest-cov = "^4.1.0"
 pytest = "^7.4.3"
@@ -59,7 +59,8 @@ addopts = [
     "--import-mode=importlib",
     "--cov-config=tests/.coveragerc",
     "--cov-report=xml",
-    "--cov"
+    "--cov",
+    "--log-cli-level=INFO"
 ]
 filterwarnings =[
     "ignore::UserWarning"
