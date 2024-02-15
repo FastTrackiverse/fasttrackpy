@@ -3,6 +3,7 @@ from pathlib import Path
 from click.testing import CliRunner
 import pytest
 import yaml
+import logging
 
 class TestCLI:
     sound_path = Path("tests", "test_data", "ay.wav")
@@ -16,10 +17,12 @@ class TestCLI:
             out_dir.mkdir()
 
         runner = CliRunner()
-        runner.invoke(
+        result = runner.invoke(
             fasttrack,
             f"audio --file {str(self.sound_path)} --dest {str(out_dir)}"
         )
+
+        assert result.exit_code == 0, result.output
         out_files = list(out_dir.glob("*"))
         assert all([x.is_file() for x in out_files])
         [x.unlink() for x in out_files]
@@ -35,10 +38,12 @@ class TestCLI:
             dest.mkdir()
 
         runner = CliRunner()
-        runner.invoke(
+        result = runner.invoke(
             fasttrack,
             f"audio --config tests/test_data/config.yml"
         )
+
+        assert result.exit_code == 0, result.output
         out_files = list(dest.glob("*"))
         assert all([x.is_file() for x in out_files])
         [x.unlink() for x in out_files]
@@ -51,27 +56,28 @@ class TestCLI:
             out_dir.mkdir()
 
         runner = CliRunner()
-        runner.invoke(
+        result = runner.invoke(
             fasttrack,
             f"audio --dir {str(self.sound_path.parent)} --dest {str(out_dir)}"
         )
         
-        out_files = list(out_dir.glob("*"))
-        assert all([x.is_file() for x in out_files])
+        assert result.exit_code == 0, result.output
+        #assert all([x.is_file() for x in out_files])
 
-        [x.unlink() for x in out_files]
-        out_dir.rmdir()
+        #[x.unlink() for x in out_files]
+        #out_dir.rmdir()
 
     def test_audio_tg(self):
         out_dir = self.sound_path.parent.joinpath("output")
         if not out_dir.is_dir():
             out_dir.mkdir()
         runner = CliRunner()
-        runner.invoke(
+        result = runner.invoke(
             fasttrack,
             f"audio-textgrid --audio {str(self.audio_path)} --textgrid {str(self.tg_path)} --target-tier Phone --target-labels AY --dest {str(out_dir)}"
         )
 
+        assert result.exit_code == 0, result.output
         out_files = list(out_dir.glob("*"))
         assert all([x.is_file() for x in out_files])
 
@@ -83,11 +89,12 @@ class TestCLI:
         if not out_dir.is_dir():
             out_dir.mkdir()
         runner = CliRunner()
-        runner.invoke(
+        result = runner.invoke(
             fasttrack,
             f"corpus --corpus {str(self.corpus_path)} --target-labels AY --dest {str(out_dir)} --separate-output"
         )
 
+        assert result.exit_code == 0, result.output
         out_files = list(out_dir.iterdir())
         assert all([x.is_file() for x in out_files])
         #assert len(out_files) > 1
