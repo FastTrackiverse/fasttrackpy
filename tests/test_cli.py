@@ -19,7 +19,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"audio --file {str(self.sound_path)} --dest {str(out_dir)}"
+            f"audio --file {self.sound_path} --dest {out_dir}"
         )
 
         assert result.exit_code == 0, result.output
@@ -29,7 +29,8 @@ class TestCLI:
         out_dir.rmdir()
 
     def test_config_file(self):
-        with open("tests/test_data/config.yml") as file:
+        config_path = Path("tests", "test_data", "config.yml")
+        with config_path.open() as file:
             params = yaml.safe_load(file)
 
         sound_path = Path(params["file"])
@@ -40,7 +41,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"audio --config tests/test_data/config.yml"
+            f"audio --config {config_path}"
         )
 
         assert result.exit_code == 0, result.output
@@ -58,14 +59,14 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"audio --dir {str(self.sound_path.parent)} --dest {str(out_dir)}"
+            f"audio --dir {self.sound_path.parent} --dest {out_dir}"
         )
         
         assert result.exit_code == 0, result.output
         #assert all([x.is_file() for x in out_files])
-
-        #[x.unlink() for x in out_files]
-        #out_dir.rmdir()
+        out_files = out_dir.glob("*")
+        [x.unlink() for x in out_files]
+        out_dir.rmdir()
 
     def test_audio_tg(self):
         out_dir = self.sound_path.parent.joinpath("output")
@@ -74,7 +75,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"audio-textgrid --audio {str(self.audio_path)} --textgrid {str(self.tg_path)} --target-tier Phone --target-labels AY --dest {str(out_dir)}"
+            f"audio-textgrid --audio {self.audio_path} --textgrid {self.tg_path} --target-tier Phone --target-labels AY --dest {out_dir}"
         )
 
         assert result.exit_code == 0, result.output
@@ -91,7 +92,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"corpus --corpus {str(self.corpus_path)} --target-labels AY --dest {str(out_dir)} --separate-output"
+            f"corpus --corpus {self.corpus_path} --target-labels AY --dest {out_dir} --separate-output"
         )
 
         assert result.exit_code == 0, result.output
