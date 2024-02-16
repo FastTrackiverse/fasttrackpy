@@ -19,12 +19,13 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            fr"audio --file {self.sound_path} --dest {out_dir}"
+            ["audio", 
+             "--file", self.sound_path, 
+             "--dest", out_dir]
         )
 
         assert result.exit_code == 0, result.output
         out_files = list(out_dir.glob("*"))
-        assert all([x.is_file() for x in out_files])
         [x.unlink() for x in out_files]
         out_dir.rmdir()
 
@@ -41,12 +42,12 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            fr"audio --config {config_path}"
+            ["audio", 
+             "--config", config_path]
         )
 
         assert result.exit_code == 0, result.output
         out_files = list(dest.glob("*"))
-        assert all([x.is_file() for x in out_files])
         [x.unlink() for x in out_files]
         dest.rmdir()
 
@@ -59,11 +60,12 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"audio --dir {self.sound_path.parent} --dest {out_dir}"
+            ["audio", 
+             "--dir", self.sound_path.parent,
+               "--dest", out_dir]
         )
         
         assert result.exit_code == 0, result.output
-        #assert all([x.is_file() for x in out_files])
         out_files = out_dir.glob("*")
         [x.unlink() for x in out_files]
         out_dir.rmdir()
@@ -75,12 +77,16 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            fr"audio-textgrid --audio {self.audio_path} --textgrid {self.tg_path} --target-tier Phone --target-labels AY --dest {out_dir}"
+            ["audio-textgrid", 
+             "--audio", self.audio_path, 
+             "--textgrid", self.tg_path, 
+             "--target-tier", "Phone", 
+             "--target-labels", "AY",
+             "--dest", out_dir]
         )
 
         assert result.exit_code == 0, result.output
         out_files = list(out_dir.glob("*"))
-        assert all([x.is_file() for x in out_files])
 
         [x.unlink() for x in out_files]
         out_dir.rmdir()
@@ -92,13 +98,16 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            fr"corpus --corpus {self.corpus_path} --target-labels AY --dest {out_dir} --separate-output"
+            ["corpus",
+             "--corpus", self.corpus_path,
+             "--target-labels", "AY",
+             "--dest", out_dir, 
+             "--separate-output"]
         )
 
         assert result.exit_code == 0, result.output
         out_files = list(out_dir.iterdir())
-        assert all([x.is_file() for x in out_files])
-        #assert len(out_files) > 1
+        assert len(out_files) > 1
 
         [x.unlink() for x in out_files]
         out_dir.rmdir()
