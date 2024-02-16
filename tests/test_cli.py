@@ -19,7 +19,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"audio --file {self.sound_path} --dest {out_dir}"
+            fr"audio --file {self.sound_path} --dest {out_dir}"
         )
 
         assert result.exit_code == 0, result.output
@@ -41,7 +41,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"audio --config {config_path}"
+            fr"audio --config {config_path}"
         )
 
         assert result.exit_code == 0, result.output
@@ -75,7 +75,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"audio-textgrid --audio {self.audio_path} --textgrid {self.tg_path} --target-tier Phone --target-labels AY --dest {out_dir}"
+            fr"audio-textgrid --audio {self.audio_path} --textgrid {self.tg_path} --target-tier Phone --target-labels AY --dest {out_dir}"
         )
 
         assert result.exit_code == 0, result.output
@@ -92,7 +92,7 @@ class TestCLI:
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
-            f"corpus --corpus {self.corpus_path} --target-labels AY --dest {out_dir} --separate-output"
+            fr"corpus --corpus {self.corpus_path} --target-labels AY --dest {out_dir} --separate-output"
         )
 
         assert result.exit_code == 0, result.output
