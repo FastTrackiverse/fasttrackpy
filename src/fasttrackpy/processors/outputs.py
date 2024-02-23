@@ -1,12 +1,15 @@
 import numpy as np
+import pickle
+import parselmouth as pm
 import polars as pl
 from aligned_textgrid import SequenceInterval
 from pathlib import Path
 import matplotlib.pyplot as mp
+import copy
 
-ptolmap = {"F1" :"#4477AA", 
-           "F1_s": "#4477AA", 
-           "F2": "#EE6677", 
+ptolmap = {"F1" :"#4477AA",
+           "F1_s": "#4477AA",
+           "F2": "#EE6677",
            "F2_s": "#EE6677",
            "F3": "#228833",
            "F3_s": "#228833",
@@ -29,7 +32,7 @@ def add_metadata(self, out_df):
         out_df = out_df.with_columns(
             group = pl.lit(self.group)
         )
-    
+
     if isinstance(self.interval, SequenceInterval) :
         out_df = out_df.with_columns(
             label = pl.lit(self.interval.label)
@@ -61,7 +64,7 @@ def formant_to_dataframe(self):
     )
 
     out_df = pl.concat([orig_df, smooth_df], how = "horizontal")
-    
+
     out_df = out_df.with_columns(
         error = pl.lit(self.smooth_error),
         time = pl.lit(self.time_domain),
@@ -70,7 +73,7 @@ def formant_to_dataframe(self):
         smooth_method = pl.lit(self.smoother.smooth_fun.__name__)
     )
 
-    out_df = add_metadata(self, out_df)       
+    out_df = add_metadata(self, out_df)
 
     return out_df
 
@@ -82,18 +85,18 @@ def param_to_dataframe(self):
     """
 
     schema = [
-        f"F{x}" for x in 
+        f"F{x}" for x in
         np.arange(self.parameters.shape[0])+1
     ]
     param_df = pl.DataFrame(
         data = self.parameters,schema=schema
     )
-    
+
     param_df = param_df.with_columns(
         error = pl.lit(self.smooth_error)
     )
 
-    param_df = add_metadata(self, param_df)    
+    param_df = add_metadata(self, param_df)
 
     return param_df
 
@@ -114,15 +117,15 @@ def write_data(
         file: Path = None,
         destination: Path = None,
         which: str = "winner",
-        output: str = "formants", 
+        output: str = "formants",
         separate: bool = False
 ):
     if destination and not isinstance(destination, Path):
         destination = Path(destination)
-    
+
     if file and not isinstance(file, Path):
         file = Path(file)
-    
+
     if type(candidates) is list:
         df = pl.concat(
             [x.to_df(which = which, output = output) for x in candidates],
@@ -134,7 +137,7 @@ def write_data(
     if file:
         df.write_csv(file = str(file.resolve()))
         return
-    
+
     if destination and "file_name" in df.columns and not separate:
         file = destination.joinpath(
             df["file_name"][0]
@@ -154,14 +157,14 @@ def write_data(
                 ).alias("newname")
             ) \
             .rows_by_key("newname", named = True)
-        
+
         for newname in unique_entries:
             out_df = df \
                 .filter(
                     (pl.col("file_name") == unique_entries[newname][0]["file_name"]) &
                     (pl.col("group") == unique_entries[newname][0]["group"])
                 )
-            
+
             out_df.write_csv(
                 file = str(destination.joinpath(newname).with_suffix(".csv").resolve())
             )
@@ -171,16 +174,16 @@ def write_data(
         file = destination.joinpath("output.csv")
         df.write_csv(file = str(file.resolve()))
         return
-    
+
     raise ValueError("Either 'file' or 'destination' needs to be set")
 
 
 def spectrogram(
-        self, 
-        formants = 3, 
-        maximum_frequency=3500, 
-        tracks = True, 
-        dynamic_range=60, 
+        self,
+        formants = 3,
+        maximum_frequency=3500,
+        tracks = True,
+        dynamic_range=60,
         figsize = (8,5),
         color_scale="Greys",
         file_name = None,
@@ -193,7 +196,7 @@ def spectrogram(
     Time, Hz = spctgrm.x_grid(), spctgrm.y_grid()
     db = 10 * np.log10(spctgrm.values)
     min_shown = db.max() - dynamic_range
-    
+
     mp.figure(figsize=figsize)
     mp.pcolormesh(Time, Hz, db, vmin=min_shown, cmap=color_scale)
     mp.ylim([spctgrm.ymin, spctgrm.ymax])
@@ -205,7 +208,6 @@ def spectrogram(
     data = self.to_df()
     all_cols = [x for x in formant_cols+smooth_cols if x in data.columns]
 
-    print (data)
     data = data\
         .select(["time"]+all_cols)\
         .melt(id_vars = "time")\
@@ -214,37 +216,38 @@ def spectrogram(
             .replace(mapping=ptolmap)\
             .alias("color")
             )
-    
+
     if tracks:
         mp.scatter(x = "time",
-                   y="value", 
-                   c="color", 
-                   marker = ".", 
+                   y="value",
+                   c="color",
+                   marker = ".",
                    data=data.filter(
                        ~pl.col("variable").str.contains("_s")
-                   ))    
+                   ))
         mp.scatter(x = "time",
-                   y="value", 
-                   c="color", 
-                   marker = "+", 
+                   y="value",
+                   c="color",
+                   marker = "+",
                    data=data.filter(
                        pl.col("variable").str.contains("_s")
-                   ))    
+                   ))
 
     if file_name:
         mp.savefig(file_name, dpi=dpi)
-    
+        mp.close()
+
 
 def candidate_spectrograms(
-        self, 
-        formants = 3, 
-        maximum_frequency = 3500, 
+        self,
+        formants = 3,
+        maximum_frequency = 3500,
         dynamic_range=60,
         figsize=(12,8),
         file_name = None,
         dpi = 75
     ):
-    
+
     spectrogram = self.sound.to_spectrogram(
         maximum_frequency=maximum_frequency,
         time_step=0.005
@@ -255,11 +258,11 @@ def candidate_spectrograms(
     db = 10 * np.log10(spectrogram.values)
     min_shown = db.max() - dynamic_range
 
-    # for plotting layout    
+    # for plotting layout
     dims = np.array([4, self.nstep//4])
     panel_columns = dims.max()
     panel_rows = dims.min()
-    
+
     fig = mp.figure(figsize=figsize)
     gs = fig.add_gridspec(panel_rows,panel_columns, hspace=0.18, wspace=0.05)
     axs = gs.subplots(sharex='col', sharey='row')
@@ -289,7 +292,7 @@ def candidate_spectrograms(
                     .replace(mapping=ptolmap)\
                     .alias("color")
                 )
-            
+
             axs[i,j].scatter(
                 x = "time",
                 y = "value",
@@ -312,16 +315,60 @@ def candidate_spectrograms(
             )
 
             axs[i, j].set_title(str(round(self.candidates[analysis].maximum_formant)),y=0.95)
-            
+
             #axs[i,j].text(
             #    x = 0.1,
             #    y = spectrogram.ymax * 0.9,
             #    s = str(round(self.candidates[analysis].maximum_formant))
             #)
-    
+
     if file_name:
         mp.savefig(file_name, dpi=dpi, bbox_inches='tight')
-             
-                
+        mp.close()
+
     for ax in fig.get_axes():
         ax.label_outer()
+
+
+class ftpSound:
+    def __init__(self, sound):
+        self.values = np.array(sound.values)
+        self.sampling_frequency = sound.sampling_frequency
+
+    def to_pmSound(self):
+        output = pm.Sound(self.values,
+                        sampling_frequency=self.sampling_frequency)
+        return (output)
+
+
+def pickle_candidates(
+    candidates,
+    file: Path = 'test.pickle'):
+
+    tmp_sound = ftpSound(candidates.sound)
+
+    tmp_candidates = copy.deepcopy (candidates)
+
+    for candidate in tmp_candidates.candidates:
+        candidate.sound = tmp_sound
+
+    tmp_candidates.sound = tmp_sound
+
+    with open(file, 'wb') as file:
+        pickle.dump(tmp_candidates, file)
+
+
+def unpickle_candidates(
+                file: Path = 'test.pickle'):
+
+    with open(file, 'rb') as file:
+        candidates = pickle.load(file)
+
+    tmp_sound = candidates.sound.to_pmSound()
+
+    for candidate in candidates.candidates:
+        candidate.sound = tmp_sound
+
+    candidates.sound = tmp_sound
+
+    return (candidates)
