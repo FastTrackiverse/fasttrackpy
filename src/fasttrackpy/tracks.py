@@ -50,18 +50,18 @@ class OneTrack(Track):
         sound (pm.Sound): A `parselmouth.Sound` object.
         maximum_formant (float): max formant
         n_formants (int, optional): The number of formants to track. Defaults to 4.
-        window_length (float, optional): Window length of the formant analysis. 
+        window_length (float, optional): Window length of the formant analysis.
             Defaults to 0.025.
-        time_step (float, optional): Time step of the formant analyusis window. 
+        time_step (float, optional): Time step of the formant analyusis window.
             Defaults to 0.002.
-        pre_emphasis_from (float, optional): Pre-emphasis threshold. 
+        pre_emphasis_from (float, optional): Pre-emphasis threshold.
             Defaults to 50.
-        smoother (Smoother, optional): The smoother method to use. 
+        smoother (Smoother, optional): The smoother method to use.
             Defaults to `Smoother()`.
-        loss_fun (Loss, optional): The loss function to use. 
+        loss_fun (Loss, optional): The loss function to use.
             Defaults to Loss().
-        agg_fun (Agg, optional): The loss aggregation function to use. 
-            Defaults to Agg().    
+        agg_fun (Agg, optional): The loss aggregation function to use.
+            Defaults to Agg().
 
     Attributes:
         maximum_formant (float): The max formant
@@ -70,10 +70,10 @@ class OneTrack(Track):
             as initially estimated by praat-parselmouth
         n_measured_formants (int): The total number of formants for which
             formant tracks were estimatable
-        smoothed_formants (np.ndarray): The smoothed formant values, using 
+        smoothed_formants (np.ndarray): The smoothed formant values, using
             the method passed to `smoother`.
         parameters (np.ndarray): The smoothing parameters.
-        smooth_error (float): The error term between formants and 
+        smooth_error (float): The error term between formants and
             smoothed formants.
         file_name (str): The filename of the audio file, if set.
         interval (aligned_textgrid.SequenceInterval): The textgrid interval of the sound, if set.
@@ -109,12 +109,12 @@ class OneTrack(Track):
         self.n_measured_formants = self._get_measured()
         self.smoothed_list = self._smooth_formants()
         self._file_name = None
-        self._id = None      
-        self._group = None  
+        self._id = None
+        self._group = None
         self._formant_df = None
         self._param_df = None
         self._interval = None
-    
+
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
 
@@ -142,18 +142,18 @@ class OneTrack(Track):
 
     def _smooth_formants(self):
         smoothed_list = [
-          self.smoother.smooth(x) 
+          self.smoother.smooth(x)
             for x in self.formants
         ]
         return smoothed_list
-    
+
     def _get_measured(self):
         nan_tracks = np.isnan(self.formants)
         mostly_nan = np.mean(nan_tracks, axis = 1) > 0.5
         if np.any(mostly_nan):
             return np.argmax(mostly_nan)
         return mostly_nan.shape[0]
-    
+
     @property
     def smoothed_formants(self):
         return np.array(
@@ -169,24 +169,24 @@ class OneTrack(Track):
     @property
     def smooth_error(self):
         msqe =  self.loss_fun.calculate_loss(
-            self.formants[0:self.n_measured_formants], 
+            self.formants[0:self.n_measured_formants],
             self.smoothed_formants[0:self.n_measured_formants]
         )
         error = self.agg_fun.aggregate(msqe)
         return error
-    
+
     @property
     def file_name(self):
         return self._file_name
-    
+
     @file_name.setter
     def file_name(self, x):
         self._file_name = x
-    
+
     @property
     def id(self):
         return self._id
-    
+
     @id.setter
     def id(self, x):
         self._id = x
@@ -194,11 +194,11 @@ class OneTrack(Track):
     @property
     def interval(self):
         return self._interval
-    
+
     @property
     def group(self):
         return self._group
-    
+
     @group.setter
     def group(self, groupname):
         self._group = groupname
@@ -213,11 +213,11 @@ class OneTrack(Track):
     def __get_group(self, interval):
         if isinstance(interval.within, TierGroup):
             return interval.within.name
-        
+
         return self.__get_group(interval.within)
 
     def to_df(
-            self, 
+            self,
             output:Literal["formants", "param"] = "formants"
             ) -> pl.DataFrame:
         """Output either the formant values or the formant smoothing parameters \
@@ -225,7 +225,7 @@ class OneTrack(Track):
 
         Args:
             output (Literal['formants', 'param'], optional): Whether
-                to output the formants or the smoothing parameters. 
+                to output the formants or the smoothing parameters.
                 Defaults to "formants".
 
         Returns:
@@ -245,58 +245,58 @@ class OneTrack(Track):
             return df
         if output == "param":
             return self._param_df
-        
+
         raise ValueError("output must be either 'formants' or 'param'")
-    
+
     def spectrogram(self, **kwargs):
         """Generate a spectrogram with tracked formants overlaid
 
         Args:
-            formants (int, optional): Number of formants to plot. 
+            formants (int, optional): Number of formants to plot.
                 Defaults to 3.
-            maximum_frequency (int, optional): Maximum frequency for the spectrogram. 
+            maximum_frequency (int, optional): Maximum frequency for the spectrogram.
                 Defaults to 3500.
-            tracks (bool, optional): Whether or not to plot the tracks. 
+            tracks (bool, optional): Whether or not to plot the tracks.
                 Defaults to True.
-            dynamic_range (int, optional): Dynamic range of the spectrogram. 
+            dynamic_range (int, optional): Dynamic range of the spectrogram.
                 Defaults to 60.
-            figsize (tuple, optional): Figure size. 
+            figsize (tuple, optional): Figure size.
                 Defaults to (8,5).
-            color_scale (str, optional): Color scale for the spectrogram. 
+            color_scale (str, optional): Color scale for the spectrogram.
                 Defaults to "Greys".
-        """        
+        """
         spectrogram(self, **kwargs)
-    
-        
+
+
 
 class CandidateTracks(Track):
     """A class for candidate tracks for a single formant
-    
+
     Args:
         sound (pm.Sound): A `parselmouth.Sound` object.
-        min_max_formant (float, optional): The lowest max-formant value to try. 
+        min_max_formant (float, optional): The lowest max-formant value to try.
             Defaults to 4000.
-        max_max_formant (float, optional): The highest max formant to try. 
+        max_max_formant (float, optional): The highest max formant to try.
             Defaults to 7000.
-        nstep (int, optional): The number of steps from the min to the max max formant. 
+        nstep (int, optional): The number of steps from the min to the max max formant.
             Defaults to 20.
         n_formants (int, optional): The number of formants to track. Defaults to 4.
-        window_length (float, optional): Window length of the formant analysis. 
+        window_length (float, optional): Window length of the formant analysis.
             Defaults to 0.025.
-        time_step (float, optional): Time step of the formant analyusis window. 
+        time_step (float, optional): Time step of the formant analyusis window.
             Defaults to 0.002.
-        pre_emphasis_from (float, optional): Pre-emphasis threshold. 
+        pre_emphasis_from (float, optional): Pre-emphasis threshold.
             Defaults to 50.
-        smoother (Smoother, optional): The smoother method to use. 
+        smoother (Smoother, optional): The smoother method to use.
             Defaults to `Smoother()`.
-        loss_fun (Loss, optional): The loss function to use. 
+        loss_fun (Loss, optional): The loss function to use.
             Defaults to Loss().
-        agg_fun (Agg, optional): The loss aggregation function to use. 
+        agg_fun (Agg, optional): The loss aggregation function to use.
             Defaults to Agg().
 
     Attributes:
         candidates (list[OneTrack,...]): A list of `OneTrack` tracks.
-        min_n_measured (int): The smallest number of successfully measured 
+        min_n_measured (int): The smallest number of successfully measured
             formants across all `candidates`
         smooth_errors (np.array): The error terms for each treack in `candidates`
         winner_idx (int): The candidate track with the smallest error term
@@ -359,12 +359,12 @@ class CandidateTracks(Track):
                 smoother = self.smoother,
                 loss_fun = self.loss_fun,
                 agg_fun = self.agg_fun
-                
+
             ) for x in self.max_formants
         ]
 
         self.min_n_measured = np.array([
-            x.n_measured_formants 
+            x.n_measured_formants
             for x in self.candidates
         ]).min()
 
@@ -380,13 +380,13 @@ class CandidateTracks(Track):
     @property
     def file_name(self):
         return self._file_name
-    
+
     @file_name.setter
     def file_name(self, x):
         self._file_name = x
         for c in self.candidates:
             c.file_name = x
-    
+
     @property
     def id(self):
         return self._id
@@ -396,11 +396,11 @@ class CandidateTracks(Track):
         self._id = x
         for c in self.candidates:
             c.id = x
-    
+
     @property
     def group(self):
         return self._group
-    
+
     @group.setter
     def group(self, name):
         self._group = name
@@ -408,7 +408,7 @@ class CandidateTracks(Track):
     def __get_group(self, interval):
         if isinstance(interval.within, TierGroup):
             return interval.within.name
-        
+
         return self.__get_group(interval.within)
 
 
@@ -426,12 +426,12 @@ class CandidateTracks(Track):
             c.interval = interval
 
     def _normalize_n_measured(self):
-        for track in self.candidates:
+        #for track in self.candidates:
             #track.n_measured_formants = self.min_n_measured
-            pass
-    
+        pass
+
     def to_df(
-            self, 
+            self,
             which: Literal["winner", "all"] = "winner",
             output: Literal["formants", "param"] = "formants"
             ) -> pl.DataFrame:
@@ -441,7 +441,7 @@ class CandidateTracks(Track):
             which (Literal['winner', 'all'], optional): Return just the winner
                 track data, or all candidates. Defaults to "winner".
             output (Literal['formants', 'param'], optional): Whether
-                to output the formants or the smoothing parameters. 
+                to output the formants or the smoothing parameters.
                 Defaults to "formants".
 
         Returns:
@@ -449,38 +449,38 @@ class CandidateTracks(Track):
         """
         if which == "winner":
             return self.winner.to_df(output=output)
-        
+
         if output == "formants"\
             and not isinstance(self._formant_df, pl.DataFrame):
             big_df = get_big_df(self, output=output)
             self._formant_df = big_df
             return big_df
-        
+
         if output == "formants":
             return self._formant_df
-        
+
         if output == "param"\
             and not isinstance(self._param_df, pl.DataFrame):
             big_df = get_big_df(self, output=output)
             self._param_df = big_df
             return big_df
-        
+
         if output == "param":
             return self._param_df
-            
+
     def spectrograms(self, **kwargs):
         """Generate a spectrogram with formant tracks for the candidate tracks
 
         Args:
-            formants (int, optional): Number of formants to plot. 
+            formants (int, optional): Number of formants to plot.
                 Defaults to 3.
-            maximum_frequency (int, optional): Maximum frequency for the spectrogram. 
+            maximum_frequency (int, optional): Maximum frequency for the spectrogram.
                 Defaults to 3500.
-            tracks (bool, optional): Whether or not to plot the tracks. 
+            tracks (bool, optional): Whether or not to plot the tracks.
                 Defaults to True.
-            dynamic_range (int, optional): Dynamic range of the spectrogram. 
+            dynamic_range (int, optional): Dynamic range of the spectrogram.
                 Defaults to 60.
-            figsize (tuple, optional): Figure size. 
+            figsize (tuple, optional): Figure size.
                 Defaults to (12,8).
         """
 
