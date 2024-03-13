@@ -426,9 +426,8 @@ class CandidateTracks(Track):
             c.interval = interval
 
     def _normalize_n_measured(self):
-        #for track in self.candidates:
-            #track.n_measured_formants = self.min_n_measured
-        pass
+        for track in self.candidates:
+            track.n_measured_formants = self.min_n_measured
 
     def to_df(
             self,
