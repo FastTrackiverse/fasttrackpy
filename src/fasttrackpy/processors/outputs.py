@@ -192,7 +192,7 @@ def spectrogram(
     """
     This will plot the spectrogram and formant tracks
     of a single candidate track. If a `file_name` is 
-    provided, it will save the plot to disc.
+    provided, it will save the plot to disk.
 
     Args:
         formants (int, optional): 
@@ -284,7 +284,7 @@ def candidate_spectrograms(
     """ 
     This will plot a grid of the candidate formant
     tracks and their spectrograms. If a `file_name`
-    is provided, it will save the plot to disc.
+    is provided, it will save the plot to disk.
 
     Args:
         formants (int, optional): 
