@@ -12,6 +12,7 @@ import polars as pl
 import numpy as np
 import matplotlib.pyplot as mp
 from pathlib import Path
+from PIL import Image
 
 SOUND_PATH = Path("tests", "test_data", "ay.wav")
 SOUND = pm.Sound(str(SOUND_PATH))
@@ -79,3 +80,35 @@ class TestPlots:
         monkeypatch.setattr(mp, 'show', lambda: None)
         self.cands.spectrograms()
         assert True
+
+    def test_save_spectrogram(self, tmp_path):
+        plot_file = tmp_path / "test.png"
+        width = 8
+        height = 5
+        dpi = 100
+        self.cands.winner.spectrogram(
+            figsize = (width, height),
+            file_name = plot_file,
+            dpi = dpi
+        )
+        assert plot_file.exists()
+        image = Image.open(plot_file)
+        im_width, im_height = image.size
+        assert im_width == width * dpi
+        assert im_height == height * dpi
+
+    def test_save_cand_spectrogram(self, tmp_path):
+        plot_file = tmp_path / "test2.png"
+        width = 8
+        height = 5
+        dpi = 100
+        self.cands.spectrograms(
+            figsize = (width, height),
+            file_name = plot_file,
+            dpi = dpi
+        )
+        assert plot_file.exists()
+        image = Image.open(plot_file)
+        im_width, im_height = image.size
+        assert im_width <= width * dpi
+        assert im_height <= height * dpi
