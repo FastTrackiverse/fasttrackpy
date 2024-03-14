@@ -6,6 +6,7 @@ from aligned_textgrid import SequenceInterval
 from pathlib import Path
 import matplotlib.pyplot as mp
 import copy
+import logging
 
 ptolmap = {"F1" :"#4477AA",
            "F1_s": "#4477AA",
@@ -15,7 +16,6 @@ ptolmap = {"F1" :"#4477AA",
            "F3_s": "#228833",
            "F4": "#CCBB44",
            "F4_s": "#CCBB44"}
-import logging
 
 def add_metadata(self, out_df):
     if self.file_name:
@@ -374,12 +374,6 @@ def candidate_spectrograms(
             )
 
             axs[i, j].set_title(str(round(self.candidates[analysis].maximum_formant)),y=0.95)
-
-            #axs[i,j].text(
-            #    x = 0.1,
-            #    y = spectrogram.ymax * 0.9,
-            #    s = str(round(self.candidates[analysis].maximum_formant))
-            #)
 
     if file_name:
         mp.savefig(file_name, dpi=dpi, bbox_inches='tight')
