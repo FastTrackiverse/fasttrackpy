@@ -20,6 +20,15 @@ Classes
 | [OneTrack](OneTrack.qmd#fasttrackpy.OneTrack) | A single formant track. |
 | [CandidateTracks](CandidateTracks.qmd#fasttrackpy.CandidateTracks) | A class for candidate tracks for a single formant |
 
+## Outputs
+
+Data outputs
+
+| | |
+| --- | --- |
+| [processors.outputs.pickle_candidates](processors.outputs.pickle_candidates.qmd#fasttrackpy.processors.outputs.pickle_candidates) | This will save a CandidateTracks object to |
+| [processors.outputs.unpickle_candidates](processors.outputs.unpickle_candidates.qmd#fasttrackpy.processors.outputs.unpickle_candidates) | This will load a CandidateTracks object  |
+
 ## Smoothers
 
 Smoother
