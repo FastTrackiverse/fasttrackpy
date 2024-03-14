@@ -5,13 +5,16 @@ from fasttrackpy.tracks import Track,\
                                Smoother,\
                                Loss, \
                                Agg
-from fasttrackpy.processors.outputs import write_data
+from fasttrackpy.processors.outputs import write_data, \
+    pickle_candidates,\
+    unpickle_candidates
 from fasttrackpy.patterns.just_audio import process_audio_file
 import parselmouth as pm
 import polars as pl
 import numpy as np
 import matplotlib.pyplot as mp
 from pathlib import Path
+from PIL import Image
 
 SOUND_PATH = Path("tests", "test_data", "ay.wav")
 SOUND = pm.Sound(str(SOUND_PATH))
@@ -79,3 +82,51 @@ class TestPlots:
         monkeypatch.setattr(mp, 'show', lambda: None)
         self.cands.spectrograms()
         assert True
+
+    def test_save_spectrogram(self, tmp_path):
+        plot_file = tmp_path / "test.png"
+        width = 8
+        height = 5
+        dpi = 100
+        self.cands.winner.spectrogram(
+            figsize = (width, height),
+            file_name = plot_file,
+            dpi = dpi
+        )
+        assert plot_file.exists()
+        image = Image.open(plot_file)
+        im_width, im_height = image.size
+        assert im_width == width * dpi
+        assert im_height == height * dpi
+
+    def test_save_cand_spectrogram(self, tmp_path):
+        plot_file = tmp_path / "test2.png"
+        width = 8
+        height = 5
+        dpi = 100
+        self.cands.spectrograms(
+            figsize = (width, height),
+            file_name = plot_file,
+            dpi = dpi
+        )
+        assert plot_file.exists()
+        image = Image.open(plot_file)
+        im_width, im_height = image.size
+        assert im_width <= width * dpi
+        assert im_height <= height * dpi
+
+class TestPickle:
+    cands = CandidateTracks(SOUND)
+
+    def test_pickle_unpickle(self, tmp_path):
+        pickle_file = tmp_path / "cand.pkl"
+        pickle_candidates(self.cands, file = pickle_file)
+        assert pickle_file.exists()
+
+        re_read = unpickle_candidates(file = pickle_file)
+        assert isinstance(re_read, CandidateTracks)
+        assert np.isclose(
+            re_read.winner.maximum_formant,
+            self.cands.winner.maximum_formant
+            )
+        assert len(re_read.candidates) == len(self.cands.candidates)
