@@ -396,7 +396,23 @@ class ftpSound:
 
 def pickle_candidates(
     candidates,
-    file: Path = 'test.pickle'):
+    file: Path|str
+    ):
+    """
+    This will save a CandidateTracks object to
+    disk as a "pickle" file. Due to the way sound 
+    objects are handled, only use `unpickle_candidates()`
+    to re-load the pickle object.
+
+    Args:
+        candidates (CandidateTracks):
+            A CandidateTracks object to pickle.
+        file (Path | str): 
+            The file location to save the pickle file
+            to.
+    """
+    if type(file) is str:
+        file = Path(file)
 
     tmp_sound = ftpSound(candidates.sound)
 
@@ -407,15 +423,31 @@ def pickle_candidates(
 
     tmp_candidates.sound = tmp_sound
 
-    with open(file, 'wb') as file:
-        pickle.dump(tmp_candidates, file)
+    with file.open('wb') as f:
+        pickle.dump(tmp_candidates, f)
 
 
 def unpickle_candidates(
-                file: Path = 'test.pickle'):
+        file: Path|str
+        ) :
+    """
+    This will load a CandidateTracks object 
+    that was pickled with `pickle_candidates()`.
 
-    with open(file, 'rb') as file:
-        candidates = pickle.load(file)
+    Args:
+        file (Path | str):
+            The pickled CandidateTracks object
+            to unpickle.
+
+    Returns:
+        (CandidateTracks):
+            A CandidateTracks object.
+    """
+    if type(file) is str:
+        file = Path(file)    
+
+    with file.open('rb') as f:
+        candidates = pickle.load(f)
 
     tmp_sound = candidates.sound.to_pmSound()
 
