@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../reference/Agg.html" rel="next">
-<link href="../reference/processors.losses.lmse.html" rel="prev">
+<link href="../reference/processors.outputs.unpickle_candidates.html" rel="next">
+<link href="../reference/CandidateTracks.html" rel="prev">
 <link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -120,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/Loss.html">Losses</a></li><li class="breadcrumb-item"><a href="../reference/processors.losses.mse.html">processors.losses.mse</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/processors.outputs.pickle_candidates.html">Outputs</a></li><li class="breadcrumb-item"><a href="../reference/processors.outputs.pickle_candidates.html">processors.outputs.pickle_candidates</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -212,7 +212,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/processors.outputs.pickle_candidates.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/processors.outputs.pickle_candidates.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">processors.outputs.pickle_candidates</span></a>
   </div>
 </li>
@@ -282,7 +282,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/processors.losses.mse.html" class="sidebar-item-text sidebar-link active">
+  <a href="../reference/processors.losses.mse.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">processors.losses.mse</span></a>
   </div>
 </li>
@@ -321,10 +321,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#fasttrackpy.processors.losses.mse" id="toc-fasttrackpy.processors.losses.mse" class="nav-link active" data-scroll-target="#fasttrackpy.processors.losses.mse">processors.losses.mse</a>
+  <li><a href="#fasttrackpy.processors.outputs.pickle_candidates" id="toc-fasttrackpy.processors.outputs.pickle_candidates" class="nav-link active" data-scroll-target="#fasttrackpy.processors.outputs.pickle_candidates">processors.outputs.pickle_candidates</a>
   <ul>
   <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
-  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -335,13 +334,19 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="fasttrackpy.processors.losses.mse" class="level1">
-<h1>processors.losses.mse</h1>
-<p><code>processors.losses.mse(formants, smoothed, axis=1)</code></p>
-<p><em>summary</em></p>
+<section id="fasttrackpy.processors.outputs.pickle_candidates" class="level1">
+<h1>processors.outputs.pickle_candidates</h1>
+<p><code>processors.outputs.pickle_candidates(candidates, file)</code></p>
+<p>This will save a CandidateTracks object to disk as a “pickle” file. Due to the way sound objects are handled, only use <code>unpickle_candidates()</code> to re-load the pickle object.</p>
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 18%">
+<col style="width: 52%">
+<col style="width: 13%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -352,39 +357,16 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>formants</code></td>
-<td>np.ndarray</td>
-<td><em>description</em></td>
+<td><code>candidates</code></td>
+<td>CandidateTracks</td>
+<td>A CandidateTracks object to pickle.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td><code>smoothed</code></td>
-<td>np.ndarray</td>
-<td><em>description</em></td>
+<td><code>file</code></td>
+<td>Path | str</td>
+<td>The file location to save the pickle file to.</td>
 <td><em>required</em></td>
-</tr>
-<tr class="odd">
-<td><code>axis</code></td>
-<td>int</td>
-<td><em>description</em>. Defaults to 1.</td>
-<td><code>1</code></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="returns" class="level2">
-<h2 class="anchored" data-anchor-id="returns">Returns</h2>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>np.ndarray</td>
-<td>np.ndarray: <em>description</em></td>
 </tr>
 </tbody>
 </table>
@@ -927,13 +909,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../reference/processors.losses.lmse.html" class="pagination-link  aria-label=" processors.losses.lmse"="">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">processors.losses.lmse</span>
+      <a href="../reference/CandidateTracks.html" class="pagination-link  aria-label=" candidatetracks"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">CandidateTracks</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../reference/Agg.html" class="pagination-link" aria-label="Agg">
-        <span class="nav-page-text">Agg</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../reference/processors.outputs.unpickle_candidates.html" class="pagination-link" aria-label="processors.outputs.unpickle_candidates">
+        <span class="nav-page-text">processors.outputs.unpickle_candidates</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
