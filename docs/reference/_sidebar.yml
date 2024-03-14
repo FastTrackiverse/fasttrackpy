@@ -13,6 +13,10 @@ website:
       - reference/CandidateTracks.qmd
       section: Classes
     - contents:
+      - reference/processors.outputs.pickle_candidates.qmd
+      - reference/processors.outputs.unpickle_candidates.qmd
+      section: Outputs
+    - contents:
       - reference/Smoother.qmd
       - reference/processors.smoothers.Smoothed.qmd
       - reference/processors.smoothers.dct_smooth.qmd

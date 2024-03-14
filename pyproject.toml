@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fasttrackpy"
-version = "0.3.1"
+version = "0.3.3"
 description = "A python implementation of FastTrack"
 authors = [
     "JoFrhwld <JoFrhwld@gmail.com>",
@@ -42,6 +42,7 @@ plotly = "^5.18.0"
 pandas = "^2.1.2"
 ipython = "^8.17.2"
 kaleido = "0.2.1"
+pillow = "^10.2.0"
 
 
 [tool.poetry.group.docs.dependencies]

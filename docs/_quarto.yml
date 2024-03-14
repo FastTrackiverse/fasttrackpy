@@ -68,6 +68,11 @@ quartodoc:
           children: embedded
         - name: CandidateTracks
           children: embedded
+    - title: Outputs
+      desc: Data outputs
+      contents:
+        - processors.outputs.pickle_candidates
+        - processors.outputs.unpickle_candidates
 
     - title: Smoothers
       desc: Smoother
