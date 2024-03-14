@@ -249,21 +249,39 @@ class OneTrack(Track):
         raise ValueError("output must be either 'formants' or 'param'")
 
     def spectrogram(self, **kwargs):
-        """Generate a spectrogram with tracked formants overlaid
+        """
+        This will plot the spectrogram and formant tracks
+        of a single candidate track. If a `file_name` is 
+        provided, it will save the plot to disk.
 
         Args:
-            formants (int, optional): Number of formants to plot.
+            formants (int, optional): 
+                The number of formants to plot. 
                 Defaults to 3.
-            maximum_frequency (int, optional): Maximum frequency for the spectrogram.
-                Defaults to 3500.
-            tracks (bool, optional): Whether or not to plot the tracks.
-                Defaults to True.
-            dynamic_range (int, optional): Dynamic range of the spectrogram.
-                Defaults to 60.
-            figsize (tuple, optional): Figure size.
+            maximum_frequency (float, optional):
+                The frequency range the spectrogram and formants
+                will be plotted up to. Defaults to 3500.
+            tracks (bool, optional): 
+                Whether or not to plot the formant tracks. 
+                Defaults to True. If False, just the spectogram
+                will be plotted.
+            dynamic_range (float, optional): 
+                A all spectrogram values below the dynamic range. 
+                will be plotted as white. Defaults to 60.
+            figsize (tuple[float, float], optional):
+                Width and height of the figure in inches. 
                 Defaults to (8,5).
-            color_scale (str, optional): Color scale for the spectrogram.
-                Defaults to "Greys".
+            color_scale (str, optional): 
+                A named matplotlib color scale for the spectrogram.
+                Defaults to "Greys". 
+                See [here](https://matplotlib.org/stable/users/explain/colors/colormaps.html) 
+                for more options.
+            file_name (Path | None, optional):
+                If provided, how to save the spectrogram. If not provided (None) 
+                the plot will show interactively. Defaults to None.
+            dpi (float, optional):
+                If the plot is being saved, its image resolution in 
+                dots per inch. Defaults to 100.
         """
         spectrogram(self, **kwargs)
 
@@ -468,19 +486,30 @@ class CandidateTracks(Track):
             return self._param_df
 
     def spectrograms(self, **kwargs):
-        """Generate a spectrogram with formant tracks for the candidate tracks
+        """ 
+        This will plot a grid of the candidate formant
+        tracks and their spectrograms. If a `file_name`
+        is provided, it will save the plot to disk.
 
         Args:
-            formants (int, optional): Number of formants to plot.
+            formants (int, optional): 
+                The number of formants to plot. 
                 Defaults to 3.
-            maximum_frequency (int, optional): Maximum frequency for the spectrogram.
-                Defaults to 3500.
-            tracks (bool, optional): Whether or not to plot the tracks.
-                Defaults to True.
-            dynamic_range (int, optional): Dynamic range of the spectrogram.
-                Defaults to 60.
-            figsize (tuple, optional): Figure size.
-                Defaults to (12,8).
+            maximum_frequency (float, optional):
+                The frequency range the spectrogram and formants
+                will be plotted up to. Defaults to 3500.
+            dynamic_range (float, optional): 
+                A all spectrogram values below the dynamic range. 
+                will be plotted as white. Defaults to 60.
+            figsize (tuple[float, float], optional):
+                Width and height of the figure in inches. 
+                Defaults to (8,5).
+            file_name (Path | None, optional):
+                If provided, how to save the spectrogram. If not provided (None) 
+                the plot will show interactively. Defaults to None.
+            dpi (float, optional):
+                If the plot is being saved, its image resolution in 
+                dots per inch. Defaults to 75
         """
 
         candidate_spectrograms(self, **kwargs)
