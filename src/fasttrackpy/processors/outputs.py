@@ -180,15 +180,49 @@ def write_data(
 
 def spectrogram(
         self,
-        formants = 3,
-        maximum_frequency=3500,
-        tracks = True,
-        dynamic_range=60,
-        figsize = (8,5),
-        color_scale="Greys",
-        file_name = None,
-        dpi = 100
+        formants:int = 3,
+        maximum_frequency:float = 3500,
+        tracks:bool = True,
+        dynamic_range:float =60,
+        figsize: tuple[float, float] = (8,5),
+        color_scale: str ="Greys",
+        file_name:Path|None = None,
+        dpi:float = 100
     ):
+    """
+    This will plot the spectrogram and formant tracks
+    of a single candidate track. If a `file_name` is 
+    provided, it will save the plot to disc.
+
+    Args:
+        formants (int, optional): 
+            The number of formants to plot. 
+            Defaults to 3.
+        maximum_frequency (float, optional):
+            The frequency range the spectrogram and formants
+            will be plotted up to. Defaults to 3500.
+        tracks (bool, optional): 
+            Whether or not to plot the formant tracks. 
+            Defaults to True. If False, just the spectogram
+            will be plotted.
+        dynamic_range (float, optional): 
+            A all spectrogram values below the dynamic range. 
+            will be plotted as white. Defaults to 60.
+        figsize (tuple[float, float], optional):
+            Width and height of the figure in inches. 
+            Defaults to (8,5).
+        color_scale (str, optional): 
+            A named matplotlib color scale for the spectrogram.
+            Defaults to "Greys". 
+            See [here](https://matplotlib.org/stable/users/explain/colors/colormaps.html) 
+            for more options.
+        file_name (Path | None, optional):
+            If provided, how to save the spectrogram. If not provided (None) 
+            the plot will show interactively. Defaults to None.
+        dpi (float, optional):
+            If the plot is being saved, its image resolution in 
+            dots per inch. Defaults to 100.
+    """
 
     spctgrm = self.sound.to_spectrogram(
         maximum_frequency=maximum_frequency
@@ -240,13 +274,38 @@ def spectrogram(
 
 def candidate_spectrograms(
         self,
-        formants = 3,
-        maximum_frequency = 3500,
-        dynamic_range=60,
-        figsize=(12,8),
-        file_name = None,
-        dpi = 75
+        formants:int = 3,
+        maximum_frequency:float = 3500,
+        dynamic_range:float=60,
+        figsize:tuple[float, float]=(12,8),
+        file_name: Path|None = None,
+        dpi:float = 75
     ):
+    """ 
+    This will plot a grid of the candidate formant
+    tracks and their spectrograms. If a `file_name`
+    is provided, it will save the plot to disc.
+
+    Args:
+        formants (int, optional): 
+            The number of formants to plot. 
+            Defaults to 3.
+        maximum_frequency (float, optional):
+            The frequency range the spectrogram and formants
+            will be plotted up to. Defaults to 3500.
+        dynamic_range (float, optional): 
+            A all spectrogram values below the dynamic range. 
+            will be plotted as white. Defaults to 60.
+        figsize (tuple[float, float], optional):
+            Width and height of the figure in inches. 
+            Defaults to (8,5).
+        file_name (Path | None, optional):
+            If provided, how to save the spectrogram. If not provided (None) 
+            the plot will show interactively. Defaults to None.
+        dpi (float, optional):
+            If the plot is being saved, its image resolution in 
+            dots per inch. Defaults to 75
+    """
 
     spectrogram = self.sound.to_spectrogram(
         maximum_frequency=maximum_frequency,
