@@ -1,0 +1,41 @@
+name: Build Docs
+
+on:
+  push:
+    branches: ["main", "dev"]
+
+jobs:
+  build-docs:
+     runs-on: ubuntu-latest
+     steps:
+      - uses: actions/checkout@v4
+      - id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+            virtualenvs-create: true
+            virtualenvs-in-project: true
+            installer-parallel: true
+  
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+            path: .venv
+            key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}          
+    
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --with docs
+      - name: Quardo Doc Build
+        run: |
+            poetry run quartodoc build --config docs/_quarto.yml
+      - uses: quarto-dev/quarto-actions/setup@v2
+      - name: Render and publish to gh pages
+        run: |
+          git config --global user.email "quarto-github-actions-publish@example.com"
+          git config --global user.name "Quarto GHA Workflow Runner"
+          poetry run quarto publish gh-pages docs --no-browser
