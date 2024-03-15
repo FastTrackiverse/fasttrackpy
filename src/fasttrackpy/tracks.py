@@ -68,8 +68,6 @@ class OneTrack(Track):
         time_domain (np.array): The time domain of the formant estimates
         formants (np.ndarray): A (formants, time) array of values. The formants
             as initially estimated by praat-parselmouth
-        n_measured_formants (int): The total number of formants for which
-            formant tracks were estimatable
         smoothed_formants (np.ndarray): The smoothed formant values, using
             the method passed to `smoother`.
         parameters (np.ndarray): The smoothing parameters.
@@ -106,7 +104,6 @@ class OneTrack(Track):
         self.maximum_formant = maximum_formant
 
         self.formants, self.time_domain = self._track_formants()
-        self.n_measured_formants = self._get_measured()
         self.smoothed_list = self._smooth_formants()
         self._file_name = None
         self._id = None
@@ -121,7 +118,7 @@ class OneTrack(Track):
     def _track_formants(self):
         formant_obj = self.sound.to_formant_burg(
             time_step = self.time_step,
-            max_number_of_formants = self.n_formants,
+            max_number_of_formants = 5.5,
             maximum_formant = self.maximum_formant,
             window_length = self.window_length,
             pre_emphasis_from = self.pre_emphasis_from
@@ -147,13 +144,6 @@ class OneTrack(Track):
         ]
         return smoothed_list
 
-    def _get_measured(self):
-        nan_tracks = np.isnan(self.formants)
-        mostly_nan = np.mean(nan_tracks, axis = 1) > 0.5
-        if np.any(mostly_nan):
-            return np.argmax(mostly_nan)
-        return mostly_nan.shape[0]
-
     @property
     def smoothed_formants(self):
         return np.array(
@@ -169,8 +159,8 @@ class OneTrack(Track):
     @property
     def smooth_error(self):
         msqe =  self.loss_fun.calculate_loss(
-            self.formants[0:self.n_measured_formants],
-            self.smoothed_formants[0:self.n_measured_formants]
+            self.formants[0:self.n_formants],
+            self.smoothed_formants[0:self.n_formants]
         )
         error = self.agg_fun.aggregate(msqe)
         return error
@@ -381,13 +371,6 @@ class CandidateTracks(Track):
             ) for x in self.max_formants
         ]
 
-        self.min_n_measured = np.array([
-            x.n_measured_formants
-            for x in self.candidates
-        ]).min()
-
-        self._normalize_n_measured()
-
         self.smooth_errors = np.array(
             [x.smooth_error for x in self.candidates]
         )
@@ -442,10 +425,6 @@ class CandidateTracks(Track):
         self.group = self.__get_group(interval)
         for c in self.candidates:
             c.interval = interval
-
-    def _normalize_n_measured(self):
-        for track in self.candidates:
-            track.n_measured_formants = self.min_n_measured
 
     def to_df(
             self,

@@ -47,19 +47,19 @@ def formant_to_dataframe(self):
         (pl.DataFrame): A data frame
     """
     orig_names = [
-        f"F{x}" for x in np.arange(self.n_measured_formants)+1
+        f"F{x}" for x in np.arange(self.n_formants)+1
     ]
     smooth_names = [
-        f"F{x}_s" for x in np.arange(self.n_measured_formants)+1
+        f"F{x}_s" for x in np.arange(self.n_formants)+1
     ]
 
     orig_df = pl.DataFrame(
-        data = self.formants[0:self.n_measured_formants],
+        data = self.formants[0:self.n_formants],
         schema=orig_names
     )
 
     smooth_df = pl.DataFrame(
-        data = self.smoothed_formants[0:self.n_measured_formants],
+        data = self.smoothed_formants[0:self.n_formants],
         schema=smooth_names
     )
 
