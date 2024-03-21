@@ -41,7 +41,11 @@ class Track:
             loss_fun: Loss = Loss(),
             agg_fun: Agg = Agg()
     ):
-        self.sound = sound
+        #self.sound = sound
+        self.samples = sound.values
+        self.sampling_frequency = sound.sampling_frequency
+        self.xmin = sound.xmin
+        self.xmax = sound.xmax
         self.n_formants = n_formants
         self.window_length = window_length
         self.time_step = time_step
@@ -49,6 +53,16 @@ class Track:
         self.smoother = smoother
         self.loss_fun = loss_fun
         self.agg_fun = agg_fun
+        
+    @property
+    def sound(self):
+        sound_obj = pm.Sound(
+            self.samples, 
+            sampling_frequency = self.sampling_frequency,
+            start_time = self.xmin
+        )
+        return sound_obj        
+
 
 class OneTrack(Track):
     """A single formant track.
