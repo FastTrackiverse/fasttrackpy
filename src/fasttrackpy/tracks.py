@@ -377,20 +377,10 @@ class CandidateTracks(Track):
         self._param_df = None
         self._interval = None
 
-        self.candidates = [
-            OneTrack(
-                sound = self.sound,
-                maximum_formant=x,
-                n_formants = self.n_formants,
-                window_length = self.window_length,
-                time_step = self.time_step,
-                pre_emphasis_from = self.pre_emphasis_from,
-                smoother = self.smoother,
-                loss_fun = self.loss_fun,
-                agg_fun = self.agg_fun
-
-            ) for x in self.max_formants
-        ]
+        self.candidates = Parallel(n_jobs=CPUS)(
+            delayed(self._make_candidate)(x)
+            for x in self.max_formants
+        )
 
         self.smooth_errors = np.array(
             [x.smooth_error for x in self.candidates]
@@ -446,6 +436,22 @@ class CandidateTracks(Track):
         self.group = self.__get_group(interval)
         for c in self.candidates:
             c.interval = interval
+
+    def _make_candidate(self, max_formant):
+        track = OneTrack(
+                sound = self.sound,
+                maximum_formant=max_formant,
+                n_formants = self.n_formants,
+                window_length = self.window_length,
+                time_step = self.time_step,
+                pre_emphasis_from = self.pre_emphasis_from,
+                smoother = self.smoother,
+                loss_fun = self.loss_fun,
+                agg_fun = self.agg_fun
+            )
+        return track
+
+
 
     def to_df(
             self,
