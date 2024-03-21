@@ -12,11 +12,18 @@ import matplotlib.pyplot as mp
 from aligned_textgrid import SequenceInterval
 from aligned_textgrid.sequences.tiers import TierGroup
 
+from joblib import Parallel, cpu_count, delayed
+
 import polars as pl
 
 from typing import Union, Literal
 import warnings
 import logging
+
+try:
+    CPUS = cpu_count()
+except NotImplementedError:
+    CPUS = 2
 
 
 class Track:
