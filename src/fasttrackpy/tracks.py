@@ -19,12 +19,16 @@ import polars as pl
 from typing import Union, Literal
 import warnings
 import logging
+from copy import deepcopy
 
 try:
     CPUS = cpu_count()
 except NotImplementedError:
     CPUS = 2
 
+def _make_candidate(args_dict):
+    track = OneTrack(**args_dict)
+    return track
 
 class Track:
     """A generic track class to set up attribute values
@@ -32,7 +36,9 @@ class Track:
 
     def __init__(
             self,
-            sound: pm.Sound,
+            sound: pm.Sound = None,
+            samples: np.array = None,
+            sampling_frequency: float = None,            
             n_formants: int = 4,
             window_length: float = 0.05,
             time_step: float = 0.002,
@@ -42,10 +48,15 @@ class Track:
             agg_fun: Agg = Agg()
     ):
         #self.sound = sound
-        self.samples = sound.values
-        self.sampling_frequency = sound.sampling_frequency
-        self.xmin = sound.xmin
-        self.xmax = sound.xmax
+        if sound:
+            self.samples = sound.values
+            self.sampling_frequency = sound.sampling_frequency
+            self.xmin = sound.xmin
+            self.xmax = sound.xmax
+        else:
+            self.samples = samples
+            self.sampling_frequency = sampling_frequency
+            self.xmin = 0            
         self.n_formants = n_formants
         self.window_length = window_length
         self.time_step = time_step
@@ -103,7 +114,9 @@ class OneTrack(Track):
     def __init__(
             self,
             maximum_formant: float,
-            sound: pm.Sound,
+            sound: pm.Sound = None,
+            samples: np.array = None,
+            sampling_frequency: float = None,
             n_formants: int = 4,
             window_length: float = 0.025,
             time_step: float = 0.002,
@@ -114,6 +127,8 @@ class OneTrack(Track):
         ):
         super().__init__(
             sound=sound,
+            samples = samples,
+            sampling_frequency=sampling_frequency,
             n_formants=n_formants,
             window_length=window_length,
             time_step=time_step,
@@ -338,7 +353,9 @@ class CandidateTracks(Track):
 
     def __init__(
         self,
-        sound: pm.Sound,
+        sound: pm.Sound = None,
+        samples: np.array = None,
+        sampling_frequency: float = None,
         min_max_formant: float = 4000,
         max_max_formant: float = 7000,
         nstep = 20,
@@ -352,6 +369,8 @@ class CandidateTracks(Track):
     ):
         super().__init__(
             sound=sound,
+            samples = samples,
+            sampling_frequency = sampling_frequency,
             n_formants=n_formants,
             window_length=window_length,
             time_step=time_step,
@@ -377,9 +396,26 @@ class CandidateTracks(Track):
         self._param_df = None
         self._interval = None
 
+        to_process = [
+            {
+                "samples": deepcopy(self.samples),
+                "sampling_frequency": deepcopy(self.sampling_frequency),
+                "maximum_formant": deepcopy(max_formant),
+                "n_formants": deepcopy(self.n_formants),
+                "window_length": deepcopy(self.window_length),
+                "time_step": deepcopy(self.time_step),
+                "pre_emphasis_from": deepcopy(self.pre_emphasis_from),
+                "smoother": deepcopy(self.smoother),
+                "loss_fun": deepcopy(self.loss_fun),
+                "agg_fun": deepcopy(self.agg_fun)                
+
+            }
+            for max_formant in self.max_formants
+        ]
+
         self.candidates = Parallel(n_jobs=CPUS)(
-            delayed(self._make_candidate)(x)
-            for x in self.max_formants
+            delayed(_make_candidate)(x)
+            for x in to_process
         )
 
         self.smooth_errors = np.array(
@@ -436,22 +472,6 @@ class CandidateTracks(Track):
         self.group = self.__get_group(interval)
         for c in self.candidates:
             c.interval = interval
-
-    def _make_candidate(self, max_formant):
-        track = OneTrack(
-                sound = self.sound,
-                maximum_formant=max_formant,
-                n_formants = self.n_formants,
-                window_length = self.window_length,
-                time_step = self.time_step,
-                pre_emphasis_from = self.pre_emphasis_from,
-                smoother = self.smoother,
-                loss_fun = self.loss_fun,
-                agg_fun = self.agg_fun
-            )
-        return track
-
-
 
     def to_df(
             self,
