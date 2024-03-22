@@ -12,19 +12,12 @@ import matplotlib.pyplot as mp
 from aligned_textgrid import SequenceInterval
 from aligned_textgrid.sequences.tiers import TierGroup
 
-from joblib import Parallel, cpu_count, delayed
-
 import polars as pl
 
 from typing import Union, Literal
 import warnings
 import logging
-from copy import deepcopy
 
-try:
-    CPUS = cpu_count()
-except NotImplementedError:
-    CPUS = 2
 
 def _make_candidate(args_dict):
     track = OneTrack(**args_dict)
@@ -416,11 +409,6 @@ class CandidateTracks(Track):
         self.candidates = [
             _make_candidate(x) for x in to_process
         ]
-
-        # self.candidates = Parallel(n_jobs=CPUS)(
-        #     delayed(_make_candidate)(x)
-        #     for x in to_process
-        # )
 
         self.smooth_errors = np.array(
             [x.smooth_error for x in self.candidates]
