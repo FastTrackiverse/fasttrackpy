@@ -8,7 +8,6 @@ from fasttrackpy import CandidateTracks,\
                         Loss,\
                         Agg
 
-import multiprocessing
 from tqdm import tqdm
 from joblib import Parallel, cpu_count, delayed
 
@@ -121,6 +120,7 @@ def process_audio_file(
     candidates = CandidateTracks(
         samples=sound_to_process.values,
         sampling_frequency=sound_to_process.sampling_frequency,
+        xmin = sound_to_process.xmin,
         min_max_formant=min_max_formant,
         max_max_formant=max_max_formant,
         nstep=nstep,

@@ -31,7 +31,8 @@ class Track:
             self,
             sound: pm.Sound = None,
             samples: np.array = None,
-            sampling_frequency: float = None,            
+            sampling_frequency: float = None,
+            xmin: float = None,            
             n_formants: int = 4,
             window_length: float = 0.05,
             time_step: float = 0.002,
@@ -45,11 +46,10 @@ class Track:
             self.samples = sound.values
             self.sampling_frequency = sound.sampling_frequency
             self.xmin = sound.xmin
-            self.xmax = sound.xmax
         else:
             self.samples = samples
             self.sampling_frequency = sampling_frequency
-            self.xmin = 0            
+            self.xmin = xmin           
         self.n_formants = n_formants
         self.window_length = window_length
         self.time_step = time_step
@@ -110,6 +110,7 @@ class OneTrack(Track):
             sound: pm.Sound = None,
             samples: np.array = None,
             sampling_frequency: float = None,
+            xmin: float = None,
             n_formants: int = 4,
             window_length: float = 0.025,
             time_step: float = 0.002,
@@ -122,6 +123,7 @@ class OneTrack(Track):
             sound=sound,
             samples = samples,
             sampling_frequency=sampling_frequency,
+            xmin = xmin,
             n_formants=n_formants,
             window_length=window_length,
             time_step=time_step,
@@ -349,6 +351,7 @@ class CandidateTracks(Track):
         sound: pm.Sound = None,
         samples: np.array = None,
         sampling_frequency: float = None,
+        xmin: float = None,
         min_max_formant: float = 4000,
         max_max_formant: float = 7000,
         nstep = 20,
@@ -364,6 +367,7 @@ class CandidateTracks(Track):
             sound=sound,
             samples = samples,
             sampling_frequency = sampling_frequency,
+            xmin = xmin,
             n_formants=n_formants,
             window_length=window_length,
             time_step=time_step,
@@ -391,16 +395,17 @@ class CandidateTracks(Track):
 
         to_process = [
             {
-                "samples": (self.samples),
-                "sampling_frequency": (self.sampling_frequency),
-                "maximum_formant": (max_formant),
-                "n_formants": (self.n_formants),
-                "window_length": (self.window_length),
-                "time_step": (self.time_step),
-                "pre_emphasis_from": (self.pre_emphasis_from),
-                "smoother": (self.smoother),
-                "loss_fun": (self.loss_fun),
-                "agg_fun": (self.agg_fun)                
+                "samples": self.samples,
+                "sampling_frequency": self.sampling_frequency,
+                "xmin": self.xmin,
+                "maximum_formant": max_formant,
+                "n_formants": self.n_formants,
+                "window_length": self.window_length,
+                "time_step": self.time_step,
+                "pre_emphasis_from": self.pre_emphasis_from,
+                "smoother": self.smoother,
+                "loss_fun": self.loss_fun,
+                "agg_fun": self.agg_fun                
 
             }
             for max_formant in self.max_formants

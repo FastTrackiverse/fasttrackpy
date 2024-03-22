@@ -6,7 +6,6 @@ from fasttrackpy.patterns.just_audio import create_audio_checker
 import re
 
 from pathlib import Path
-import multiprocessing
 from tqdm import tqdm
 from joblib import Parallel, cpu_count, delayed
 import warnings
@@ -152,6 +151,7 @@ def process_audio_textgrid(
         {
             "samples": x.values,
             "sampling_frequency": x.sampling_frequency,
+            "xmin": x.xmin,
             #"interval": interval,
             "min_max_formant": min_max_formant,
             "max_max_formant": max_max_formant,

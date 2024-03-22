@@ -7,7 +7,6 @@ from fasttrackpy.patterns.audio_textgrid import get_interval_classes
 import re
 from collections import namedtuple
 from pathlib import Path
-import multiprocessing
 from tqdm import tqdm
 from functools import reduce
 from operator import add
@@ -188,6 +187,7 @@ def process_corpus(
             {
                 "samples": x.values,
                 "sampling_frequency": x.sampling_frequency,
+                "xmin": x.xmin,
                 #"interval": interval,
                 "min_max_formant": min_max_formant,
                 "max_max_formant": max_max_formant,
