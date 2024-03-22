@@ -398,25 +398,29 @@ class CandidateTracks(Track):
 
         to_process = [
             {
-                "samples": deepcopy(self.samples),
-                "sampling_frequency": deepcopy(self.sampling_frequency),
-                "maximum_formant": deepcopy(max_formant),
-                "n_formants": deepcopy(self.n_formants),
-                "window_length": deepcopy(self.window_length),
-                "time_step": deepcopy(self.time_step),
-                "pre_emphasis_from": deepcopy(self.pre_emphasis_from),
-                "smoother": deepcopy(self.smoother),
-                "loss_fun": deepcopy(self.loss_fun),
-                "agg_fun": deepcopy(self.agg_fun)                
+                "samples": (self.samples),
+                "sampling_frequency": (self.sampling_frequency),
+                "maximum_formant": (max_formant),
+                "n_formants": (self.n_formants),
+                "window_length": (self.window_length),
+                "time_step": (self.time_step),
+                "pre_emphasis_from": (self.pre_emphasis_from),
+                "smoother": (self.smoother),
+                "loss_fun": (self.loss_fun),
+                "agg_fun": (self.agg_fun)                
 
             }
             for max_formant in self.max_formants
         ]
 
-        self.candidates = Parallel(n_jobs=CPUS)(
-            delayed(_make_candidate)(x)
-            for x in to_process
-        )
+        self.candidates = [
+            _make_candidate(x) for x in to_process
+        ]
+
+        # self.candidates = Parallel(n_jobs=CPUS)(
+        #     delayed(_make_candidate)(x)
+        #     for x in to_process
+        # )
 
         self.smooth_errors = np.array(
             [x.smooth_error for x in self.candidates]

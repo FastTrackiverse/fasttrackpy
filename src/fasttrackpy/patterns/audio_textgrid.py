@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 import multiprocessing
 from tqdm import tqdm
-from joblib import Parallel, delayed, wrap_non_picklable_objects
+from joblib import Parallel, cpu_count, delayed
 import warnings
 
 try:
@@ -66,7 +66,6 @@ def get_target_intervals(
     return intervals
 
 @delayed
-@wrap_non_picklable_objects
 def get_candidates(args_dict):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -151,7 +150,8 @@ def process_audio_textgrid(
 
     arg_list = [
         {
-            "sound": x,
+            "samples": x.values,
+            "sampling_frequency": x.sampling_frequency,
             #"interval": interval,
             "min_max_formant": min_max_formant,
             "max_max_formant": max_max_formant,
@@ -166,8 +166,8 @@ def process_audio_textgrid(
         } for x, interval in zip(sound_parts, target_intervals)
     ]
     
-    n_jobs = multiprocessing.cpu_count()
-    candidate_list = Parallel(n_jobs=n_jobs, prefer="threads")(
+    n_jobs = cpu_count()
+    candidate_list = Parallel(n_jobs=n_jobs)(
         get_candidates(args_dict=arg) for arg in tqdm(arg_list)
         )
     for cand, interval in zip(candidate_list, target_intervals):

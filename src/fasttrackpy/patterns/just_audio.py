@@ -10,8 +10,7 @@ from fasttrackpy import CandidateTracks,\
 
 import multiprocessing
 from tqdm import tqdm
-from joblib import Parallel, delayed, wrap_non_picklable_objects
-
+from joblib import Parallel, cpu_count, delayed
 
 try:
     import magic
@@ -120,7 +119,8 @@ def process_audio_file(
 
     sound_to_process = sound.extract_part(from_time = xmin, to_time = xmax)
     candidates = CandidateTracks(
-        sound=sound_to_process,
+        samples=sound_to_process.values,
+        sampling_frequency=sound_to_process.sampling_frequency,
         min_max_formant=min_max_formant,
         max_max_formant=max_max_formant,
         nstep=nstep,
@@ -136,7 +136,6 @@ def process_audio_file(
     return candidates
 
 @delayed
-@wrap_non_picklable_objects
 def wrapped_audio(args_dict):
     return process_audio_file(**args_dict)
 
@@ -201,9 +200,9 @@ def process_directory(
             }
             for x in all_audio
     ]
-    n_jobs = multiprocessing.cpu_count()
+    n_jobs = cpu_count()
 
-    all_candidates = Parallel(n_jobs=n_jobs, prefer="threads")(
+    all_candidates = Parallel(n_jobs=n_jobs)(
         wrapped_audio(args_dict=arg) for arg in tqdm(arg_list)
         )
     for x, path in zip(all_candidates, all_audio):
