@@ -19,13 +19,20 @@ import warnings
 import logging
 
 
+def _make_candidate(args_dict):
+    track = OneTrack(**args_dict)
+    return track
+
 class Track:
     """A generic track class to set up attribute values
     """
 
     def __init__(
             self,
-            sound: pm.Sound,
+            sound: pm.Sound = None,
+            samples: np.array = None,
+            sampling_frequency: float = None,
+            xmin: float = 0.0,            
             n_formants: int = 4,
             window_length: float = 0.05,
             time_step: float = 0.002,
@@ -34,7 +41,15 @@ class Track:
             loss_fun: Loss = Loss(),
             agg_fun: Agg = Agg()
     ):
-        self.sound = sound
+        #self.sound = sound
+        if sound:
+            self.samples = sound.values
+            self.sampling_frequency = sound.sampling_frequency
+            self.xmin = sound.xmin
+        else:
+            self.samples = samples
+            self.sampling_frequency = sampling_frequency
+            self.xmin = xmin           
         self.n_formants = n_formants
         self.window_length = window_length
         self.time_step = time_step
@@ -42,12 +57,38 @@ class Track:
         self.smoother = smoother
         self.loss_fun = loss_fun
         self.agg_fun = agg_fun
+        
+    @property
+    def sound(self):
+        sound_obj = pm.Sound(
+            self.samples, 
+            sampling_frequency = self.sampling_frequency,
+            start_time = self.xmin
+        )
+        return sound_obj        
+
 
 class OneTrack(Track):
     """A single formant track.
 
+    You can provide *either*
+
+    - A parselmouth `Sound` object to the `sound` argument
+
+    xor
+
+    - An array of audio samples to the `samples` argument
+    - The sampling frequency to the `sampling_frequency` argument
+    - Any optional time offset to the `xmin` argument.
+
+    If a `Sound` object is passed to `sound`, any values passed to `samples`,
+    `sampling_frequency` and `xmin` are ignored.
+
     Args:
-        sound (pm.Sound): A `parselmouth.Sound` object.
+        sound (pm.Sound, optional): A `parselmouth.Sound` object.
+        samples (np.ndarray, optional): A numpy array of audio samples.
+        sampling_frequency (float, optional): The audio sampling frequency.
+        xmin (float, optional): The time offset for the audio. Defaults to 0.0.
         maximum_formant (float): max formant
         n_formants (int, optional): The number of formants to track. Defaults to 4.
         window_length (float, optional): Window length of the formant analysis.
@@ -82,7 +123,10 @@ class OneTrack(Track):
     def __init__(
             self,
             maximum_formant: float,
-            sound: pm.Sound,
+            sound: pm.Sound = None,
+            samples: np.array = None,
+            sampling_frequency: float = None,
+            xmin: float = 0.0,
             n_formants: int = 4,
             window_length: float = 0.025,
             time_step: float = 0.002,
@@ -93,6 +137,9 @@ class OneTrack(Track):
         ):
         super().__init__(
             sound=sound,
+            samples = samples,
+            sampling_frequency=sampling_frequency,
+            xmin = xmin,
             n_formants=n_formants,
             window_length=window_length,
             time_step=time_step,
@@ -280,8 +327,25 @@ class OneTrack(Track):
 class CandidateTracks(Track):
     """A class for candidate tracks for a single formant
 
+    You can provide *either*
+
+    - A parselmouth `Sound` object to the `sound` argument
+
+    xor
+
+    - An array of audio samples to the `samples` argument
+    - The sampling frequency to the `sampling_frequency` argument
+    - Any optional time offset to the `xmin` argument.
+
+    If a `Sound` object is passed to `sound`, any values passed to `samples`,
+    `sampling_frequency` and `xmin` are ignored.
+
+
     Args:
-        sound (pm.Sound): A `parselmouth.Sound` object.
+        sound (pm.Sound, optional): A `parselmouth.Sound` object.
+        samples (np.ndarray, optional): A numpy array of audio samples.
+        sampling_frequency (float, optional): The audio sampling frequency.
+        xmin (float, optional): The time offset for the audio. Defaults to 0.0.
         min_max_formant (float, optional): The lowest max-formant value to try.
             Defaults to 4000.
         max_max_formant (float, optional): The highest max formant to try.
@@ -304,8 +368,6 @@ class CandidateTracks(Track):
 
     Attributes:
         candidates (list[OneTrack,...]): A list of `OneTrack` tracks.
-        min_n_measured (int): The smallest number of successfully measured
-            formants across all `candidates`
         smooth_errors (np.array): The error terms for each treack in `candidates`
         winner_idx (int): The candidate track with the smallest error term
         winner (OneTrack): The winning `OneTrack` track.
@@ -317,7 +379,10 @@ class CandidateTracks(Track):
 
     def __init__(
         self,
-        sound: pm.Sound,
+        sound: pm.Sound = None,
+        samples: np.array = None,
+        sampling_frequency: float = None,
+        xmin: float = 0.0,
         min_max_formant: float = 4000,
         max_max_formant: float = 7000,
         nstep = 20,
@@ -331,6 +396,9 @@ class CandidateTracks(Track):
     ):
         super().__init__(
             sound=sound,
+            samples = samples,
+            sampling_frequency = sampling_frequency,
+            xmin = xmin,
             n_formants=n_formants,
             window_length=window_length,
             time_step=time_step,
@@ -356,19 +424,26 @@ class CandidateTracks(Track):
         self._param_df = None
         self._interval = None
 
-        self.candidates = [
-            OneTrack(
-                sound = self.sound,
-                maximum_formant=x,
-                n_formants = self.n_formants,
-                window_length = self.window_length,
-                time_step = self.time_step,
-                pre_emphasis_from = self.pre_emphasis_from,
-                smoother = self.smoother,
-                loss_fun = self.loss_fun,
-                agg_fun = self.agg_fun
+        to_process = [
+            {
+                "samples": self.samples,
+                "sampling_frequency": self.sampling_frequency,
+                "xmin": self.xmin,
+                "maximum_formant": max_formant,
+                "n_formants": self.n_formants,
+                "window_length": self.window_length,
+                "time_step": self.time_step,
+                "pre_emphasis_from": self.pre_emphasis_from,
+                "smoother": self.smoother,
+                "loss_fun": self.loss_fun,
+                "agg_fun": self.agg_fun                
 
-            ) for x in self.max_formants
+            }
+            for max_formant in self.max_formants
+        ]
+
+        self.candidates = [
+            _make_candidate(x) for x in to_process
         ]
 
         self.smooth_errors = np.array(

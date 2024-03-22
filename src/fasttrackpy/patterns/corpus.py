@@ -7,11 +7,10 @@ from fasttrackpy.patterns.audio_textgrid import get_interval_classes
 import re
 from collections import namedtuple
 from pathlib import Path
-import multiprocessing
 from tqdm import tqdm
 from functools import reduce
 from operator import add
-from joblib import Parallel, delayed, wrap_non_picklable_objects
+from joblib import Parallel, cpu_count, delayed
 import warnings
 
 
@@ -100,12 +99,10 @@ def get_target_intervals(
     return intervals
 
 @delayed
-@wrap_non_picklable_objects
-def get_candidates(args_dict, progress_bar:tqdm):
+def get_candidates(args_dict):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         candidates =  CandidateTracks(**args_dict)
-        progress_bar.update()
     if candidates.winner.formants.shape[1] == 1:
         warnings.warn("formant tracking error")
     return candidates
@@ -178,7 +175,6 @@ def process_corpus(
             for tiers in all_tiers
         ]
     all_candidates = []
-    progress_bar = tqdm(total=reduce(add, [len(x) for x in all_intervals]))
     for intervals in all_intervals:
         sound = pm.Sound(str(intervals[0].wav))
         sound_parts = [
@@ -189,7 +185,9 @@ def process_corpus(
 
         arg_list = [
             {
-                "sound": x,
+                "samples": x.values,
+                "sampling_frequency": x.sampling_frequency,
+                "xmin": x.xmin,
                 #"interval": interval,
                 "min_max_formant": min_max_formant,
                 "max_max_formant": max_max_formant,
@@ -204,9 +202,9 @@ def process_corpus(
             } for x, interval in zip(sound_parts, intervals)
         ]
 
-        n_jobs = multiprocessing.cpu_count()
-        candidate_list = Parallel(n_jobs=n_jobs, prefer="threads")(
-            get_candidates(args_dict=arg, progress_bar=progress_bar) for arg in arg_list
+        n_jobs = cpu_count()
+        candidate_list = Parallel(n_jobs=n_jobs)(
+            get_candidates(args_dict=arg) for arg in tqdm(arg_list)
             )
 
         for cand, interval in zip(candidate_list, intervals):
