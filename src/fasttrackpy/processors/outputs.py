@@ -383,17 +383,6 @@ def candidate_spectrograms(
         ax.label_outer()
 
 
-class ftpSound:
-    def __init__(self, sound):
-        self.values = np.array(sound.values)
-        self.sampling_frequency = sound.sampling_frequency
-
-    def to_pmSound(self):
-        output = pm.Sound(self.values,
-                        sampling_frequency=self.sampling_frequency)
-        return (output)
-
-
 def pickle_candidates(
     candidates,
     file: Path|str
@@ -414,14 +403,7 @@ def pickle_candidates(
     if type(file) is str:
         file = Path(file)
 
-    tmp_sound = ftpSound(candidates.sound)
-
     tmp_candidates = copy.deepcopy (candidates)
-
-    for candidate in tmp_candidates.candidates:
-        candidate.sound = tmp_sound
-
-    tmp_candidates.sound = tmp_sound
 
     with file.open('wb') as f:
         pickle.dump(tmp_candidates, f)
@@ -449,11 +431,4 @@ def unpickle_candidates(
     with file.open('rb') as f:
         candidates = pickle.load(f)
 
-    tmp_sound = candidates.sound.to_pmSound()
-
-    for candidate in candidates.candidates:
-        candidate.sound = tmp_sound
-
-    candidates.sound = tmp_sound
-
-    return (candidates)
+    return candidates
