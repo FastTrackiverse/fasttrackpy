@@ -32,7 +32,7 @@ class Track:
             sound: pm.Sound = None,
             samples: np.array = None,
             sampling_frequency: float = None,
-            xmin: float = None,            
+            xmin: float = 0.0,            
             n_formants: int = 4,
             window_length: float = 0.05,
             time_step: float = 0.002,
@@ -71,8 +71,24 @@ class Track:
 class OneTrack(Track):
     """A single formant track.
 
+    You can provide *either*
+
+    - A parselmouth `Sound` object to the `sound` argument
+
+    xor
+
+    - An array of audio samples to the `samples` argument
+    - The sampling frequency to the `sampling_frequency` argument
+    - Any optional time offset to the `xmin` argument.
+
+    If a `Sound` object is passed to `sound`, any values passed to `samples`,
+    `sampling_frequency` and `xmin` are ignored.
+
     Args:
-        sound (pm.Sound): A `parselmouth.Sound` object.
+        sound (pm.Sound, optional): A `parselmouth.Sound` object.
+        samples (np.ndarray, optional): A numpy array of audio samples.
+        sampling_frequency (float, optional): The audio sampling frequency.
+        xmin (float, optional): The time offset for the audio. Defaults to 0.0.
         maximum_formant (float): max formant
         n_formants (int, optional): The number of formants to track. Defaults to 4.
         window_length (float, optional): Window length of the formant analysis.
@@ -110,7 +126,7 @@ class OneTrack(Track):
             sound: pm.Sound = None,
             samples: np.array = None,
             sampling_frequency: float = None,
-            xmin: float = None,
+            xmin: float = 0.0,
             n_formants: int = 4,
             window_length: float = 0.025,
             time_step: float = 0.002,
@@ -311,8 +327,25 @@ class OneTrack(Track):
 class CandidateTracks(Track):
     """A class for candidate tracks for a single formant
 
+    You can provide *either*
+
+    - A parselmouth `Sound` object to the `sound` argument
+
+    xor
+
+    - An array of audio samples to the `samples` argument
+    - The sampling frequency to the `sampling_frequency` argument
+    - Any optional time offset to the `xmin` argument.
+
+    If a `Sound` object is passed to `sound`, any values passed to `samples`,
+    `sampling_frequency` and `xmin` are ignored.
+
+
     Args:
-        sound (pm.Sound): A `parselmouth.Sound` object.
+        sound (pm.Sound, optional): A `parselmouth.Sound` object.
+        samples (np.ndarray, optional): A numpy array of audio samples.
+        sampling_frequency (float, optional): The audio sampling frequency.
+        xmin (float, optional): The time offset for the audio. Defaults to 0.0.
         min_max_formant (float, optional): The lowest max-formant value to try.
             Defaults to 4000.
         max_max_formant (float, optional): The highest max formant to try.
@@ -335,8 +368,6 @@ class CandidateTracks(Track):
 
     Attributes:
         candidates (list[OneTrack,...]): A list of `OneTrack` tracks.
-        min_n_measured (int): The smallest number of successfully measured
-            formants across all `candidates`
         smooth_errors (np.array): The error terms for each treack in `candidates`
         winner_idx (int): The candidate track with the smallest error term
         winner (OneTrack): The winning `OneTrack` track.
@@ -351,7 +382,7 @@ class CandidateTracks(Track):
         sound: pm.Sound = None,
         samples: np.array = None,
         sampling_frequency: float = None,
-        xmin: float = None,
+        xmin: float = 0.0,
         min_max_formant: float = 4000,
         max_max_formant: float = 7000,
         nstep = 20,
