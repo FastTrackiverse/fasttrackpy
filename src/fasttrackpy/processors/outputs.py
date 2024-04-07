@@ -247,7 +247,7 @@ def spectrogram(
         .melt(id_vars = "time")\
         .with_columns(
             pl.col("variable")\
-            .replace(mapping=ptolmap)\
+            .replace(ptolmap)\
             .alias("color")
             )
 
@@ -348,7 +348,7 @@ def candidate_spectrograms(
                 .melt(id_vars = "time")\
                 .with_columns(
                     pl.col("variable")\
-                    .replace(mapping=ptolmap)\
+                    .replace(ptolmap)\
                     .alias("color")
                 )
 
