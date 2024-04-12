@@ -101,7 +101,7 @@ def dct_smooth_regression(
     y = np.array (x)
     N = x.size
     predictors = np.array (
-        [(np.cos(np.pi * (np.arange(N)/N) * k)) 
+        [(np.cos(np.pi * (np.arange(N)/(N-1)) * k)) 
          for k in range(order)]
         )
 
