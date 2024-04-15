@@ -404,6 +404,50 @@
     ]
   },
   {
+    "objectID": "usage/dct.html",
+    "href": "usage/dct.html",
+    "title": "Working with the smoothing parameters",
+    "section": "",
+    "text": "FastTrackPy smooths formant trajectories using a form of Discrete Cosine Transform. Here’s how you can convert the DCT parameters back into formant track smooths after, e.g. averaging them.\nimport polars as pl\nimport matplotlib.pyplot as plt\nfrom scipy.fft import dct, idct\nimport numpy as np\nfrom fasttrackpy import process_corpus\nfrom pathlib import Path\ncorpus_path = Path(\"..\",\"assets\", \"corpus\")\nmeasurements = process_corpus(corpus_path)\n\n100%|██████████| 65/65 [00:01&lt;00:00, 62.80it/s]\n100%|██████████| 274/274 [00:01&lt;00:00, 224.56it/s]\nLet’s just look at /ay/ from these speakers.\nays = [track for track in measurements if track.label == \"AY1\"]\nays[0].winner.spectrogram()",
+    "crumbs": [
+      "Home",
+      "Working with the smoothing parameters"
+    ]
+  },
+  {
+    "objectID": "usage/dct.html#the-discrete-cosine-transform",
+    "href": "usage/dct.html#the-discrete-cosine-transform",
+    "title": "Working with the smoothing parameters",
+    "section": "The Discrete Cosine Transform",
+    "text": "The Discrete Cosine Transform\nThe smoothed formants are a 5th order discrete cosine transform. The DCT parameters are estimated via regression, using the following basis.\n\ntime = ays[0].winner.time_domain\nN = time.size\norder = 5\n\nfull_basis = dct(\n    np.eye(N), \n    orthogonalize=True, \n    norm = \"backward\"\n)\n\nbasis = full_basis[:,:order]\n\nplt.plot(time, basis)\nplt.legend(range(5))\nplt.show()\n\n\n\n\n\n\n\n\nDCT coefficients define how to weight and sum this bank of cosine functions to match the input signal.\n\n# the dct coefs for f1\nf1_params = ays[0].winner.parameters[0,:]\n\n# the formant track\nf1 = ays[0].winner.formants[0,:]\n\nplt.plot(time, basis * f1_params)\nplt.title(\"weighted coefficients\")\nplt.show()\n\n\n\n\n\n\n\n\n\nplt.plot(time, basis @ f1_params)\nplt.plot(time, f1)\nplt.title(\"weighted and summed\")\nplt.legend([\"DCT\", \"F1\"])\nplt.show()\n\n\n\n\n\n\n\n\nIt’s possible to estimate DCT coefficients directly with scipy.fft.dct, but because there is potential for missing data in some formant tracks, FastTrackPy instead estimates the DCT coefficients using regression.\n\ndef reg_fit(x, basis):\n    params = np.linalg.inv(basis.T @ basis) @ (basis.T @ x)\n    return params\n\nparams = reg_fit(f1, basis)\nprint(params)\n\n[480.35423508  42.95237019 -25.847216    43.60350087 -21.40266949]",
+    "crumbs": [
+      "Home",
+      "Working with the smoothing parameters"
+    ]
+  },
+  {
+    "objectID": "usage/dct.html#inverting-the-dct",
+    "href": "usage/dct.html#inverting-the-dct",
+    "title": "Working with the smoothing parameters",
+    "section": "Inverting the DCT",
+    "text": "Inverting the DCT\nIt’s possible to invert the DCT parameters with scipy.fft.idct(), with orthognalize = True and norm = \"forward\". You also need to define how large you want the resulting smooth to be with n\n\nf1_smooth = idct(\n    params, \n    n = time.size, \n    orthogonalize=True, \n    norm = \"forward\"\n    )\n\nplt.plot(time, f1_smooth)\nplt.plot(time, f1)\nplt.legend([\"smooth\", \"F1\"])\nplt.show()",
+    "crumbs": [
+      "Home",
+      "Working with the smoothing parameters"
+    ]
+  },
+  {
+    "objectID": "usage/dct.html#benefits-of-using-the-dct-parameters",
+    "href": "usage/dct.html#benefits-of-using-the-dct-parameters",
+    "title": "Working with the smoothing parameters",
+    "section": "Benefits of using the DCT parameters",
+    "text": "Benefits of using the DCT parameters\n\n“Down sampling”\nIt’s somewhat commmon to reduce the number of measurement points from a formant track to a common number (e.g. 20 evenly spaced points). We can achieve that by inverting the DCT parameters and using differently sized outputs.\n\nsmooth_100 = idct(params, n = 100, orthogonalize=True, norm = \"forward\")\nsmooth_20 = idct(params, n = 20, orthogonalize=True, norm = \"forward\")\n\nplt.scatter(\n    np.arange(100)/99,\n    smooth_100\n)\n\nplt.scatter(\n    np.arange(20)/19,\n    smooth_20\n)\nplt.legend([\"100\", \"20\"])\nplt.show()\n\n\n\n\n\n\n\n\n\n\nAveraging\nInstead of point-wise averaging over formant tracks, you can instead average over the DCT parameters, then invert the average. We can get a polars data frame of all of the parameters of /ays/ from these speakers with the .to_df() method,\n\nall_ay_param = pl.concat([\n    ay.to_df(output = \"param\")\n    for ay in ays\n])\nall_ay_param.head()\n\n\n\nshape: (5, 10)\n\n\n\nparam\nF1\nF2\nF3\nF4\nerror\nfile_name\nid\ngroup\nlabel\n\n\nu32\nf64\nf64\nf64\nf64\nf64\nstr\nstr\nstr\nstr\n\n\n\n\n0\n480.354235\n979.982402\n1844.645657\n2375.309331\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n1\n42.95237\n-130.966974\n-15.909405\n2.074594\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n2\n-25.847216\n13.467448\n-67.211033\n-35.364144\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n3\n43.603501\n4.180242\n-84.055828\n18.796364\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n4\n-21.402669\n-2.113492\n-42.2589\n-20.556695\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n\n\n\n\n\nTo get the the average of each parameter for each speaker, we need to group the dataframe by the param, file_name and group columns, then aggregate them.\n\nay_param_means = (all_ay_param\n .group_by(\n     [\"param\", \"file_name\", \"group\", ], \n     maintain_order = True)\n .agg(\n     pl.col(\"F1\").mean()\n )\n)\nay_param_means.head()\n\n\n\nshape: (5, 4)\n\n\n\nparam\nfile_name\ngroup\nF1\n\n\nu32\nstr\nstr\nf64\n\n\n\n\n0\n\"KY25A_1\"\n\"KY25A\"\n509.370491\n\n\n1\n\"KY25A_1\"\n\"KY25A\"\n44.866749\n\n\n2\n\"KY25A_1\"\n\"KY25A\"\n-8.803074\n\n\n3\n\"KY25A_1\"\n\"KY25A\"\n27.038315\n\n\n4\n\"KY25A_1\"\n\"KY25A\"\n-11.637004\n\n\n\n\n\n\n\nHere’s the fitted F1 for the first speaker.\n\nspeaker_params = ay_param_means[\"F1\"][0:5]\nspeaker_fit = idct(\n    speaker_params,\n    n = 100,\n    orthogonalize=True,\n    norm=\"forward\"\n)\n\nplt.plot(speaker_fit)\nplt.show()\n\n\n\n\n\n\n\n\nThe code below for getting fitted F1 tracks for each speaker is a bit detailed with respect to how polars dataframes work, but the process could be replicated in whatever way a user feels comfortable.\n\nay_fits = (\n    ay_param_means\n    .group_by([\"file_name\", \"group\"])\n    .agg(pl.col(\"F1\"))\n    .with_columns(\n        f1_fit =pl.col(\"F1\")\n                  .map_elements(\n                      lambda x: idct(x, n = 100, orthogonalize=True, norm = \"forward\").tolist(),\n                      return_dtype=pl.List(pl.Float64)\n                      ),\n        time = pl.lit(np.linspace(0,1,100).tolist())\n    )\n    .explode([\"f1_fit\", \"time\"])\n)\n\n\nay_fits.plot(\n    \"time\",\n    \"f1_fit\",\n    by = \"group\"\n)\n\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n  \n\n\n\n\n\n\nGetting derivatives\nIf we wanted to get the first derivative (or the rate of change) of the formant track smooths, this can also be calculated (code modified from here.)\n\nfrom scipy.fft import idst\n\ndef first_deriv(coefs, size = 100):\n    hatu = coefs.copy()\n    for i in range(hatu.size):\n        hatu[i]=-(i)*hatu[i]\n    hatu[:-1]=hatu[1:]\n    hatu[-1]=0\n    dotu=idst(hatu, n = size, type=2)\n    return dotu\n\n\nspeaker_fit = (\n    ay_fits\n    .filter(pl.col(\"group\").str.contains(\"group\"))\n)\n\nspeaker_params = (\n    ay_param_means\n    .filter(pl.col(\"group\").str.contains(\"group\"))\n    .select(\"F1\")\n)\n\nspeaker_rate = first_deriv(speaker_params[\"F1\"].to_numpy(), size = 100)\n\n\nfig, axes = plt.subplots(nrows= 1, ncols=2)\naxes[0].plot(speaker_fit[\"f1_fit\"])\naxes[0].set_title(\"f1\")\naxes[1].plot(speaker_rate)\naxes[1].set_title(\"first derivative\")\nplt.show()",
+    "crumbs": [
+      "Home",
+      "Working with the smoothing parameters"
+    ]
+  },
+  {
     "objectID": "usage/pythonic_use.html",
     "href": "usage/pythonic_use.html",
     "title": "Pythonic Use",
