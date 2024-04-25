@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fasttrackpy"
-version = "0.4.3"
+version = "0.4.4"
 description = "A python implementation of FastTrack"
 authors = [
     "JoFrhwld <JoFrhwld@gmail.com>",
