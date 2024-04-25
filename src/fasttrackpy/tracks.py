@@ -159,6 +159,7 @@ class OneTrack(Track):
         self._group = None
         self._formant_df = None
         self._param_df = None
+        self._log_param_df = None
         self._interval = None
 
     def __repr__(self):
@@ -448,6 +449,7 @@ class CandidateTracks(Track):
         self._group = None
         self._formant_df = None
         self._param_df = None
+        self._log_param_df = None
         self._interval = None
 
         to_process = [
