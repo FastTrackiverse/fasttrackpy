@@ -145,7 +145,7 @@ output_options = cloup.option_group(
     ),
     cloup.option(
         "--data-output", 
-        type=click.Choice(["formants", "param"]), 
+        type=click.Choice(["formants", "param", "log_param"]), 
         default="formants",
         help = "Whether to save the formant data, "\
                "or smoothing parameter data."\
