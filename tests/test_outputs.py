@@ -19,6 +19,31 @@ from PIL import Image
 SOUND_PATH = Path("tests", "test_data", "ay.wav")
 SOUND = pm.Sound(str(SOUND_PATH))
 
+class TestDataFrames:
+    candidates = CandidateTracks(sound = SOUND)
+    def test_formant_df(self):
+       
+        formant_df = self.candidates.to_df(output="formants")
+        big_formant_df = self.candidates.to_df(which='all', output="formants")
+
+        assert isinstance(formant_df, pl.DataFrame)
+        assert isinstance(big_formant_df, pl.DataFrame)
+
+    def test_param_df(self):
+        param_df = self.candidates.to_df(output="param")
+        big_param_df = self.candidates.to_df(which='all', output="formants")
+
+        assert isinstance(param_df, pl.DataFrame)
+        assert isinstance(big_param_df, pl.DataFrame)
+
+    def test_log_param_df(self):
+        log_param_df = self.candidates.to_df(output="log_param")
+        big_log_param_df = self.candidates.to_df(which='all', output='log_param')
+
+        assert isinstance(log_param_df, pl.DataFrame)                
+        assert isinstance(big_log_param_df, pl.DataFrame)
+
+
 class TestWrite:
 
     def test_formant_write(self):
