@@ -5,6 +5,7 @@ from fasttrackpy.processors.losses import Loss
 from fasttrackpy.processors.aggs import Agg
 from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            param_to_dataframe,\
+                                           log_param_to_dataframe,\
                                            get_big_df,\
                                            spectrogram,\
                                            candidate_spectrograms
@@ -152,6 +153,7 @@ class OneTrack(Track):
 
         self.formants, self.time_domain = self._track_formants()
         self.smoothed_list = self._smooth_formants()
+        self.smoothed_log_list = self._smooth_log_formants()
         self._file_name = None
         self._id = None
         self._group = None
@@ -190,6 +192,14 @@ class OneTrack(Track):
             for x in self.formants
         ]
         return smoothed_list
+    
+    def _smooth_log_formants(self):
+        smoothed_list = [
+            self.smoother.smooth(x)
+            for x in np.log(self.formants)
+        ]
+
+        return smoothed_list
 
     @property
     def smoothed_formants(self):
@@ -202,6 +212,12 @@ class OneTrack(Track):
         return np.array(
             [x.params for x in self.smoothed_list]
         )
+    
+    @property
+    def log_parameters(self):
+        return np.array([
+            x.params for x in self.smoothed_log_list
+        ])
 
     @property
     def smooth_error(self):
@@ -255,13 +271,13 @@ class OneTrack(Track):
 
     def to_df(
             self,
-            output:Literal["formants", "param"] = "formants"
+            output:Literal["formants", "param", "log_param"] = "formants"
             ) -> pl.DataFrame:
         """Output either the formant values or the formant smoothing parameters \
         as a polars dataframe
 
         Args:
-            output (Literal['formants', 'param'], optional): Whether
+            output (Literal['formants', 'param', 'log_param'], optional): Whether
                 to output the formants or the smoothing parameters.
                 Defaults to "formants".
 
@@ -275,6 +291,7 @@ class OneTrack(Track):
             return df
         if output == "formants":
             return self._formant_df
+
         if output == "param"\
             and not isinstance(self._param_df, pl.DataFrame):
             df =  param_to_dataframe(self)
@@ -282,8 +299,17 @@ class OneTrack(Track):
             return df
         if output == "param":
             return self._param_df
+        
+        if output == "log_param"\
+            and not isinstance(self._log_param_df, pl.DataFrame):
+            df = log_param_to_dataframe(self)
+            self._log_param_df = df
+            return df
+        
+        if output == "log_param":
+            return self._log_param_df
 
-        raise ValueError("output must be either 'formants' or 'param'")
+        raise ValueError("output must be 'formants', 'param', or 'log_param'")
 
     def spectrogram(self, **kwargs):
         """
@@ -504,14 +530,14 @@ class CandidateTracks(Track):
     def to_df(
             self,
             which: Literal["winner", "all"] = "winner",
-            output: Literal["formants", "param"] = "formants"
+            output: Literal["formants", "param", "log_param"] = "formants"
             ) -> pl.DataFrame:
         """Return a polars dataframe of the candidate tracks
 
         Args:
             which (Literal['winner', 'all'], optional): Return just the winner
                 track data, or all candidates. Defaults to "winner".
-            output (Literal['formants', 'param'], optional): Whether
+            output (Literal['formants', 'param', 'log_param'], optional): Whether
                 to output the formants or the smoothing parameters.
                 Defaults to "formants".
 
@@ -538,6 +564,15 @@ class CandidateTracks(Track):
 
         if output == "param":
             return self._param_df
+        
+        if output == "log_param"\
+            and not isinstance(self._log_param_df, pl.DataFrame):
+            big_df = get_big_df(self, output=output)
+            self._log_param_df = big_df
+            return big_df
+
+        if output == "log_param":
+            return self._log_param_df        
 
     def spectrograms(self, **kwargs):
         """ 

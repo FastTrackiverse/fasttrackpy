@@ -100,6 +100,29 @@ def param_to_dataframe(self):
 
     return param_df
 
+def log_param_to_dataframe(self):
+    """Return data as a data frame
+
+    Returns:
+        (pl.DataFrame): A data frame
+    """
+
+    schema = [
+        f"F{x}" for x in
+        np.arange(self.log_parameters.shape[0])+1
+    ]
+    param_df = pl.DataFrame(
+        data = self.log_parameters,schema=schema
+    )
+
+    param_df = param_df.with_columns(
+        error = pl.lit(self.smooth_error)
+    ).with_row_count(name = "param")
+
+    param_df = add_metadata(self, param_df)
+
+    return param_df
+
 def get_big_df(self, output):
         all_df = [x.to_df(output = output) for x in self.candidates]
         all_df = [
