@@ -34,6 +34,7 @@ jobs:
         run: |
             cd docs
             poetry run quartodoc build
+            poetry run python objects.py            
             poetry run quartodoc interlinks
       - uses: quarto-dev/quarto-actions/setup@v2
       - name: Render and publish to gh pages

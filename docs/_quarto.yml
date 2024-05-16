@@ -32,7 +32,7 @@ metadata-files:
   - reference/_sidebar.yml
 
 resources: 
-  - objects.txt
+  - objects.inv
 
 interlinks:
   fast: true

@@ -2,3 +2,5 @@
 _site/
 *.wav
 _inv/
+reference/
+objects.txt
