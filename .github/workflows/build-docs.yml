@@ -33,7 +33,7 @@ jobs:
       - name: Quardo Doc Build
         run: |
             cd docs
-            poetry run quartodoc build _quarto.yml
+            poetry run quartodoc build
             poetry run quartodoc interlinks
       - uses: quarto-dev/quarto-actions/setup@v2
       - name: Render and publish to gh pages
