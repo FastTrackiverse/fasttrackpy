@@ -365,12 +365,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
-<colgroup>
-<col style="width: 18%">
-<col style="width: 9%">
-<col style="width: 60%">
-<col style="width: 11%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -382,85 +376,85 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td><code>sound</code></td>
-<td>pm.Sound</td>
+<td><code>pm</code>.<code>Sound</code></td>
 <td>A <code>parselmouth.Sound</code> object.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td><code>samples</code></td>
-<td>np.ndarray</td>
+<td><a href="https://numpy.org/doc/stable/reference/index.html#module-numpy">np</a>.<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray">ndarray</a></td>
 <td>A numpy array of audio samples.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td><code>sampling_frequency</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The audio sampling frequency.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td><code>xmin</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The time offset for the audio. Defaults to 0.0.</td>
 <td><code>0.0</code></td>
 </tr>
 <tr class="odd">
 <td><code>min_max_formant</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The lowest max-formant value to try. Defaults to 4000.</td>
 <td><code>4000</code></td>
 </tr>
 <tr class="even">
 <td><code>max_max_formant</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The highest max formant to try. Defaults to 7000.</td>
 <td><code>7000</code></td>
 </tr>
 <tr class="odd">
 <td><code>nstep</code></td>
-<td>int</td>
+<td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of steps from the min to the max max formant. Defaults to 20.</td>
 <td><code>20</code></td>
 </tr>
 <tr class="even">
 <td><code>n_formants</code></td>
-<td>int</td>
+<td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of formants to track. Defaults to 4.</td>
 <td><code>4</code></td>
 </tr>
 <tr class="odd">
 <td><code>window_length</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Window length of the formant analysis. Defaults to 0.025.</td>
 <td><code>0.025</code></td>
 </tr>
 <tr class="even">
 <td><code>time_step</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Time step of the formant analyusis window. Defaults to 0.002.</td>
 <td><code>0.002</code></td>
 </tr>
 <tr class="odd">
 <td><code>pre_emphasis_from</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Pre-emphasis threshold. Defaults to 50.</td>
 <td><code>50</code></td>
 </tr>
 <tr class="even">
 <td><code>smoother</code></td>
-<td>Smoother</td>
+<td><a href="../reference/Smoother.html#fasttrackpy.Smoother">Smoother</a></td>
 <td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
 <td><code>Smoother()</code></td>
 </tr>
 <tr class="odd">
 <td><code>loss_fun</code></td>
-<td>Loss</td>
+<td><a href="../reference/Loss.html#fasttrackpy.Loss">Loss</a></td>
 <td>The loss function to use. Defaults to Loss().</td>
 <td><code>Loss()</code></td>
 </tr>
 <tr class="even">
 <td><code>agg_fun</code></td>
-<td>Agg</td>
+<td><a href="../reference/Agg.html#fasttrackpy.Agg">Agg</a></td>
 <td>The loss aggregation function to use. Defaults to Agg().</td>
 <td><code>Agg()</code></td>
 </tr>
@@ -470,11 +464,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="attributes" class="level2">
 <h2 class="anchored" data-anchor-id="attributes">Attributes</h2>
 <table class="table">
-<colgroup>
-<col style="width: 15%">
-<col style="width: 35%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -485,42 +474,42 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td>candidates</td>
-<td>list[OneTrack, …]</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="../reference/OneTrack.html#fasttrackpy.OneTrack">OneTrack</a>, …]</td>
 <td>A list of <code>OneTrack</code> tracks.</td>
 </tr>
 <tr class="even">
 <td>smooth_errors</td>
-<td>np.array</td>
+<td><a href="https://numpy.org/doc/stable/reference/index.html#module-numpy">np</a>.<a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array">array</a></td>
 <td>The error terms for each treack in <code>candidates</code></td>
 </tr>
 <tr class="odd">
 <td>winner_idx</td>
-<td>int</td>
+<td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The candidate track with the smallest error term</td>
 </tr>
 <tr class="even">
 <td>winner</td>
-<td>OneTrack</td>
+<td><a href="../reference/OneTrack.html#fasttrackpy.OneTrack">OneTrack</a></td>
 <td>The winning <code>OneTrack</code> track.</td>
 </tr>
 <tr class="odd">
 <td>file_name</td>
-<td>str</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a></td>
 <td>The filename of the audio file, if set.</td>
 </tr>
 <tr class="even">
 <td>interval</td>
-<td>aligned_textgrid.SequenceInterval</td>
+<td><code>aligned_textgrid</code>.<code>SequenceInterval</code></td>
 <td>The textgrid interval of the sound, if set.</td>
 </tr>
 <tr class="odd">
 <td>id</td>
-<td>str</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a></td>
 <td>The interval id of the sound, if set.</td>
 </tr>
 <tr class="even">
 <td>group</td>
-<td>str</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a></td>
 <td>The tier group name of the sound, if set.</td>
 </tr>
 </tbody>
@@ -553,12 +542,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="parameters-1" class="level4">
 <h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="table">
-<colgroup>
-<col style="width: 12%">
-<col style="width: 13%">
-<col style="width: 68%">
-<col style="width: 6%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -570,37 +553,37 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td><code>formants</code></td>
-<td>int</td>
+<td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of formants to plot. Defaults to 3.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td><code>maximum_frequency</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The frequency range the spectrogram and formants will be plotted up to. Defaults to 3500.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td><code>dynamic_range</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>A all spectrogram values below the dynamic range. will be plotted as white. Defaults to 60.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td><code>figsize</code></td>
-<td>tuple[float, float]</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#tuple">tuple</a>[<a href="https://docs.python.org/3/library/functions.html#float">float</a>, <a href="https://docs.python.org/3/library/functions.html#float">float</a>]</td>
 <td>Width and height of the figure in inches. Defaults to (8,5).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td><code>file_name</code></td>
-<td>Path | None</td>
+<td><code>Path</code> | None</td>
 <td>If provided, how to save the spectrogram. If not provided (None) the plot will show interactively. Defaults to None.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td><code>dpi</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>If the plot is being saved, its image resolution in dots per inch. Defaults to 75</td>
 <td><em>required</em></td>
 </tr>
@@ -615,12 +598,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="parameters-2" class="level4">
 <h4 class="anchored" data-anchor-id="parameters-2">Parameters</h4>
 <table class="table">
-<colgroup>
-<col style="width: 6%">
-<col style="width: 29%">
-<col style="width: 55%">
-<col style="width: 9%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -632,13 +609,13 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td><code>which</code></td>
-<td>Literal[‘winner’, ‘all’]</td>
+<td><a href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[‘winner’, ‘all’]</td>
 <td>Return just the winner track data, or all candidates. Defaults to “winner”.</td>
 <td><code>'winner'</code></td>
 </tr>
 <tr class="even">
 <td><code>output</code></td>
-<td>Literal[‘formants’, ‘param’, ‘log_param’]</td>
+<td><a href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[‘formants’, ‘param’, ‘log_param’]</td>
 <td>Whether to output the formants or the smoothing parameters. Defaults to “formants”.</td>
 <td><code>'formants'</code></td>
 </tr>
@@ -648,6 +625,10 @@ ul.task-list li input[type="checkbox"] {
 <section id="returns" class="level4">
 <h4 class="anchored" data-anchor-id="returns">Returns</h4>
 <table class="table">
+<colgroup>
+<col style="width: 68%">
+<col style="width: 31%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Type</th>
@@ -656,7 +637,7 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td>pl.DataFrame</td>
+<td><code>pl</code>.<code>DataFrame</code></td>
 <td>A <code>polars.DataFrame</code></td>
 </tr>
 </tbody>

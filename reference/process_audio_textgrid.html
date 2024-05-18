@@ -342,12 +342,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 10%">
-<col style="width: 57%">
-<col style="width: 16%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -359,97 +353,97 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td><code>audio_path</code></td>
-<td>str | Path</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></td>
 <td>Path to an audio file.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td><code>textgrid_path</code></td>
-<td>str | Path</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></td>
 <td>Path to a TextGrid</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td><code>entry_classes</code></td>
-<td>list</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a></td>
 <td>Entry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].</td>
 <td><code>['Word', 'Phone']</code></td>
 </tr>
 <tr class="even">
 <td><code>target_tier</code></td>
-<td>str</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a></td>
 <td>The tier to target. Defaults to “Phone”.</td>
 <td><code>'Phone'</code></td>
 </tr>
 <tr class="odd">
 <td><code>target_labels</code></td>
-<td>str</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a></td>
 <td>A regex that will match intervals to target. Defaults to “[AEIOU]”.</td>
 <td><code>'[AEIOU]'</code></td>
 </tr>
 <tr class="even">
 <td><code>min_duration</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Minimum vowel duration to mention. Defaults to 0.05.</td>
 <td><code>0.05</code></td>
 </tr>
 <tr class="odd">
 <td><code>min_max_formant</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The lowest max-formant value to try. Defaults to 4000.</td>
 <td><code>4000</code></td>
 </tr>
 <tr class="even">
 <td><code>max_max_formant</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The highest max formant to try. Defaults to 7000.</td>
 <td><code>7000</code></td>
 </tr>
 <tr class="odd">
 <td><code>nstep</code></td>
-<td>int</td>
+<td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of steps from the min to the max max formant. Defaults to 20.</td>
 <td><code>20</code></td>
 </tr>
 <tr class="even">
 <td><code>n_formants</code></td>
-<td>int</td>
+<td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of formants to track. Defaults to 4.</td>
 <td><code>4</code></td>
 </tr>
 <tr class="odd">
 <td><code>window_length</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Window length of the formant analysis. Defaults to 0.025.</td>
 <td><code>0.025</code></td>
 </tr>
 <tr class="even">
 <td><code>time_step</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Time step of the formant analyusis window. Defaults to 0.002.</td>
 <td><code>0.002</code></td>
 </tr>
 <tr class="odd">
 <td><code>pre_emphasis_from</code></td>
-<td>float</td>
+<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Pre-emphasis threshold. Defaults to 50.</td>
 <td><code>50</code></td>
 </tr>
 <tr class="even">
 <td><code>smoother</code></td>
-<td>Smoother</td>
+<td><a href="../reference/Smoother.html#fasttrackpy.Smoother">Smoother</a></td>
 <td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
 <td><code>Smoother()</code></td>
 </tr>
 <tr class="odd">
 <td><code>loss_fun</code></td>
-<td>Loss</td>
+<td><a href="../reference/Loss.html#fasttrackpy.Loss">Loss</a></td>
 <td>The loss function to use. Defaults to Loss().</td>
 <td><code>Loss()</code></td>
 </tr>
 <tr class="even">
 <td><code>agg_fun</code></td>
-<td>Agg</td>
+<td><a href="../reference/Agg.html#fasttrackpy.Agg">Agg</a></td>
 <td>The loss aggregation function to use. Defaults to Agg().</td>
 <td><code>Agg()</code></td>
 </tr>
@@ -467,7 +461,7 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td>list[CandidateTracks]</td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="../reference/CandidateTracks.html#fasttrackpy.CandidateTracks">CandidateTracks</a>]</td>
 <td>A list of candidate tracks.</td>
 </tr>
 </tbody>
