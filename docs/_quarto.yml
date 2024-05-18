@@ -33,7 +33,8 @@ metadata-files:
 
 resources: 
   - objects.inv
-
+filters:
+  - "interlinks"  
 interlinks:
   fast: true
   sources:
@@ -57,7 +58,7 @@ quartodoc:
   package: fasttrackpy
   sidebar: "reference/_sidebar.yml"
   parser: google
-  render_interlinks: false
+  render_interlinks: true
   sections:
     - title: Processing Functions
       desc: functions
