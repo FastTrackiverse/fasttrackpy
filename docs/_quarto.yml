@@ -41,7 +41,9 @@ interlinks:
     numpy:
       url: https://numpy.org/doc/stable/
     python:
-      url: https://docs.python.org/3/          
+      url: https://docs.python.org/3/
+    aligned_textgrid:
+      url: https://forced-alignment-and-vowel-extraction.github.io/alignedTextGrid/   
 
 format:
   html:

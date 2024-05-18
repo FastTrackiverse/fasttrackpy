@@ -587,7 +587,7 @@ item []:
         intervals [144]:
             xmin = 41.9 
             xmax = 45.48 
-            text = "the" 
+            text = "" 
         intervals [145]:
             xmin = 45.48 
             xmax = 46.35 
@@ -3305,7 +3305,7 @@ item []:
         intervals [445]:
             xmin = 41.92 
             xmax = 45.48 
-            text = "AH0" 
+            text = "" 
         intervals [446]:
             xmin = 45.48 
             xmax = 46.35 
