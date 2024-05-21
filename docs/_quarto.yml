@@ -97,3 +97,7 @@ quartodoc:
       contents:
         - Agg
         - processors.aggs.agg_sum
+    
+    - title: Utilities
+      contents:
+        - utils.safely
