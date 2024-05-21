@@ -4,6 +4,7 @@ import aligned_textgrid
 from fasttrackpy import CandidateTracks, Smoother, Loss, Agg
 from fasttrackpy.patterns.just_audio import create_audio_checker
 from fasttrackpy.patterns.audio_textgrid import get_interval_classes
+from fasttrackpy.utils.safely import safely, filter_nones
 import re
 from collections import namedtuple
 from pathlib import Path
@@ -86,7 +87,7 @@ def get_target_intervals(
         target_tiers: list[SequenceTier],
         target_labels:str = "[AEIOU]",
         min_duration = 0.05
-        ):
+        )->list[SequenceInterval]:
     intervals = [
         interval 
         for tier in target_tiers 
@@ -98,7 +99,22 @@ def get_target_intervals(
 
     return intervals
 
+@safely(message = "There was a problem extracting some sounds.")
+def get_sound_parts(
+        intervals: list[SequenceInterval],
+        window_length: float
+):
+    sound = pm.Sound(str(intervals[0].wav))
+    sound_parts = [
+        sound.extract_part(from_time = interval.start-(window_length/2), 
+        to_time = interval.end+(window_length/2))
+        for interval in intervals
+    ]
+
+    return sound_parts
+
 @delayed
+@safely(message = "There was a problem getting some candidate tracks.")
 def get_candidates(args_dict):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -176,12 +192,8 @@ def process_corpus(
         ]
     all_candidates = []
     for intervals in all_intervals:
-        sound = pm.Sound(str(intervals[0].wav))
-        sound_parts = [
-            sound.extract_part(from_time = interval.start-(window_length/2), 
-            to_time = interval.end+(window_length/2))
-            for interval in intervals
-        ]
+        sound_parts = get_sound_parts(intervals, window_length)
+        sound_parts, intervals = filter_nones(sound_parts, [sound_parts, intervals])
 
         arg_list = [
             {
@@ -207,6 +219,7 @@ def process_corpus(
             get_candidates(args_dict=arg) for arg in tqdm(arg_list)
             )
 
+        candidate_list, intervals = filter_nones(candidate_list, [candidate_list, intervals])
         for cand, interval in zip(candidate_list, intervals):
             cand.interval = interval
             cand.file_name = Path(str(interval.wav)).stem
