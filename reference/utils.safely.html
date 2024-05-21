@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +64,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../reference/processors.losses.lmse.html" rel="next">
-<link href="../reference/processors.smoothers.dct_smooth_regression.html" rel="prev">
+<link href="../reference/processors.aggs.agg_sum.html" rel="prev">
 <link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -120,7 +153,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/Loss.html">Losses</a></li><li class="breadcrumb-item"><a href="../reference/Loss.html">Loss</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/utils.safely.html">Utilities</a></li><li class="breadcrumb-item"><a href="../reference/utils.safely.html">utils.safely</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -270,7 +303,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/Loss.html" class="sidebar-item-text sidebar-link active">
+  <a href="../reference/Loss.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Loss</span></a>
   </div>
 </li>
@@ -322,7 +355,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.safely.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.safely.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">utils.safely</span></a>
   </div>
 </li>
@@ -338,9 +371,18 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#fasttrackpy.Loss" id="toc-fasttrackpy.Loss" class="nav-link active" data-scroll-target="#fasttrackpy.Loss">Loss</a>
+  <li><a href="#functions" id="toc-functions" class="nav-link active" data-scroll-target="#functions">Functions</a>
   <ul>
+  <li><a href="#fasttrackpy.utils.safely.filter_nones" id="toc-fasttrackpy.utils.safely.filter_nones" class="nav-link" data-scroll-target="#fasttrackpy.utils.safely.filter_nones">filter_nones</a>
+  <ul class="collapse">
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage:</a></li>
   <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
+  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
+  </ul></li>
+  <li><a href="#fasttrackpy.utils.safely.safely" id="toc-fasttrackpy.utils.safely.safely" class="nav-link" data-scroll-target="#fasttrackpy.utils.safely.safely">safely</a>
+  <ul class="collapse">
+  <li><a href="#parameters-1" id="toc-parameters-1" class="nav-link" data-scroll-target="#parameters-1">Parameters</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -348,15 +390,80 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/utils.safely.html">Utilities</a></li><li class="breadcrumb-item"><a href="../reference/utils.safely.html">utils.safely</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">utils.safely</h1>
+</div>
 
 
 
-<section id="fasttrackpy.Loss" class="level1">
-<h1>Loss</h1>
-<p><code>Loss(self, method='lmse', **kwargs)</code></p>
-<p><em>summary</em></p>
-<section id="parameters" class="level2">
-<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><code>utils.safely</code></p>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">Functions</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#fasttrackpy.utils.safely.filter_nones">filter_nones</a></td>
+<td>Filter lists based on the presence of None values.</td>
+</tr>
+<tr class="even">
+<td><a href="#fasttrackpy.utils.safely.safely">safely</a></td>
+<td>A decorator for more graceful failing.</td>
+</tr>
+</tbody>
+</table>
+<section id="fasttrackpy.utils.safely.filter_nones" class="level3">
+<h3 class="anchored" data-anchor-id="fasttrackpy.utils.safely.filter_nones">filter_nones</h3>
+<p><code>utils.safely.filter_nones(filterer, to_filter)</code></p>
+<p>Filter lists based on the presence of None values.</p>
+<section id="usage" class="level4">
+<h4 class="anchored" data-anchor-id="usage">Usage:</h4>
+<div id="7128631f" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on a single list</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fasttrackpy.utils.safely <span class="im">import</span> filter_nones</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="va">None</span>, <span class="dv">6</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># value unpacking</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>a, <span class="op">=</span> filter_nones(a, [a])</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1, 2, 6]</code></pre>
+</div>
+</div>
+<div id="515e0761" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fasttrackpy.utils.safely <span class="im">import</span> filter_nones</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="va">None</span>, <span class="dv">6</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> [<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>a,b <span class="op">=</span> filter_nones(a, [a,b])</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(a)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1, 2, 6]
+['a', 'b', 'd']</code></pre>
+</div>
+</div>
+</section>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="table">
 <thead>
 <tr class="header">
@@ -368,15 +475,65 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>method</code></td>
-<td><a href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a>]</td>
-<td><em>description</em>. Defaults to “lmse”.</td>
-<td><code>'lmse'</code></td>
+<td><code>filterer</code></td>
+<td><a href="https://docs.python.org/3/library/typing.html#typing.Sequence">Sequence</a></td>
+<td>The filterer list that may contain <code>None</code> values</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td><code>to_filter</code></td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="https://docs.python.org/3/library/typing.html#typing.Sequence">Sequence</a>]</td>
+<td>A list of lists to filter.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns" class="level4">
+<h4 class="anchored" data-anchor-id="returns">Returns</h4>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="https://docs.python.org/3/library/typing.html#typing.Sequence">Sequence</a>]</td>
+<td>list[Sequence]: <em>description</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="fasttrackpy.utils.safely.safely" class="level3">
+<h3 class="anchored" data-anchor-id="fasttrackpy.utils.safely.safely">safely</h3>
+<p><code>utils.safely.safely(message=f'There was a problem a function's application.')</code></p>
+<p>A decorator for more graceful failing. If the decorated function raises an exception, it will return <code>None</code>.</p>
+<section id="parameters-1" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>message</code></td>
+<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a></td>
+<td>A warning message in the case of an exception. Defaults to <code>f"There was a problem a function's application."</code>.</td>
+<td><code>f'There was a problem a function's application.'</code></td>
 </tr>
 </tbody>
 </table>
 
 
+</section>
 </section>
 </section>
 
@@ -936,14 +1093,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../reference/processors.smoothers.dct_smooth_regression.html" class="pagination-link" aria-label="processors.smoothers.dct_smooth_regression">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">processors.smoothers.dct_smooth_regression</span>
+      <a href="../reference/processors.aggs.agg_sum.html" class="pagination-link" aria-label="processors.aggs.agg_sum">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">processors.aggs.agg_sum</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../reference/processors.losses.lmse.html" class="pagination-link" aria-label="processors.losses.lmse">
-        <span class="nav-page-text">processors.losses.lmse</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

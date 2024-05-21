@@ -349,6 +349,28 @@
     ]
   },
   {
+    "objectID": "reference/utils.safely.html",
+    "href": "reference/utils.safely.html",
+    "title": "utils.safely",
+    "section": "",
+    "text": "utils.safely",
+    "crumbs": [
+      "Utilities",
+      "utils.safely"
+    ]
+  },
+  {
+    "objectID": "reference/utils.safely.html#functions",
+    "href": "reference/utils.safely.html#functions",
+    "title": "utils.safely",
+    "section": "Functions",
+    "text": "Functions\n\n\n\nName\nDescription\n\n\n\n\nfilter_nones\nFilter lists based on the presence of None values.\n\n\nsafely\nA decorator for more graceful failing.\n\n\n\n\nfilter_nones\nutils.safely.filter_nones(filterer, to_filter)\nFilter lists based on the presence of None values.\n\nUsage:\n\n# on a single list\nfrom fasttrackpy.utils.safely import filter_nones\na = [1, 2, None, 6]\n\n# value unpacking\na, = filter_nones(a, [a])\nprint(a)\n\n[1, 2, 6]\n\n\n\nfrom fasttrackpy.utils.safely import filter_nones\na = [1, 2, None, 6]\nb = [\"a\", \"b\", \"c\", \"d\"]\n\na,b = filter_nones(a, [a,b])\nprint(a)\nprint(b)\n\n[1, 2, 6]\n['a', 'b', 'd']\n\n\n\n\nParameters\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nfilterer\nSequence\nThe filterer list that may contain None values\nrequired\n\n\nto_filter\nlist[Sequence]\nA list of lists to filter.\nrequired\n\n\n\n\n\nReturns\n\n\n\nType\nDescription\n\n\n\n\nlist[Sequence]\nlist[Sequence]: description\n\n\n\n\n\n\nsafely\nutils.safely.safely(message=f'There was a problem a function's application.')\nA decorator for more graceful failing. If the decorated function raises an exception, it will return None.\n\nParameters\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmessage\nstr\nA warning message in the case of an exception. Defaults to f\"There was a problem a function's application.\".\nf'There was a problem a function's application.'",
+    "crumbs": [
+      "Utilities",
+      "utils.safely"
+    ]
+  },
+  {
     "objectID": "reference/Smoother.html",
     "href": "reference/Smoother.html",
     "title": "Smoother",
@@ -430,7 +452,7 @@
     "href": "reference/index.html",
     "title": "Function reference",
     "section": "",
-    "text": "functions\n\n\n\nprocess_audio_file\nGiven the path to a single audio file, return a candidates track object.\n\n\nprocess_directory\nGiven a path to a directoy of audio files, process them all.\n\n\nprocess_audio_textgrid\nProcess an audio and TextGrid file together.\n\n\nprocess_corpus\nGiven a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.\n\n\n\n\n\n\nClasses\n\n\n\nOneTrack\nA single formant track.\n\n\nCandidateTracks\nA class for candidate tracks for a single formant\n\n\n\n\n\n\nData outputs\n\n\n\nprocessors.outputs.pickle_candidates\nThis will save a CandidateTracks object to\n\n\nprocessors.outputs.unpickle_candidates\nThis will load a CandidateTracks object\n\n\n\n\n\n\nSmoother\n\n\n\nSmoother\nA smoother function factory\n\n\nprocessors.smoothers.Smoothed\nSmooothed formant tracks\n\n\nprocessors.smoothers.dct_smooth\nA DCT Smoother\n\n\nprocessors.smoothers.dct_smooth_regression\nA DCT Smoother using regression\n\n\n\n\n\n\nLosses\n\n\n\nLoss\nsummary\n\n\nprocessors.losses.lmse\nsummary\n\n\nprocessors.losses.mse\nsummary\n\n\n\n\n\n\nAggs\n\n\n\nAgg\nsummary\n\n\nprocessors.aggs.agg_sum\nSum the error",
+    "text": "functions\n\n\n\nprocess_audio_file\nGiven the path to a single audio file, return a candidates track object.\n\n\nprocess_directory\nGiven a path to a directoy of audio files, process them all.\n\n\nprocess_audio_textgrid\nProcess an audio and TextGrid file together.\n\n\nprocess_corpus\nGiven a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.\n\n\n\n\n\n\nClasses\n\n\n\nOneTrack\nA single formant track.\n\n\nCandidateTracks\nA class for candidate tracks for a single formant\n\n\n\n\n\n\nData outputs\n\n\n\nprocessors.outputs.pickle_candidates\nThis will save a CandidateTracks object to\n\n\nprocessors.outputs.unpickle_candidates\nThis will load a CandidateTracks object\n\n\n\n\n\n\nSmoother\n\n\n\nSmoother\nA smoother function factory\n\n\nprocessors.smoothers.Smoothed\nSmooothed formant tracks\n\n\nprocessors.smoothers.dct_smooth\nA DCT Smoother\n\n\nprocessors.smoothers.dct_smooth_regression\nA DCT Smoother using regression\n\n\n\n\n\n\nLosses\n\n\n\nLoss\nsummary\n\n\nprocessors.losses.lmse\nsummary\n\n\nprocessors.losses.mse\nsummary\n\n\n\n\n\n\nAggs\n\n\n\nAgg\nsummary\n\n\nprocessors.aggs.agg_sum\nSum the error\n\n\n\n\n\n\n\n\n\nutils.safely",
     "crumbs": [
       "Function reference"
     ]
@@ -491,6 +513,16 @@
     "title": "Function reference",
     "section": "",
     "text": "Aggs\n\n\n\nAgg\nsummary\n\n\nprocessors.aggs.agg_sum\nSum the error",
+    "crumbs": [
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/index.html#utilities",
+    "href": "reference/index.html#utilities",
+    "title": "Function reference",
+    "section": "",
+    "text": "utils.safely",
     "crumbs": [
       "Function reference"
     ]
