@@ -94,7 +94,7 @@ def param_to_dataframe(self):
 
     param_df = param_df.with_columns(
         error = pl.lit(self.smooth_error)
-    ).with_row_count(name = "param")
+    ).with_row_index(name = "param")
 
     param_df = add_metadata(self, param_df)
 
@@ -117,7 +117,7 @@ def log_param_to_dataframe(self):
 
     param_df = param_df.with_columns(
         error = pl.lit(self.smooth_error)
-    ).with_row_count(name = "param")
+    ).with_row_index(name = "param")
 
     param_df = add_metadata(self, param_df)
 

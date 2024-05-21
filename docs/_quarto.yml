@@ -31,12 +31,21 @@ website:
 metadata-files:
   - reference/_sidebar.yml
 
+resources: 
+  - objects.inv
+filters:
+  - "interlinks"  
 interlinks:
+  fast: true
   sources:
     numpy:
       url: https://numpy.org/doc/stable/
     python:
-      url: https://docs.python.org/3/          
+      url: https://docs.python.org/3/
+    aligned_textgrid:
+      url: https://forced-alignment-and-vowel-extraction.github.io/alignedTextGrid/
+    parselmouth:
+      url: https://parselmouth.readthedocs.io/en/stable/
 
 format:
   html:
@@ -53,7 +62,7 @@ quartodoc:
   package: fasttrackpy
   sidebar: "reference/_sidebar.yml"
   parser: google
-  render_interlinks: false
+  render_interlinks: true
   sections:
     - title: Processing Functions
       desc: functions
@@ -93,3 +102,7 @@ quartodoc:
       contents:
         - Agg
         - processors.aggs.agg_sum
+    
+    - title: Utilities
+      contents:
+        - utils.safely
