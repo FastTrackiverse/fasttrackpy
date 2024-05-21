@@ -43,7 +43,9 @@ interlinks:
     python:
       url: https://docs.python.org/3/
     aligned_textgrid:
-      url: https://forced-alignment-and-vowel-extraction.github.io/alignedTextGrid/   
+      url: https://forced-alignment-and-vowel-extraction.github.io/alignedTextGrid/
+    parselmouth:
+      url: https://parselmouth.readthedocs.io/en/stable/
 
 format:
   html:
