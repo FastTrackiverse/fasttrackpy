@@ -7,6 +7,7 @@ from fasttrackpy import CandidateTracks,\
                         Smoother,\
                         Loss,\
                         Agg
+from fasttrackpy.utils.safely import safely, filter_nones
 
 from tqdm import tqdm
 from joblib import Parallel, cpu_count, delayed
@@ -136,6 +137,7 @@ def process_audio_file(
     return candidates
 
 @delayed
+@safely(message = "There was a problem processing an audio file.")
 def wrapped_audio(args_dict):
     return process_audio_file(**args_dict)
 
@@ -205,6 +207,7 @@ def process_directory(
     all_candidates = Parallel(n_jobs=n_jobs)(
         wrapped_audio(args_dict=arg) for arg in tqdm(arg_list)
         )
+    all_candidates, all_audio = filter_nones(all_candidates, [all_candidates, all_audio])
     for x, path in zip(all_candidates, all_audio):
         x.file_name = Path(str(path)).name
 

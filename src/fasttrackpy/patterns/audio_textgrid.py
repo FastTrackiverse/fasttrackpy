@@ -3,6 +3,7 @@ from aligned_textgrid import AlignedTextGrid, Word, Phone, SequenceInterval, Seq
 import aligned_textgrid
 from fasttrackpy import CandidateTracks, Smoother, Loss, Agg
 from fasttrackpy.patterns.just_audio import create_audio_checker
+from fasttrackpy.utils.safely import safely, filter_nones
 import re
 
 from pathlib import Path
@@ -65,6 +66,7 @@ def get_target_intervals(
     return intervals
 
 @delayed
+@safely(message="There was a problem getting some candidate tracks.")
 def get_candidates(args_dict):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -170,6 +172,7 @@ def process_audio_textgrid(
     candidate_list = Parallel(n_jobs=n_jobs)(
         get_candidates(args_dict=arg) for arg in tqdm(arg_list)
         )
+    candidate_list, target_intervals = filter_nones(candidate_list, [candidate_list, target_intervals])
     for cand, interval in zip(candidate_list, target_intervals):
         cand.interval = interval
         cand.file_name = Path(str(audio_path)).stem
