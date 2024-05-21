@@ -103,7 +103,7 @@
     "href": "index.html",
     "title": "Home",
     "section": "",
-    "text": "These are the docs for fasttrackpy",
+    "text": "These are the docs for fasttrackpy. For more info, see the quickstart.",
     "crumbs": [
       "Home"
     ]
@@ -113,7 +113,17 @@
     "href": "index.html#installation",
     "title": "Home",
     "section": "Installation",
-    "text": "Installation\nYou can install fasttrackpy with pip.\npip install fasttrackpy\nIn addition to making the python modules available, this will also make the fasttrack command line executable available.",
+    "text": "Installation\npip install fasttrackpy\nThis will make the command line executable fasttrack available, along with its subcommands:\n\naudio\naudio-textgrid\ncorpus",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#getting-help",
+    "href": "index.html#getting-help",
+    "title": "Home",
+    "section": "Getting help",
+    "text": "Getting help\nFor any of the fasttrack subcommands, add the --help flag to print the help info.",
     "crumbs": [
       "Home"
     ]
@@ -123,7 +133,7 @@
     "href": "index.html#usage",
     "title": "Home",
     "section": "Usage",
-    "text": "Usage\nThe fasttrack executable has two commands\nfasttrack audio ...\nand\nfasttrack audio-textgrid ...\nFor more info, see the quickstart.",
+    "text": "Usage\nFor a single audio file containing a vowel-like sound:\nfasttrack audio --file audio.wav \\\n    --output formants.csv\nFor a paired audio file and textgrid with intervals defining target audio to process:\nfasttrack audio-textgrid --audio audio.wav \\\n    --textgrid audio.TextGrid \\\n    --output formants.csv\nFor a corpus directory of paired audio files and textgrid\nfasttrack corpus --corpus dir/ \\\n    --output formants.csv",
     "crumbs": [
       "Home"
     ]

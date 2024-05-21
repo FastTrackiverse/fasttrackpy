@@ -211,6 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#getting-help" id="toc-getting-help" class="nav-link" data-scroll-target="#getting-help">Getting help</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   </ul>
 </nav>
@@ -238,20 +239,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><a href="https://pypi.org/project/fasttrackpy/"><img src="https://img.shields.io/pypi/v/fasttrackpy.png" class="img-fluid" alt="PyPI"></a> <a href="https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml"><img src="https://github.com/JoFrhwld/fasttrackpy/actions/workflows/test-and-run.yml/badge.svg" class="img-fluid" alt="Python CI"></a> <a href="https://codecov.io/gh/FastTrackiverse/fasttrackpy"><img src="https://codecov.io/gh/FastTrackiverse/fasttrackpy/graph/badge.svg?token=GOAWY4B5C8" class="img-fluid" alt="codecov"></a> <a href="https://zenodo.org/badge/latestdoi/580169086"><img src="https://zenodo.org/badge/580169086.svg" class="img-fluid" alt="DOI"></a></p>
-<p>These are the docs for <code>fasttrackpy</code></p>
+<p>These are the docs for <code>fasttrackpy</code>. For more info, see <a href="./usage/getting_started.html">the quickstart</a>.</p>
 <section id="installation" class="level2">
 <h2 class="anchored" data-anchor-id="installation">Installation</h2>
-<p>You can install <code>fasttrackpy</code> with pip.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install fasttrackpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In addition to making the python modules available, this will also make the <code>fasttrack</code> command line executable available.</p>
+<p>This will make the command line executable <code>fasttrack</code> available, along with its subcommands:</p>
+<ul>
+<li><code>audio</code></li>
+<li><code>audio-textgrid</code></li>
+<li><code>corpus</code></li>
+</ul>
+</section>
+<section id="getting-help" class="level2">
+<h2 class="anchored" data-anchor-id="getting-help">Getting help</h2>
+<p>For any of the fasttrack subcommands, add the <code>--help</code> flag to print the help info.</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<p>The <code>fasttrack</code> executable has two commands</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>and</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio-textgrid ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>For more info, see <a href="./usage/getting_started.html">the quickstart</a>.</p>
+<p>For a single audio file containing a vowel-like sound:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio <span class="at">--file</span> audio.wav <span class="dt">\</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output</span> formants.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For a paired audio file and textgrid with intervals defining target audio to process:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> audio-textgrid <span class="at">--audio</span> audio.wav <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--textgrid</span> audio.TextGrid <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output</span> formants.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For a corpus directory of paired audio files and textgrid</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fasttrack</span> corpus <span class="at">--corpus</span> dir/ <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output</span> formants.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
