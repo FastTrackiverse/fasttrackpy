@@ -11,6 +11,7 @@ from fasttrackpy.utils.safely import safely, filter_nones
 
 from tqdm import tqdm
 from joblib import Parallel, cpu_count, delayed
+import os
 
 try:
     import magic
@@ -204,9 +205,12 @@ def process_directory(
     ]
     n_jobs = cpu_count()
 
-    all_candidates = Parallel(n_jobs=n_jobs)(
-        wrapped_audio(args_dict=arg) for arg in tqdm(arg_list)
-        )
+    if os.name == "posix":
+        all_candidates = Parallel(n_jobs=n_jobs)(
+            wrapped_audio(args_dict=arg) for arg in tqdm(arg_list)
+            )
+    else:
+        all_candidates = [wrapped_audio(arg) for arg in tqdm(arg_list)]
     all_candidates, all_audio = filter_nones(all_candidates, [all_candidates, all_audio])
     for x, path in zip(all_candidates, all_audio):
         x.file_name = Path(str(path)).name

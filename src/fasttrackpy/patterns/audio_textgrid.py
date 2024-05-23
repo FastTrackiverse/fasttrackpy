@@ -5,6 +5,7 @@ from fasttrackpy import CandidateTracks, Smoother, Loss, Agg
 from fasttrackpy.patterns.just_audio import create_audio_checker
 from fasttrackpy.utils.safely import safely, filter_nones
 import re
+import os
 
 from pathlib import Path
 from tqdm import tqdm
@@ -169,9 +170,13 @@ def process_audio_textgrid(
     ]
     
     n_jobs = cpu_count()
-    candidate_list = Parallel(n_jobs=n_jobs)(
-        get_candidates(args_dict=arg) for arg in tqdm(arg_list)
-        )
+    if os.name == "posix":
+        candidate_list = Parallel(n_jobs=n_jobs)(
+            get_candidates(args_dict=arg) for arg in tqdm(arg_list)
+            )
+    else:
+        candidate_list = [get_candidates(arg) for arg in tqdm(arg_list)]
+        
     candidate_list, target_intervals = filter_nones(candidate_list, [candidate_list, target_intervals])
     for cand, interval in zip(candidate_list, target_intervals):
         cand.interval = interval

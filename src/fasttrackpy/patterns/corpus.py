@@ -13,6 +13,7 @@ from functools import reduce
 from operator import add
 from joblib import Parallel, cpu_count, delayed
 import warnings
+import os
 
 
 
@@ -215,10 +216,12 @@ def process_corpus(
         ]
 
         n_jobs = cpu_count()
-        candidate_list = Parallel(n_jobs=n_jobs)(
-            get_candidates(args_dict=arg) for arg in tqdm(arg_list)
-            )
-
+        if os.name == "posix":
+            candidate_list = Parallel(n_jobs=n_jobs)(
+                get_candidates(args_dict=arg) for arg in tqdm(arg_list)
+                )
+        else:
+            candidate_list = [get_candidates(arg) for arg in tqdm(arg_list)]
         candidate_list, intervals = filter_nones(candidate_list, [candidate_list, intervals])
         for cand, interval in zip(candidate_list, intervals):
             cand.interval = interval
