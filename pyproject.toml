@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fasttrackpy"
-version = "0.4.5"
+version = "0.4.6"
 description = "A python implementation of FastTrack"
 authors = [
     "JoFrhwld <JoFrhwld@gmail.com>",
@@ -18,10 +18,10 @@ homepage = "https://fasttrackiverse.github.io/fasttrackpy/"
 repository = "https://github.com/FastTrackiverse/fasttrackpy"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.12"
+python = ">=3.10,<3.13"
 praat-parselmouth = "^0.4.3"
-scipy = {version = "^1.11.3", python = ">=3.10,<3.12"}
-numpy = {version = "^1.26.1", python = ">=3.10,<3.12"}
+scipy = {version = "^1.11.3", python = ">=3.10,<3.13"}
+numpy = {version = "^1.26.1", python = ">=3.10,<3.13"}
 polars = "^0.20.18"
 pytest-cov = "^4.1.0"
 pytest = "^7.4.3"
