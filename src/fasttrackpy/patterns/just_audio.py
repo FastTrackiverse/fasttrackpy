@@ -149,15 +149,15 @@ def get_candidates_delayed(args_dict):
 def get_candidates(args_dict):
     return process_audio_file(**args_dict)
 
-def run_candidates(arg_list, parallel):
+def run_candidates(arg_list, parallel:bool):
     if parallel:
         n_jobs = cpu_count()
         all_candidates = Parallel(n_jobs=n_jobs)(
             get_candidates_delayed(args_dict=arg) for arg in tqdm(arg_list)
             )
-    else:
-        all_candidates = [get_candidates(args_dict=arg) for arg in tqdm(arg_list)]
+        return all_candidates
     
+    all_candidates = [get_candidates(args_dict=arg) for arg in tqdm(arg_list)]
     return all_candidates
 
 def process_directory(
@@ -222,11 +222,14 @@ def process_directory(
             for x in all_audio
     ]
 
-    all_candidates = run_candidates(
-        arg_list, os.name != "posix" and \
+    windows_3_12 = os.name != "posix" and \
             sys.version_info.major == 3 and \
             sys.version_info.minor == 12
+
+    all_candidates = run_candidates(
+        arg_list, not windows_3_12
     )
+
     all_candidates, all_audio = filter_nones(all_candidates, [all_candidates, all_audio])
 
     for x, path in zip(all_candidates, all_audio):

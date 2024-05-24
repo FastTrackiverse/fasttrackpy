@@ -14,7 +14,7 @@ from operator import add
 from joblib import Parallel, cpu_count, delayed
 import warnings
 import os
-
+import sys
 
 
 try:
@@ -116,6 +116,15 @@ def get_sound_parts(
 
 @delayed
 @safely(message = "There was a problem getting some candidate tracks.")
+def get_candidates_delayed(args_dict):
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        candidates =  CandidateTracks(**args_dict)
+    if candidates.winner.formants.shape[1] == 1:
+        warnings.warn("formant tracking error")
+    return candidates
+
+@safely(message = "There was a problem getting some candidate tracks.")
 def get_candidates(args_dict):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -124,6 +133,16 @@ def get_candidates(args_dict):
         warnings.warn("formant tracking error")
     return candidates
 
+def run_candidates(arg_list, parallel:bool):
+    if parallel:
+        n_jobs = cpu_count()
+        all_candidates = Parallel(n_jobs=n_jobs)(
+            get_candidates_delayed(args_dict=arg) for arg in tqdm(arg_list)
+            )
+        return all_candidates
+    
+    all_candidates = [get_candidates(args_dict=arg) for arg in tqdm(arg_list)]
+    return all_candidates
 
 def process_corpus(
         corpus_path: str|Path,
@@ -215,13 +234,14 @@ def process_corpus(
             } for x, interval in zip(sound_parts, intervals)
         ]
 
-        n_jobs = cpu_count()
-        if os.name == "posix":
-            candidate_list = Parallel(n_jobs=n_jobs)(
-                get_candidates(args_dict=arg) for arg in tqdm(arg_list)
-                )
-        else:
-            candidate_list = [get_candidates(arg) for arg in tqdm(arg_list)]
+        windows_3_12 = os.name != "posix" and \
+                sys.version_info.major == 3 and \
+                sys.version_info.minor == 12
+
+        candidate_list = run_candidates(
+            arg_list, not windows_3_12
+        )
+
         candidate_list, intervals = filter_nones(candidate_list, [candidate_list, intervals])
         for cand, interval in zip(candidate_list, intervals):
             cand.interval = interval
