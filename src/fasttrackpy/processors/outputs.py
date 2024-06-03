@@ -1,5 +1,5 @@
 import numpy as np
-import pickle
+import cloudpickle
 import parselmouth as pm
 import polars as pl
 from aligned_textgrid import SequenceInterval
@@ -429,7 +429,7 @@ def pickle_candidates(
     tmp_candidates = copy.deepcopy (candidates)
 
     with file.open('wb') as f:
-        pickle.dump(tmp_candidates, f)
+        cloudpickle.dump(tmp_candidates, f)
 
 
 def unpickle_candidates(
@@ -452,6 +452,6 @@ def unpickle_candidates(
         file = Path(file)    
 
     with file.open('rb') as f:
-        candidates = pickle.load(f)
+        candidates = cloudpickle.load(f)
 
     return candidates
