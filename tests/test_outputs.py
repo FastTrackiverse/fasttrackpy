@@ -9,6 +9,7 @@ from fasttrackpy.processors.outputs import write_data, \
     pickle_candidates,\
     unpickle_candidates
 from fasttrackpy.patterns.just_audio import process_audio_file
+from fasttrackpy import process_audio_textgrid
 import parselmouth as pm
 import polars as pl
 import numpy as np
@@ -142,6 +143,7 @@ class TestPlots:
 
 class TestPickle:
     cands = CandidateTracks(SOUND)
+    
 
     def test_pickle_unpickle(self, tmp_path):
         pickle_file = tmp_path / "cand.pkl"
@@ -155,3 +157,15 @@ class TestPickle:
             self.cands.winner.maximum_formant
             )
         assert len(re_read.candidates) == len(self.cands.candidates)
+
+    def test_big_pickle_unpickle(self, tmp_path):
+        cands2 = process_audio_textgrid(
+            audio_path=Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.wav"),
+            textgrid_path=Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.TextGrid"),
+        )
+        pickle_file = tmp_path / "cand2.pkl"
+        pickle_candidates(cands2[0], file = pickle_file)
+        assert pickle_file.exists()
+
+        #re_read = unpickle_candidates(file = pickle_file)
+        #assert len(re_read.candidates) == len(self.cands2[0].candidates)

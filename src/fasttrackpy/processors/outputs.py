@@ -426,10 +426,10 @@ def pickle_candidates(
     if type(file) is str:
         file = Path(file)
 
-    tmp_candidates = copy.deepcopy (candidates)
+    #tmp_candidates = copy.deepcopy (candidates)
 
     with file.open('wb') as f:
-        cloudpickle.dump(tmp_candidates, f)
+        cloudpickle.dump(candidates, f)
 
 
 def unpickle_candidates(
