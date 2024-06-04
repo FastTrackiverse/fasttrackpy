@@ -1,5 +1,5 @@
 import numpy as np
-import pickle
+import cloudpickle
 import parselmouth as pm
 import polars as pl
 from aligned_textgrid import SequenceInterval
@@ -7,6 +7,7 @@ from pathlib import Path
 import matplotlib.pyplot as mp
 import copy
 import logging
+import sys
 
 ptolmap = {"F1" :"#4477AA",
            "F1_s": "#4477AA",
@@ -425,11 +426,11 @@ def pickle_candidates(
     """
     if type(file) is str:
         file = Path(file)
-
-    tmp_candidates = copy.deepcopy (candidates)
+    sys.setrecursionlimit(3000)
+    #tmp_candidates = copy.deepcopy (candidates)
 
     with file.open('wb') as f:
-        pickle.dump(tmp_candidates, f)
+        cloudpickle.dump(candidates, f)
 
 
 def unpickle_candidates(
@@ -450,8 +451,8 @@ def unpickle_candidates(
     """
     if type(file) is str:
         file = Path(file)    
-
+    sys.setrecursionlimit(3000)
     with file.open('rb') as f:
-        candidates = pickle.load(f)
+        candidates = cloudpickle.load(f)
 
     return candidates
