@@ -167,5 +167,5 @@ class TestPickle:
         pickle_candidates(cands2[0], file = pickle_file)
         assert pickle_file.exists()
 
-        #re_read = unpickle_candidates(file = pickle_file)
-        #assert len(re_read.candidates) == len(self.cands2[0].candidates)
+        re_read = unpickle_candidates(file = pickle_file)
+        assert len(re_read.candidates) == len(cands2[0].candidates)

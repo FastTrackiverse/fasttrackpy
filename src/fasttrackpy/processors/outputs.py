@@ -7,6 +7,7 @@ from pathlib import Path
 import matplotlib.pyplot as mp
 import copy
 import logging
+import sys
 
 ptolmap = {"F1" :"#4477AA",
            "F1_s": "#4477AA",
@@ -425,7 +426,7 @@ def pickle_candidates(
     """
     if type(file) is str:
         file = Path(file)
-
+    sys.setrecursionlimit(3000)
     #tmp_candidates = copy.deepcopy (candidates)
 
     with file.open('wb') as f:
@@ -450,7 +451,7 @@ def unpickle_candidates(
     """
     if type(file) is str:
         file = Path(file)    
-
+    sys.setrecursionlimit(3000)
     with file.open('rb') as f:
         candidates = cloudpickle.load(f)
 
