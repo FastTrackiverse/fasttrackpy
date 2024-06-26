@@ -99,4 +99,14 @@ class TestCandidateTracks:
         big_df4 = candidates.to_df(which = "all", output="param")
 
         assert isinstance(big_df3, pl.DataFrame)
-        assert isinstance(big_df4, pl.DataFrame)        
+        assert isinstance(big_df4, pl.DataFrame)
+
+    def test_candidate_sequence(self):
+        candidates = CandidateTracks(
+            sound = SOUND
+        )
+
+        assert len(candidates) == 20
+
+        one_cand = candidates[0]
+        assert isinstance(one_cand, OneTrack)
