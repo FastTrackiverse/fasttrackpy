@@ -151,8 +151,9 @@ class OneTrack(Track):
         )
         self.maximum_formant = maximum_formant
 
-        self.formants, self.time_domain = self._track_formants()
+        self.formants, self.bandwidths, self.time_domain = self._track_formants()
         self.smoothed_list = self._smooth_formants()
+        self.smoothed_b_list = self._smooth_log_bandwidths()
         self.smoothed_log_list = self._smooth_log_formants()
         self._file_name = None
         self._id = None
@@ -185,7 +186,17 @@ class OneTrack(Track):
             ]
         )
 
-        return tracks, time_domain
+        bandwidths = np.array(
+            [
+                [
+                    formant_obj.get_bandwidth_at_time(i+1, x)
+                    for x in time_domain
+                ]
+                for i in range(int(np.floor(self.n_formants)))
+            ]
+        )
+
+        return tracks, bandwidths, time_domain
 
     def _smooth_formants(self):
         smoothed_list = [
@@ -201,11 +212,24 @@ class OneTrack(Track):
         ]
 
         return smoothed_list
+    
+    def _smooth_log_bandwidths(self):
+        smoothed_b_list = [
+            self.smoother.smooth(x)
+            for x in np.log(self.bandwidths)
+        ]
+        return smoothed_b_list
 
     @property
     def smoothed_formants(self):
         return np.array(
             [x.smoothed for x in self.smoothed_list]
+        )
+
+    @property
+    def smoothed_bandwidths(self):
+        return np.array(
+            [x.smoothed for x in self.smoothed_b_list]
         )
 
     @property
@@ -219,6 +243,12 @@ class OneTrack(Track):
         return np.array([
             x.params for x in self.smoothed_log_list
         ])
+    
+    @property
+    def bandwidth_parameters(self):
+        return np.array(
+            [x.params for x in self.smoothed_b_list]
+        )
 
     @property
     def smooth_error(self):
