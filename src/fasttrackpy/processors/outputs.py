@@ -53,6 +53,9 @@ def formant_to_dataframe(self):
     smooth_names = [
         f"F{x}_s" for x in np.arange(self.n_formants)+1
     ]
+    bandwidth_names = [
+        f"B{x}" for x in np.arange(self.n_formants)+1
+    ]
 
     orig_df = pl.DataFrame(
         data = self.formants[0:self.n_formants],
@@ -64,7 +67,12 @@ def formant_to_dataframe(self):
         schema=smooth_names
     )
 
-    out_df = pl.concat([orig_df, smooth_df], how = "horizontal")
+    bandwidth_df = pl.DataFrame(
+        data = np.exp(self.smoothed_bandwidths[0:self.n_formants]),
+        schema = bandwidth_names
+    )
+
+    out_df = pl.concat([orig_df, smooth_df, bandwidth_df], how = "horizontal")
 
     out_df = out_df.with_columns(
         error = pl.lit(self.smooth_error),
