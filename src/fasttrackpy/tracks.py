@@ -14,6 +14,7 @@ from aligned_textgrid import SequenceInterval
 from aligned_textgrid.sequences.tiers import TierGroup
 
 import polars as pl
+from collections.abc import Sequence
 
 from typing import Union, Literal
 import warnings
@@ -381,7 +382,7 @@ class OneTrack(Track):
 
 
 
-class CandidateTracks(Track):
+class CandidateTracks(Track, Sequence):
     """A class for candidate tracks for a single formant
 
     You can provide *either*
@@ -510,6 +511,12 @@ class CandidateTracks(Track):
 
         self.winner_idx = np.argmin(self.smooth_errors)
         self.winner = self.candidates[self.winner_idx]
+    
+    def __getitem__(self, idx:int) -> OneTrack:
+        return self.candidates[idx]
+    
+    def __len__(self) -> int:
+        return len(self.candidates)
 
     @property
     def file_name(self):
