@@ -80,32 +80,40 @@ class Track:
         self.heuristic_values = heuristic_values
 
     def get_smooth_error(self, smoothed_formants, smoothed_bandwidths):
-        msqe =  self.loss_fun.calculate_loss(
-            self.formants[0:self.n_formants],
-            smoothed_formants[0:self.n_formants]
+        """Calculates the smooth error with heuristic penalties."""
+
+        msqe = self.loss_fun.calculate_loss(
+            self.formants[:self.n_formants], 
+            smoothed_formants[:self.n_formants]
         )
         error = self.agg_fun.aggregate(msqe)
-        for i in range(self.n_formants): # checking for min/max frequency/bandwidth heuristics
-            if (i+1 in self.heuristic_values["max_freq"]) and (self.heuristics["max_freq"]):
-                if np.median(smoothed_formants[i]) > self.heuristic_values["max_freq"][i+1]:
-                    error += 10000  
-            if (i+1 in self.heuristic_values["min_freq"]) and (self.heuristics["min_freq"]):
-                if np.median(smoothed_formants[i]) < self.heuristic_values["min_freq"][i+1]:
-                    error += 10000 
-            if (i+1 in self.heuristic_values["max_bw"]) and (self.heuristics["max_bw"]):
-                if np.median(smoothed_bandwidths[i]) > self.heuristic_values["max_bw"][i+1]:
-                    error += 10000 
-            if (i+1 in self.heuristic_values["min_bw"]) and (self.heuristivs["min_bw"]):
-                if np.median(smoothed_bandwidths[i]) < self.heuristic_values["min_bw"][i+1]:
-                    error += 10000 
-        if (self.n_formants > 2) and (self.heuristics["rhotic"]): # checking for the rhotic heuristic
+
+        def _apply_heuristic(heuristic_name, comparison_lambda, smoothed_values):
+            """Applies a heuristic if it exists and conditions are met."""
+            if heuristic_name in self.heuristics and heuristic_name in self.heuristic_values and self.heuristics.get(heuristic_name, False):
+                for i in range(self.n_formants):
+                    if (i + 1) in self.heuristic_values[heuristic_name]:
+                        if comparison_lambda(smoothed_values[i], self.heuristic_values[heuristic_name][i + 1]):
+                            return 10000
+            return 0
+
+        # Apply frequency/bandwidth heuristics
+        error += _apply_heuristic("max_freq", lambda x, y: np.median(x) > y, smoothed_formants)
+        error += _apply_heuristic("min_freq", lambda x, y: np.median(x) < y, smoothed_formants)
+        error += _apply_heuristic("max_bw", lambda x, y: np.median(x) > y, smoothed_bandwidths)
+        error += _apply_heuristic("min_bw", lambda x, y: np.median(x) < y, smoothed_bandwidths)
+
+        # Apply rhotic heuristic
+        if self.n_formants > 2 and self.heuristics.get("rhotic", False) and "rhotic" in self.heuristic_values:
             if np.median(smoothed_formants[2]) < self.heuristic_values["rhotic"][0]:
-                if np.median(smoothed_formants[1]-smoothed_formants[0]) < self.heuristic_values["rhotic"][1]:
-                    error += 10000 
-        if (self.n_formants > 3) and (self.heuristics["proxF3F4"]): # checking for the F3-F4 proximity heuristic
-            if np.median(smoothed_formants[3] - smoothed_formants[2]) < self.heuristic_values["proxF3F4"][0]:
-                if np.median(smoothed_formants[1]-smoothed_formants[0]) < self.heuristic_values["proxF3F4"][1]:
+                if np.median(smoothed_formants[1] - smoothed_formants[0]) < self.heuristic_values["rhotic"][1]:
                     error += 10000
+        # Apply F3-F4 proximity heuristic
+        if self.n_formants > 3 and self.heuristics.get("proxF3F4", False) and "proxF3F4" in self.heuristic_values:
+            if np.median(smoothed_formants[3] - smoothed_formants[2]) < self.heuristic_values["proxF3F4"][0]:
+                if np.median(smoothed_formants[1] - smoothed_formants[0]) < self.heuristic_values["proxF3F4"][1]:
+                    error += 10000
+        print(error)
         return error
         
     @property
