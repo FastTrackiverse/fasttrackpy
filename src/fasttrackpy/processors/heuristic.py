@@ -150,7 +150,7 @@ class SpacingHeuristic:
 
 F1_Max: Annotated[
     MinMaxHeuristic, 
-    "F1 should not be greater than 1200 hz"
+    "F1 should not be greater than 1200 Hz"
 ] = MinMaxHeuristic(
     edge="max",
     measure="frequency",
@@ -158,12 +158,12 @@ F1_Max: Annotated[
     boundary=1200
 )
 """
-[](`~fasttrackpy.processors.heuristic.MinMaxHeuristic`): F1 should not be greater than 1200 hz
+[](`~fasttrackpy.processors.heuristic.MinMaxHeuristic`): F1 should not be greater than 1200 Hz
 """
 
 B2_Max: Annotated[
     MinMaxHeuristic, 
-    "B2 should not be greater than 500 hz"
+    "B2 should not be greater than 500 Hz"
 ] = MinMaxHeuristic(
     edge="max",
     measure="bandwidth",
@@ -171,12 +171,12 @@ B2_Max: Annotated[
     boundary=500
 )
 """
-[](`~fasttrackpy.processors.heuristic.MinMaxHeuristic`): B2 should not be greater than 500 hz
+[](`~fasttrackpy.processors.heuristic.MinMaxHeuristic`): B2 should not be greater than 500 Hz
 """
 
 B3_Max: Annotated[
     MinMaxHeuristic, 
-    "B3 should not be greater than 600 hz"
+    "B3 should not be greater than 600 Hz"
 ] = MinMaxHeuristic(
     edge="max",
     measure="bandwidth",
@@ -184,7 +184,7 @@ B3_Max: Annotated[
     boundary=600
 )
 """
-[](`~fasttrackpy.processors.heuristic.MinMaxHeuristic`): B3 should not be greater than 600 hz
+[](`~fasttrackpy.processors.heuristic.MinMaxHeuristic`): B3 should not be greater than 600 Hz
 """
 
 F4_Min:  Annotated[
