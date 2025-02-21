@@ -108,5 +108,71 @@ class TestMinMax:
         assert not np.isfinite(low_check)
 
 
+class TestSpacing:
 
+    def test_f3_spacing(self):
+        low_f3_close = MockTrack(
+            formants = np.array([100, 200, 1000])
+        )
 
+        low_f3_far = MockTrack(
+            formants = np.array([100, 700, 1000])
+        )
+
+        high_f3_close = MockTrack(
+            formants = np.array([100, 200, 3000])
+        )
+
+        high_f3_far = MockTrack(
+            formants = np.array([100, 700, 3000])
+        )
+
+        f3_spacing = SpacingHeuristic(
+            top = [3],
+            bottom = [1,2],
+            top_diff=2000,
+            bottom_diff=500
+        )
+
+        lf3c_check = f3_spacing.eval(low_f3_close)
+        lf3f_check = f3_spacing.eval(low_f3_far)
+        hf3c_check = f3_spacing.eval(high_f3_close)
+        hf3f_check = f3_spacing.eval(high_f3_far)
+
+        assert not np.isfinite(lf3c_check)
+        assert lf3f_check == 0
+        assert hf3c_check == 0
+        assert hf3f_check == 0
+
+    def test_f3f4_spacing(self):
+        close_close = MockTrack(
+            formants = np.array([100, 200, 2000, 2400])
+        )
+        close_far = MockTrack(
+            formants = np.array([100, 1700, 2000, 2400])
+        )
+        
+        far_close = MockTrack(
+            formants = np.array([100, 200, 2000, 3000])
+        )
+
+        far_far = MockTrack(
+            formants = np.array([100, 1700, 2000, 3000])
+        )
+
+        f3f4_space = SpacingHeuristic(
+            top = [3,4],
+            bottom=[1,2],
+            top_diff=500,
+            bottom_diff=1500
+        )
+
+        cc_check = f3f4_space.eval(close_close)
+        cf_check = f3f4_space.eval(close_far)
+        fc_check = f3f4_space.eval(far_close)
+        ff_check = f3f4_space.eval(far_far)
+
+        assert not np.isfinite(cc_check)
+        assert cf_check == 0
+        assert fc_check == 0
+        assert ff_check == 0

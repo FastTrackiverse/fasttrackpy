@@ -84,12 +84,12 @@ class SpacingHeuristic:
             return 0
         
         top_values = np.array([
-            np.exp(track.log_parameters[idx,0]*np.sqrt(2))
+            np.exp(track.log_parameters[idx-1,0]*np.sqrt(2))
             for idx in self.top
         ])
 
         bottom_values = np.array([
-            np.exp(track.log_parameters[idx,0]*np.sqrt(2))
+            np.exp(track.log_parameters[idx-1,0]*np.sqrt(2))
             for idx in self.bottom
         ])
 
