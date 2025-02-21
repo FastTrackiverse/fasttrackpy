@@ -9,6 +9,11 @@ from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            get_big_df,\
                                            spectrogram,\
                                            candidate_spectrograms
+from fasttrackpy.processors.heuristic import (
+    MinMaxHeuristic,
+    SpacingHeuristic
+)
+
 import matplotlib.pyplot as mp
 from aligned_textgrid import SequenceInterval
 from aligned_textgrid.sequences.tiers import TierGroup
@@ -42,23 +47,7 @@ class Track:
             pre_emphasis_from: float = 50,
             smoother: Smoother = Smoother(),
             loss_fun: Loss = Loss(),
-            agg_fun: Agg = Agg(),
-            heuristics: dict = {
-                "max_freq": False,
-                "min_freq": False,
-                "max_bw": False,
-                "min_bw": False,
-                "rhotic": False,
-                "proxF3F4": False
-            },
-            heuristic_values: dict = {
-                "max_freq": {1: 1200}, # median F1 frequency should not be higher than 1200 Hz
-                "min_freq": {},
-                "max_bw": {2: 500, 3: 600, 4: 900}, # median bandwidths should not be higher than values
-                "min_bw": {},
-                "rhotic": [2000, 500], # if F3<2000Hz, F1&F2 should be at least 500Hz apart
-                "proxF3F4": [500, 1500] # if F4-F3<500Hz, F1&F2 should be at least 1500Hz apart
-            }
+            agg_fun: Agg = Agg()
     ):
         #self.sound = sound
         if sound:
@@ -76,45 +65,6 @@ class Track:
         self.smoother = smoother
         self.loss_fun = loss_fun
         self.agg_fun = agg_fun
-        self.heuristics = heuristics
-        self.heuristic_values = heuristic_values
-
-    def get_smooth_error(self, smoothed_formants, smoothed_bandwidths):
-        """Calculates the smooth error with heuristic penalties."""
-
-        msqe = self.loss_fun.calculate_loss(
-            self.formants[:self.n_formants], 
-            smoothed_formants[:self.n_formants]
-        )
-        error = self.agg_fun.aggregate(msqe)
-
-        def _apply_heuristic(heuristic_name, comparison_lambda, smoothed_values):
-            """Applies a heuristic if it exists and conditions are met."""
-            if heuristic_name in self.heuristics and heuristic_name in self.heuristic_values and self.heuristics.get(heuristic_name, False):
-                for i in range(self.n_formants):
-                    if (i + 1) in self.heuristic_values[heuristic_name]:
-                        if comparison_lambda(smoothed_values[i], self.heuristic_values[heuristic_name][i + 1]):
-                            return 10000
-            return 0
-
-        # Apply frequency/bandwidth heuristics
-        error += _apply_heuristic("max_freq", lambda x, y: np.median(x) > y, smoothed_formants)
-        error += _apply_heuristic("min_freq", lambda x, y: np.median(x) < y, smoothed_formants)
-        error += _apply_heuristic("max_bw", lambda x, y: np.median(x) > y, smoothed_bandwidths)
-        error += _apply_heuristic("min_bw", lambda x, y: np.median(x) < y, smoothed_bandwidths)
-
-        # Apply rhotic heuristic
-        if self.n_formants > 2 and self.heuristics.get("rhotic", False) and "rhotic" in self.heuristic_values:
-            if np.median(smoothed_formants[2]) < self.heuristic_values["rhotic"][0]:
-                if np.median(smoothed_formants[1] - smoothed_formants[0]) < self.heuristic_values["rhotic"][1]:
-                    error += 10000
-        # Apply F3-F4 proximity heuristic
-        if self.n_formants > 3 and self.heuristics.get("proxF3F4", False) and "proxF3F4" in self.heuristic_values:
-            if np.median(smoothed_formants[3] - smoothed_formants[2]) < self.heuristic_values["proxF3F4"][0]:
-                if np.median(smoothed_formants[1] - smoothed_formants[0]) < self.heuristic_values["proxF3F4"][1]:
-                    error += 10000
-        print(error)
-        return error
         
     @property
     def sound(self):
@@ -161,25 +111,8 @@ class OneTrack(Track):
             Defaults to Loss().
         agg_fun (Agg, optional): The loss aggregation function to use.
             Defaults to Agg().
-        heuristics (dict, optional): A dictionary specifying which heuristics to include.
-            Expected keys:
-            - `"max_freq"` (bool)
-            - `"min_freq"` (bool)
-            - `"max_bw"` (bool)
-            - `"min_bw"` (bool)
-            - `"rhotic"` (bool)
-            - `"proxF3F4"` (bool)
-            Defaults to False for all.
-        heuristic_values (dict, optional): A dictionary specifying values for included heuristics.
-            Expected keys:
-            - `"max_freq"` (dict): formant numbers (1, 2, etc.) as keys, frequencies (1200, etc.) as values.
-            - `"min_freq"` (dict): formant numbers as keys, frequencies as values.
-            - `"max_bw"` (dict): formant numbers as keys, bandwidths (500, etc.) as values.
-            - `"min_bw"` (dict): formant numbers as keys, bandwidths as values.
-            - `"rhotic"` (list): 2-value list. If F3 is less than the first value then the second value is the min distance between F1 and F2.
-            - `"proxF3F4"` (list): 2-value list. If the F4-F3 is less than the first value then the second values is the min distance between F1 and F2.
-
-             
+        heuristics (list[MinMaxHeuristic|SpacingHeuristic]):
+            A list of formant tracking heuristics to use.
 
     Attributes:
         maximum_formant (float): The max formant
@@ -211,22 +144,7 @@ class OneTrack(Track):
             smoother: Smoother = Smoother(),
             loss_fun: Loss = Loss(),
             agg_fun: Agg = Agg(),
-            heuristics: dict = {
-                "max_freq": False,
-                "min_freq": False,
-                "max_bw": False,
-                "min_bw": False,
-                "rhotic": False,
-                "proxF3F4": False
-            },
-            heuristic_values: dict = {
-                "max_freq": {1: 1200}, # median F1 frequency should not be higher than 1200 Hz
-                "min_freq": {},
-                "max_bw": {2: 500, 3: 600, 4: 900}, # median bandwidths should not be higher than values
-                "min_bw": {},
-                "rhotic": [2000, 500], # if F3<2000Hz, F1&F2 should be at least 500Hz apart
-                "proxF3F4": [500, 1500] # if F4-F3<500Hz, F1&F2 should be at least 1500Hz apart
-            }
+            heuristics: list[MinMaxHeuristic|SpacingHeuristic] = [],
         ):
         super().__init__(
             sound=sound,
@@ -239,9 +157,7 @@ class OneTrack(Track):
             pre_emphasis_from=pre_emphasis_from,
             smoother=smoother,
             loss_fun=loss_fun,
-            agg_fun=agg_fun,
-            heuristics=heuristics,
-            heuristic_values=heuristic_values
+            agg_fun=agg_fun
         )
         self.maximum_formant = maximum_formant
 
@@ -250,6 +166,7 @@ class OneTrack(Track):
         self.smoothed_b_list = self._smooth_bandwidths()
         self.smoothed_b_log_list = self._smooth_log_bandwidths()
         self.smoothed_log_list = self._smooth_log_formants()
+        self.heuristics = heuristics
         self._file_name = None
         self._id = None
         self._group = None
@@ -354,7 +271,27 @@ class OneTrack(Track):
 
     @property
     def smooth_error(self):
-        return super().get_smooth_error(self.smoothed_formants, self.smoothed_bandwidths)
+        msqe =  self.loss_fun.calculate_loss(
+            self.formants[0:self.n_formants],
+            self.smoothed_formants[0:self.n_formants]
+        )
+        error = self.agg_fun.aggregate(msqe)
+        return error
+    
+    @property
+    def heuristic_error(self):
+        error = 0
+        if len(self.heuristics) < 1:
+            return error
+
+        for heuristic in self.heuristics:
+            error += heuristic.eval(self)
+        
+        return error
+    
+    @property
+    def total_error(self):
+        return self.smooth_error + self.heuristic_error
 
     @property
     def file_name(self):
@@ -519,23 +456,8 @@ class CandidateTracks(Track, Sequence):
             Defaults to Loss().
         agg_fun (Agg, optional): The loss aggregation function to use.
             Defaults to Agg().
-        heuristics (dict, optional): A dictionary specifying which heuristics to include.
-            Expected keys:
-            - `"max_freq"` (bool)
-            - `"min_freq"` (bool)
-            - `"max_bw"` (bool)
-            - `"min_bw"` (bool)
-            - `"rhotic"` (bool)
-            - `"proxF3F4"` (bool)
-            Defaults to False for all.
-        heuristic_values (dict, optional): A dictionary specifying values for included heuristics.
-            Expected keys:
-            - `"max_freq"` (dict): formant numbers (1, 2, etc.) as keys, frequencies (1200, etc.) as values.
-            - `"min_freq"` (dict): formant numbers as keys, frequencies as values.
-            - `"max_bw"` (dict): formant numbers as keys, bandwidths (500, etc.) as values.
-            - `"min_bw"` (dict): formant numbers as keys, bandwidths as values.
-            - `"rhotic"` (list): 2-value list. If F3 is less than the first value then the second value is the min distance between F1 and F2.
-            - `"proxF3F4"` (list): 2-value list. If the F4-F3 is less than the first value then the second values is the min distance between F1 and F2.
+        heuristics (list[MinMaxHeuristic|SpacingHeuristic]):
+            A list of formant tracking heuristics to use.
 
     Attributes:
         candidates (list[OneTrack,...]): A list of `OneTrack` tracks.
@@ -564,22 +486,7 @@ class CandidateTracks(Track, Sequence):
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg(),
-        heuristics: dict = {
-            "max_freq": False,
-            "min_freq": False,
-            "max_bw": False,
-            "min_bw": False,
-            "rhotic": False,
-            "proxF3F4": False
-        },
-        heuristic_values: dict = {
-            "max_freq": {1: 1200}, # median F1 frequency should not be higher than 1200 Hz
-            "min_freq": {},
-            "max_bw": {2: 500, 3: 600, 4: 900}, # median bandwidths should not be higher than values
-            "min_bw": {},
-            "rhotic": [2000, 500], # if F3<2000Hz, F1&F2 should be at least 500Hz apart
-            "proxF3F4": [500, 1500] # if F4-F3<500Hz, F1&F2 should be at least 1500Hz apart
-        }
+        heuristics: list[MinMaxHeuristic|SpacingHeuristic] = []
     ):
         super().__init__(
             sound=sound,
@@ -592,9 +499,7 @@ class CandidateTracks(Track, Sequence):
             pre_emphasis_from=pre_emphasis_from,
             smoother=smoother,
             loss_fun=loss_fun,
-            agg_fun=agg_fun,
-            heuristics=heuristics,
-            heuristic_values=heuristic_values
+            agg_fun=agg_fun
         )
 
         self.min_max_formant = min_max_formant
@@ -605,6 +510,7 @@ class CandidateTracks(Track, Sequence):
             stop = self.max_max_formant,
             num = self.nstep
         )
+        self.heuristics = heuristics
         self._file_name = None
         self._id = None
         self._label = None
@@ -627,8 +533,7 @@ class CandidateTracks(Track, Sequence):
                 "smoother": self.smoother,
                 "loss_fun": self.loss_fun,
                 "agg_fun": self.agg_fun,
-                "heuristics": self.heuristics,
-                "heuristic_values": self.heuristic_values 
+                "heuristics": self.heuristics
             }
             for max_formant in self.max_formants
         ]
@@ -640,8 +545,16 @@ class CandidateTracks(Track, Sequence):
         self.smooth_errors = np.array(
             [x.smooth_error for x in self.candidates]
         )
+        self.heuristic_errors = np.array(
+            [x.heuristic_error for x in self.candidates]
+        )
 
-        self.winner_idx = np.argmin(self.smooth_errors)
+        self.total_errors = np.copy(self.smooth_errors)
+
+        if np.any(np.isfinite(self.heuristic_errors)):
+            self.total_errors += self.heuristic_errors        
+
+        self.winner_idx = np.argmin(self.total_errors)
         self.winner = self.candidates[self.winner_idx]
     
     def __getitem__(self, idx:int) -> OneTrack:
