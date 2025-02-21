@@ -1,10 +1,11 @@
 import warnings
 from typing import Callable
 from typing import Sequence
-
+import logging
+logger = logging.getLogger("safely")
 
 def safely(
-        message: str = f"There was a problem a function's application."
+        message: str = "There was a problem in the application of {func.__name__}"
     ):
     """
     A decorator for more graceful failing. 
@@ -15,14 +16,16 @@ def safely(
     Args:
         message (str, optional): 
             A warning message in the case of an exception. 
-            Defaults to `f"There was a problem a function's application."`.
+            Defaults to `"There was a problem in the application of {func.__name__}"`.
     """
     def decorator(func:Callable):
         def safe_func(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
-            except:
-                warnings.warn(message)
+            except Exception as e:
+                logger.warning(message.format(func = func))
+                logger.warning("Exception: "+ repr(e))
+                logger.warning("args, kwargs: " + repr(args) + ", " + repr(kwargs))
                 return None
         return safe_func
     return decorator
