@@ -7,6 +7,7 @@ from fasttrackpy import CandidateTracks,\
                         Smoother,\
                         Loss,\
                         Agg
+from fasttrackpy.processors.heuristic import MinMaxHeuristic, SpacingHeuristic
 from fasttrackpy.utils.safely import safely, filter_nones
 
 from tqdm import tqdm
@@ -82,7 +83,8 @@ def process_audio_file(
         pre_emphasis_from: float = 50,
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
-        agg_fun: Agg = Agg()
+        agg_fun: Agg = Agg(),
+        heuristics: list[MinMaxHeuristic|SpacingHeuristic] = []
 )->CandidateTracks:
     """Given the path to a single audio file, return a candidates track object.
 
@@ -110,6 +112,8 @@ def process_audio_file(
             Defaults to Loss().
         agg_fun (Agg, optional): The loss aggregation function to use. 
             Defaults to Agg().
+        heuristics (list[MinMaxHeuristic|SpacingHeuristic]):
+            A list of formant tracking heuristics to use.            
 
     Returns:
         (CandidateTracks): A `CandidateTracks` object to use.
@@ -135,7 +139,8 @@ def process_audio_file(
         pre_emphasis_from=pre_emphasis_from,
         smoother=smoother,
         loss_fun=loss_fun,
-        agg_fun=agg_fun
+        agg_fun=agg_fun,
+        heuristics=heuristics
     )
     candidates.file_name = Path(str(path)).name
     return candidates
@@ -171,7 +176,8 @@ def process_directory(
         pre_emphasis_from: float = 50,
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
-        agg_fun: Agg = Agg()
+        agg_fun: Agg = Agg(),
+        heuristics: list[MinMaxHeuristic|SpacingHeuristic] = []
 )->list[CandidateTracks]:
     """Given a path to a directoy of audio files, process them all.
 
@@ -196,6 +202,8 @@ def process_directory(
             Defaults to Loss().
         agg_fun (Agg, optional): The loss aggregation function to use. 
             Defaults to Agg().
+        heuristics (list[MinMaxHeuristic|SpacingHeuristic]):
+            A list of formant tracking heuristics to use.            
 
     Returns:
         (list[CandidateTracks]): A list of `CandidateTracks` objects.
@@ -217,7 +225,8 @@ def process_directory(
             "pre_emphasis_from":pre_emphasis_from,
             "smoother":smoother,
             "loss_fun":loss_fun,
-            "agg_fun":agg_fun
+            "agg_fun":agg_fun,
+            "heuristics":heuristics
             }
             for x in all_audio
     ]
