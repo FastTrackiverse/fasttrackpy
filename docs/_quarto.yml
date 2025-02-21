@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: _site
+  preview:
+    port: 7778  
 
 website:
   title: "fasttrackpy"
@@ -102,7 +104,18 @@ quartodoc:
       contents:
         - Agg
         - processors.aggs.agg_sum
-    
+    - title: Heuristics
+      desc: Heuristics
+      contents:
+        - processors.heuristic.MinMaxHeuristic
+        - processors.heuristic.SpacingHeuristic
+        - processors.heuristic.F1_Max
+        - processors.heuristic.F4_Min
+        - processors.heuristic.B2_Max
+        - processors.heuristic.B3_Max
+        - processors.heuristic.Rhotic
+        - processors.heuristic.F3_F4_Sep
+
     - title: Utilities
       contents:
         - utils.safely
