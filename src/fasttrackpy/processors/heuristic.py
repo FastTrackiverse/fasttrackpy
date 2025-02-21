@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field
 import numpy as np
 from collections.abc import Mapping
-from typing import TYPE_CHECKING
+from typing import TypeVar, TYPE_CHECKING, Literal
 if TYPE_CHECKING:
     from fasttrackpy import OneTrack
+
+TrackType = TypeVar("OneTrack")
 
 @dataclass
 class MinMaxHeuristic:
@@ -11,12 +13,12 @@ class MinMaxHeuristic:
         _summary_
 
     """
-    edge: str = "max"
-    measure: str = "frequency"
+    edge: Literal["min", "max"] = "max"
+    measure: Literal["frequency", "bandwidth"] = "frequency"
     number: int = 1
     boundary: float|int|np.floating = 1200
 
-    def eval(self, track: OneTrack):
+    def eval(self, track: TrackType):
         """_summary_
 
         Args:
@@ -25,24 +27,27 @@ class MinMaxHeuristic:
         Returns:
             _type_: _description_
         """
-        nformants = track.smoothed_formants.shape[0]
+        nformants = track.n_formants
         if self.number > nformants:
             return 0
         
         if self.measure == "frequency":
-            median_value = np.median(
-                track.smoothed_formants[self.number-1,:]
+            mean_value = np.exp(
+                track.log_parameters[self.number-1,0]*
+                np.sqrt(2)
             )
+
         if self.measure == "bandwidth":
-            median_value = np.median(
-                track.smoothed_bandwidths[self.number-1,:]
+            mean_value = np.exp(
+                track.bandwidth_parameters[self.number-1, 0]
+                *np.sqrt(2)
             )
 
         check = False
         if self.edge == "max":
-            check = median_value > self.boundary
+            check = mean_value > float(self.boundary)
         if self.edge == "min":
-            check = median_value < self.boundary
+            check = mean_value < float(self.boundary)
 
         if check:
             return np.inf
@@ -55,12 +60,16 @@ class SpacingHeuristic:
     """_summary_
 
     """
-    top: int = 3
-    bottom: int = 0
-    diff: float|int|np.floating = 2000
-    spacing: float|int|np.floating = 500
+    top: list[int] = field(default_factory=lambda: [3])
+    bottom: list[int] = field(default_factory=lambda: [1,2])
+    top_diff: float|int|np.floating = 2000
+    bottom_diff: float|int|np.floating = 500
 
-    def eval(self, track: OneTrack):
+    def __post_init__(self):
+        self.top = np.array(self.top)
+        self.bottom = np.array(self.bottom)
+
+    def eval(self, track:TrackType):
         """_summary_
 
         Args:
@@ -69,31 +78,29 @@ class SpacingHeuristic:
         Returns:
             _type_: _description_
         """
-        nformants = track.smoothed_formants.shape[0]
-        if nformants < self.top:
+        nformants = track.n_formants
+
+        if nformants < self.top.max():
             return 0
         
-        top_median = np.median(
-            track.smoothed_formants[self.top-1,:]
-        )
+        top_values = np.array([
+            np.exp(track.log_parameters[idx,0]*np.sqrt(2))
+            for idx in self.top
+        ])
 
-        if self.bottom == 0:
-            bottom_median = 0
+        bottom_values = np.array([
+            np.exp(track.log_parameters[idx,0]*np.sqrt(2))
+            for idx in self.bottom
+        ])
+
+        if top_values.size == 1:
+            top_spacing = top_values[0]
         else:
-            bottom_median = np.median(
-                track.smoothed_formants[self.bottom-1,:]
-            )
-        
-        top_spacing = top_median - bottom_median
+            top_spacing = np.diff(top_values)
 
-        bottom_spacing = np.diff(
-            np.median(
-                track.smoothed_formants[0:2, :],
-                axis = 1
-            )
-        )
-
-        if top_spacing < self.diff and bottom_spacing < self.spacing:
+        bottom_spacing = np.diff(bottom_values)
+    
+        if top_spacing < self.top_diff and bottom_spacing < self.bottom_diff:
             return np.inf
         
         return 0
