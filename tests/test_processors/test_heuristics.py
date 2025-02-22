@@ -20,6 +20,33 @@ class MockTrack:
 
 class TestMinMax:
 
+    def test_nformant(self):
+        track_high = MockTrack(
+            formants = np.array([1300, 2500, 3000])
+        )
+
+        f1_max = MinMaxHeuristic(
+            edge="max",
+            measure = "frequency",
+            number = 1,
+            boundary=1200
+        )
+
+        f4_min = MinMaxHeuristic(
+            edge="min",
+            measure = "frequency",
+            number = 4,
+            boundary=2900
+        )
+
+        f1_check = f1_max.eval(track_high)
+        f4_check = f4_min.eval(track_high)
+
+        assert not np.isfinite(f1_check)
+        assert f4_check == 0
+
+
+
     def test_f1_max(self):
         track_high = MockTrack(
             formants = np.array([1300, 2500, 3000])
