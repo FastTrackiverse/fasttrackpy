@@ -109,13 +109,23 @@ quartodoc:
       contents:
         - processors.heuristic.MinMaxHeuristic
         - processors.heuristic.SpacingHeuristic
-        - processors.heuristic.F1_Max
-        - processors.heuristic.F4_Min
-        - processors.heuristic.B2_Max
-        - processors.heuristic.B3_Max
-        - processors.heuristic.Rhotic
-        - processors.heuristic.F3_F4_Sep
 
+    - title: Pre-specified Heuristics
+      desc: Pre-specified Heuristics
+      contents: 
+        - kind: page
+          #desc: "Heuristics"
+          path: heuristics
+          flatten: true
+          contents: 
+            - name: "processors.heuristic"
+              members:
+                - F1_Max
+                - F4_Min
+                - B2_Max
+                - B3_Max
+                - Rhotic
+                - F3_F4_Sep
     - title: Utilities
       contents:
         - utils.safely
