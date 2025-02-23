@@ -9,6 +9,11 @@ from fasttrackpy.processors.outputs import formant_to_dataframe,\
                                            get_big_df,\
                                            spectrogram,\
                                            candidate_spectrograms
+from fasttrackpy.processors.heuristic import (
+    MinMaxHeuristic,
+    SpacingHeuristic
+)
+
 import matplotlib.pyplot as mp
 from aligned_textgrid import SequenceInterval
 from aligned_textgrid.sequences.tiers import TierGroup
@@ -26,7 +31,8 @@ def _make_candidate(args_dict):
     return track
 
 class Track:
-    """A generic track class to set up attribute values
+    """
+    A generic track class to set up attribute values
     """
 
     def __init__(
@@ -105,6 +111,8 @@ class OneTrack(Track):
             Defaults to Loss().
         agg_fun (Agg, optional): The loss aggregation function to use.
             Defaults to Agg().
+        heuristics (list[MinMaxHeuristic|SpacingHeuristic]):
+            A list of formant tracking heuristics to use.
 
     Attributes:
         maximum_formant (float): The max formant
@@ -135,7 +143,8 @@ class OneTrack(Track):
             pre_emphasis_from: float = 50,
             smoother: Smoother = Smoother(),
             loss_fun: Loss = Loss(),
-            agg_fun: Agg = Agg()
+            agg_fun: Agg = Agg(),
+            heuristics: list[MinMaxHeuristic|SpacingHeuristic] = [],
         ):
         super().__init__(
             sound=sound,
@@ -154,8 +163,10 @@ class OneTrack(Track):
 
         self.formants, self.bandwidths, self.time_domain = self._track_formants()
         self.smoothed_list = self._smooth_formants()
-        self.smoothed_b_list = self._smooth_log_bandwidths()
+        self.smoothed_b_list = self._smooth_bandwidths()
+        self.smoothed_b_log_list = self._smooth_log_bandwidths()
         self.smoothed_log_list = self._smooth_log_formants()
+        self.heuristics = heuristics
         self._file_name = None
         self._id = None
         self._group = None
@@ -213,6 +224,13 @@ class OneTrack(Track):
         ]
 
         return smoothed_list
+
+    def _smooth_bandwidths(self):
+        smoothed_b_list = [
+          self.smoother.smooth(x)
+            for x in self.bandwidths
+        ]
+        return smoothed_b_list
     
     def _smooth_log_bandwidths(self):
         smoothed_b_list = [
@@ -230,7 +248,7 @@ class OneTrack(Track):
     @property
     def smoothed_bandwidths(self):
         return np.array(
-            [x.smoothed for x in self.smoothed_b_list]
+            [x.smoothed for x in self.smoothed_b_log_list]
         )
 
     @property
@@ -248,7 +266,7 @@ class OneTrack(Track):
     @property
     def bandwidth_parameters(self):
         return np.array(
-            [x.params for x in self.smoothed_b_list]
+            [x.params for x in self.smoothed_b_log_list]
         )
 
     @property
@@ -259,6 +277,21 @@ class OneTrack(Track):
         )
         error = self.agg_fun.aggregate(msqe)
         return error
+    
+    @property
+    def heuristic_error(self):
+        error = 0
+        if len(self.heuristics) < 1:
+            return error
+
+        for heuristic in self.heuristics:
+            error += heuristic.eval(self)
+        
+        return error
+    
+    @property
+    def total_error(self):
+        return self.smooth_error + self.heuristic_error
 
     @property
     def file_name(self):
@@ -423,6 +456,8 @@ class CandidateTracks(Track, Sequence):
             Defaults to Loss().
         agg_fun (Agg, optional): The loss aggregation function to use.
             Defaults to Agg().
+        heuristics (list[MinMaxHeuristic|SpacingHeuristic]):
+            A list of formant tracking heuristics to use.
 
     Attributes:
         candidates (list[OneTrack,...]): A list of `OneTrack` tracks.
@@ -450,7 +485,8 @@ class CandidateTracks(Track, Sequence):
         pre_emphasis_from: float = 50,
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
-        agg_fun: Agg = Agg()
+        agg_fun: Agg = Agg(),
+        heuristics: list[MinMaxHeuristic|SpacingHeuristic] = []
     ):
         super().__init__(
             sound=sound,
@@ -474,6 +510,7 @@ class CandidateTracks(Track, Sequence):
             stop = self.max_max_formant,
             num = self.nstep
         )
+        self.heuristics = heuristics
         self._file_name = None
         self._id = None
         self._label = None
@@ -495,8 +532,8 @@ class CandidateTracks(Track, Sequence):
                 "pre_emphasis_from": self.pre_emphasis_from,
                 "smoother": self.smoother,
                 "loss_fun": self.loss_fun,
-                "agg_fun": self.agg_fun                
-
+                "agg_fun": self.agg_fun,
+                "heuristics": self.heuristics
             }
             for max_formant in self.max_formants
         ]
@@ -508,8 +545,16 @@ class CandidateTracks(Track, Sequence):
         self.smooth_errors = np.array(
             [x.smooth_error for x in self.candidates]
         )
+        self.heuristic_errors = np.array(
+            [x.heuristic_error for x in self.candidates]
+        )
 
-        self.winner_idx = np.argmin(self.smooth_errors)
+        self.total_errors = np.copy(self.smooth_errors)
+
+        if np.any(np.isfinite(self.heuristic_errors)):
+            self.total_errors += self.heuristic_errors        
+
+        self.winner_idx = np.argmin(self.total_errors)
         self.winner = self.candidates[self.winner_idx]
     
     def __getitem__(self, idx:int) -> OneTrack:
