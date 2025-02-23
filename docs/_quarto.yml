@@ -104,12 +104,11 @@ quartodoc:
       contents:
         - Agg
         - processors.aggs.agg_sum
-    - title: Heuristics
-      desc: Heuristics
+    - title: Heuristic Classes
+      desc: Heuristics Classes
       contents:
-        - processors.heuristic.MinMaxHeuristic
-        - processors.heuristic.SpacingHeuristic
-
+        - MinMaxHeuristic
+        - SpacingHeuristic
     - title: Pre-specified Heuristics
       desc: Pre-specified Heuristics
       contents: 
