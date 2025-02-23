@@ -1,104 +1,5 @@
 [
   {
-    "objectID": "usage/getting_started.html",
-    "href": "usage/getting_started.html",
-    "title": "Quickstart",
-    "section": "",
-    "text": "After installing fasttrackpy, you can use the fasttrack commandline executable. For a full list of all settable options, see All FastTrack Options",
-    "crumbs": [
-      "Home",
-      "Quickstart"
-    ]
-  },
-  {
-    "objectID": "usage/getting_started.html#audio-file-only-processing",
-    "href": "usage/getting_started.html#audio-file-only-processing",
-    "title": "Quickstart",
-    "section": "Audio File Only Processing",
-    "text": "Audio File Only Processing\nYou can process either a single audio file or a directory of audio files with fasttrack audio. To use the fasttrack defaults, just provide fasttrack audio with the path to the input file or directory, and an output file or directory.\nfasttrack audio --file assets/audio/ay.wav --dest assets/audio\nThis will save the formant tracks for this single wav file to assets/audio/ay.csv/.\nTo process an entire directory of files, instead pass the directory to --dir.\nfasttrack audio --dir assets/audio/ --dest assets/audio\nThis will save the formant tracks for each audio file with the same file name to the output directory.",
-    "crumbs": [
-      "Home",
-      "Quickstart"
-    ]
-  },
-  {
-    "objectID": "usage/getting_started.html#audio-file-textgrid-processing",
-    "href": "usage/getting_started.html#audio-file-textgrid-processing",
-    "title": "Quickstart",
-    "section": "Audio File + TextGrid Processing",
-    "text": "Audio File + TextGrid Processing\nYou can process an audio file + textgrid combination with fasttrack audio-textgrid. The defaults assume you are passing a textgrid with a Word and Phone tier from forced alignment, but this can be overriden.\nfasttrack audio-textgrid --audio speaker.wav \\\n    --textgrid speaker.TextGrid \\\n    --dest output\n\nAdjusting the assumed TextGrid format\nIf your textgrid is not formatted as force aligned textgrid, you need to pass --entry-classes the value SequenceInterval and --target-tier the name of the tier you want to analyze.\nfasttrack audio-textgrid --audio speaker.wav \\\n    --textgrid speaker.TextGrid \\\n    --dest output \\\n    --entry-classes SequenceInterval \\\n    --target-tier phones\n\n\nAdjusting the target intervals\nYou can configure fasttrack to only process certain intervals by passing --target-labels a regular expression matching values in your textgrid. For example, if you have segmented only the vowels you want to analyze, you can pass --target-labels the value \".\".\nfasttrack audio-textgrid --audio speaker.wav \\\n    --textgrid speaker.TextGrid \\\n    --dest output \\\n    --entry-classes SequenceInterval \\\n    --target-tier phones \\\n    --target-labels \".\"",
-    "crumbs": [
-      "Home",
-      "Quickstart"
-    ]
-  },
-  {
-    "objectID": "usage/getting_started.html#processing-a-corpus",
-    "href": "usage/getting_started.html#processing-a-corpus",
-    "title": "Quickstart",
-    "section": "Processing a corpus",
-    "text": "Processing a corpus\nIf you have a corpus of audio + textgrid pairs, you can process them with fasttrack corpus. You can either write the output to one large file, or have it separated by original file name & speaker with the --separate-output flag.\nfasttrack corpus --corpus data \\\n    --dest output \\\n    --separate-output",
-    "crumbs": [
-      "Home",
-      "Quickstart"
-    ]
-  },
-  {
-    "objectID": "usage/getting_started.html#using-a-config-file",
-    "href": "usage/getting_started.html#using-a-config-file",
-    "title": "Quickstart",
-    "section": "Using a config file",
-    "text": "Using a config file\nThere are many possible options to set for both fasttrack audio and fasttrack audio-textgrid. Instead of passing them all at the commandline, you can pass either command a yaml config file.\n# config.yml\nmin_max_formant: 3000\nmax_max_formant: 6000\nnstep: 10\nfasttrack audio --file ay.wav \\\n    --dest output \\\n    --config config.yml",
-    "crumbs": [
-      "Home",
-      "Quickstart"
-    ]
-  },
-  {
-    "objectID": "usage/dct.html",
-    "href": "usage/dct.html",
-    "title": "Working with the smoothing parameters",
-    "section": "",
-    "text": "FastTrackPy smooths formant trajectories using a form of Discrete Cosine Transform. Here’s how you can convert the DCT parameters back into formant track smooths after, e.g. averaging them.\nimport polars as pl\nimport matplotlib.pyplot as plt\nfrom scipy.fft import dct, idct\nimport numpy as np\nfrom fasttrackpy import process_corpus\nfrom pathlib import Path\ncorpus_path = Path(\"..\",\"assets\", \"corpus\")\nmeasurements = process_corpus(corpus_path)\n\n100%|██████████| 65/65 [00:01&lt;00:00, 62.80it/s]\n100%|██████████| 274/274 [00:01&lt;00:00, 224.56it/s]\nLet’s just look at /ay/ from these speakers.\nays = [track for track in measurements if track.label == \"AY1\"]\nays[0].winner.spectrogram()",
-    "crumbs": [
-      "Home",
-      "Working with the smoothing parameters"
-    ]
-  },
-  {
-    "objectID": "usage/dct.html#the-discrete-cosine-transform",
-    "href": "usage/dct.html#the-discrete-cosine-transform",
-    "title": "Working with the smoothing parameters",
-    "section": "The Discrete Cosine Transform",
-    "text": "The Discrete Cosine Transform\nThe smoothed formants are a 5th order discrete cosine transform. The DCT parameters are estimated via regression, using the following basis.\n\ntime = ays[0].winner.time_domain\nN = time.size\norder = 5\n\nfull_basis = dct(\n    np.eye(N), \n    orthogonalize=True, \n    norm = \"backward\"\n)\n\nbasis = full_basis[:,:order]\n\nplt.plot(time, basis)\nplt.legend(range(5))\nplt.show()\n\n\n\n\n\n\n\n\nDCT coefficients define how to weight and sum this bank of cosine functions to match the input signal.\n\n# the dct coefs for f1\nf1_params = ays[0].winner.parameters[0,:]\n\n# the formant track\nf1 = ays[0].winner.formants[0,:]\n\nplt.plot(time, basis * f1_params)\nplt.title(\"weighted coefficients\")\nplt.show()\n\n\n\n\n\n\n\n\n\nplt.plot(time, basis @ f1_params)\nplt.plot(time, f1)\nplt.title(\"weighted and summed\")\nplt.legend([\"DCT\", \"F1\"])\nplt.show()\n\n\n\n\n\n\n\n\nIt’s possible to estimate DCT coefficients directly with scipy.fft.dct, but because there is potential for missing data in some formant tracks, FastTrackPy instead estimates the DCT coefficients using regression.\n\ndef reg_fit(x, basis):\n    params = np.linalg.inv(basis.T @ basis) @ (basis.T @ x)\n    return params\n\nparams = reg_fit(f1, basis)\nprint(params)\n\n[480.35423508  42.95237019 -25.847216    43.60350087 -21.40266949]",
-    "crumbs": [
-      "Home",
-      "Working with the smoothing parameters"
-    ]
-  },
-  {
-    "objectID": "usage/dct.html#inverting-the-dct",
-    "href": "usage/dct.html#inverting-the-dct",
-    "title": "Working with the smoothing parameters",
-    "section": "Inverting the DCT",
-    "text": "Inverting the DCT\nIt’s possible to invert the DCT parameters with scipy.fft.idct(), with orthognalize = True and norm = \"forward\". You also need to define how large you want the resulting smooth to be with n\n\nf1_smooth = idct(\n    params, \n    n = time.size, \n    orthogonalize=True, \n    norm = \"forward\"\n    )\n\nplt.plot(time, f1_smooth)\nplt.plot(time, f1)\nplt.legend([\"smooth\", \"F1\"])\nplt.show()",
-    "crumbs": [
-      "Home",
-      "Working with the smoothing parameters"
-    ]
-  },
-  {
-    "objectID": "usage/dct.html#benefits-of-using-the-dct-parameters",
-    "href": "usage/dct.html#benefits-of-using-the-dct-parameters",
-    "title": "Working with the smoothing parameters",
-    "section": "Benefits of using the DCT parameters",
-    "text": "Benefits of using the DCT parameters\n\n“Down sampling”\nIt’s somewhat commmon to reduce the number of measurement points from a formant track to a common number (e.g. 20 evenly spaced points). We can achieve that by inverting the DCT parameters and using differently sized outputs.\n\nsmooth_100 = idct(params, n = 100, orthogonalize=True, norm = \"forward\")\nsmooth_20 = idct(params, n = 20, orthogonalize=True, norm = \"forward\")\n\nplt.scatter(\n    np.arange(100)/99,\n    smooth_100\n)\n\nplt.scatter(\n    np.arange(20)/19,\n    smooth_20\n)\nplt.legend([\"100\", \"20\"])\nplt.show()\n\n\n\n\n\n\n\n\n\n\nAveraging\nInstead of point-wise averaging over formant tracks, you can instead average over the DCT parameters, then invert the average. We can get a polars data frame of all of the parameters of /ays/ from these speakers with the .to_df() method,\n\nall_ay_param = pl.concat([\n    ay.to_df(output = \"param\")\n    for ay in ays\n])\nall_ay_param.head()\n\n\nshape: (5, 10)\n\n\n\nparam\nF1\nF2\nF3\nF4\nerror\nfile_name\nid\ngroup\nlabel\n\n\nu32\nf64\nf64\nf64\nf64\nf64\nstr\nstr\nstr\nstr\n\n\n\n\n0\n480.354235\n979.982402\n1844.645657\n2375.309331\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n1\n42.95237\n-130.966974\n-15.909405\n2.074594\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n2\n-25.847216\n13.467448\n-67.211033\n-35.364144\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n3\n43.603501\n4.180242\n-84.055828\n18.796364\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n4\n-21.402669\n-2.113492\n-42.2589\n-20.556695\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n\n\n\n\nTo get the the average of each parameter for each speaker, we need to group the dataframe by the param, file_name and group columns, then aggregate them.\n\nay_param_means = (all_ay_param\n .group_by(\n     [\"param\", \"file_name\", \"group\", ], \n     maintain_order = True)\n .agg(\n     pl.col(\"F1\").mean()\n )\n)\nay_param_means.head()\n\n\nshape: (5, 4)\n\n\n\nparam\nfile_name\ngroup\nF1\n\n\nu32\nstr\nstr\nf64\n\n\n\n\n0\n\"KY25A_1\"\n\"KY25A\"\n509.370491\n\n\n1\n\"KY25A_1\"\n\"KY25A\"\n44.866749\n\n\n2\n\"KY25A_1\"\n\"KY25A\"\n-8.803074\n\n\n3\n\"KY25A_1\"\n\"KY25A\"\n27.038315\n\n\n4\n\"KY25A_1\"\n\"KY25A\"\n-11.637004\n\n\n\n\n\n\nHere’s the fitted F1 for the first speaker.\n\nspeaker_params = ay_param_means[\"F1\"][0:5]\nspeaker_fit = idct(\n    speaker_params,\n    n = 100,\n    orthogonalize=True,\n    norm=\"forward\"\n)\n\nplt.plot(speaker_fit)\nplt.show()\n\n\n\n\n\n\n\n\nThe code below for getting fitted F1 tracks for each speaker is a bit detailed with respect to how polars dataframes work, but the process could be replicated in whatever way a user feels comfortable.\n\nay_fits = (\n    ay_param_means\n    .group_by([\"file_name\", \"group\"])\n    .agg(pl.col(\"F1\"))\n    .with_columns(\n        f1_fit =pl.col(\"F1\")\n                  .map_elements(\n                      lambda x: idct(x, n = 100, orthogonalize=True, norm = \"forward\").tolist(),\n                      return_dtype=pl.List(pl.Float64)\n                      ),\n        time = pl.lit(np.linspace(0,1,100).tolist())\n    )\n    .explode([\"f1_fit\", \"time\"])\n)\n\n\nay_fits.plot(\n    \"time\",\n    \"f1_fit\",\n    by = \"group\"\n)\n\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n  \n\n\n\n\n\n\nGetting derivatives\nIf we wanted to get the first derivative (or the rate of change) of the formant track smooths, this can also be calculated (code modified from here.)\n\nfrom scipy.fft import idst\n\ndef first_deriv(coefs, size = 100):\n    hatu = coefs.copy()\n    for i in range(hatu.size):\n        hatu[i]=-(i)*hatu[i]\n    hatu[:-1]=hatu[1:]\n    hatu[-1]=0\n    dotu=idst(hatu, n = size, type=2)\n    return dotu\n\n\nspeaker_fit = (\n    ay_fits\n    .filter(pl.col(\"group\").str.contains(\"group\"))\n)\n\nspeaker_params = (\n    ay_param_means\n    .filter(pl.col(\"group\").str.contains(\"group\"))\n    .select(\"F1\")\n)\n\nspeaker_rate = first_deriv(speaker_params[\"F1\"].to_numpy(), size = 100)\n\n\nfig, axes = plt.subplots(nrows= 1, ncols=2)\naxes[0].plot(speaker_fit[\"f1_fit\"])\naxes[0].set_title(\"f1\")\naxes[1].plot(speaker_rate)\naxes[1].set_title(\"first derivative\")\nplt.show()",
-    "crumbs": [
-      "Home",
-      "Working with the smoothing parameters"
-    ]
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Home",
@@ -139,11 +40,44 @@
     ]
   },
   {
+    "objectID": "reference/processors.losses.lmse.html",
+    "href": "reference/processors.losses.lmse.html",
+    "title": "processors.losses.lmse",
+    "section": "",
+    "text": "processors.losses.lmse(formants, smoothed, axis=1)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description",
+    "crumbs": [
+      "Losses",
+      "processors.losses.lmse"
+    ]
+  },
+  {
+    "objectID": "reference/processors.losses.lmse.html#parameters",
+    "href": "reference/processors.losses.lmse.html#parameters",
+    "title": "processors.losses.lmse",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1",
+    "crumbs": [
+      "Losses",
+      "processors.losses.lmse"
+    ]
+  },
+  {
+    "objectID": "reference/processors.losses.lmse.html#returns",
+    "href": "reference/processors.losses.lmse.html#returns",
+    "title": "processors.losses.lmse",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description",
+    "crumbs": [
+      "Losses",
+      "processors.losses.lmse"
+    ]
+  },
+  {
     "objectID": "reference/OneTrack.html",
     "href": "reference/OneTrack.html",
     "title": "OneTrack",
     "section": "",
-    "text": "OneTrack(self, maximum_formant, sound=None, samples=None, sampling_frequency=None, xmin=0.0, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nA single formant track.\nYou can provide either\n\nA parselmouth Sound object to the sound argument\n\nxor\n\nAn array of audio samples to the samples argument\nThe sampling frequency to the sampling_frequency argument\nAny optional time offset to the xmin argument.\n\nIf a Sound object is passed to sound, any values passed to samples, sampling_frequency and xmin are ignored.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nNone\n\n\nsamples\nnp.ndarray\nA numpy array of audio samples.\nNone\n\n\nsampling_frequency\nfloat\nThe audio sampling frequency.\nNone\n\n\nxmin\nfloat\nThe time offset for the audio. Defaults to 0.0.\n0.0\n\n\nmaximum_formant\nfloat\nmax formant\nrequired\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\nmaximum_formant\nfloat\nThe max formant\n\n\ntime_domain\nnp.array\nThe time domain of the formant estimates\n\n\nformants\nnp.ndarray\nA (formants, time) array of values. The formants as initially estimated by praat-parselmouth\n\n\nsmoothed_formants\nnp.ndarray\nThe smoothed formant values, using the method passed to smoother.\n\n\nparameters\nnp.ndarray\nThe smoothing parameters.\n\n\nsmooth_error\nfloat\nThe error term between formants and smoothed formants.\n\n\nfile_name\nstr\nThe filename of the audio file, if set.\n\n\ninterval\naligned_textgrid.SequenceInterval\nThe textgrid interval of the sound, if set.\n\n\nid\nstr\nThe interval id of the sound, if set.\n\n\ngroup\nstr\nThe tier group name of the sound, if set.\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\nspectrogram\nThis will plot the spectrogram and formant tracks\n\n\nto_df\nOutput either the formant values or the formant smoothing parameters as a polars dataframe\n\n\n\n\n\nOneTrack.spectrogram(**kwargs)\nThis will plot the spectrogram and formant tracks of a single candidate track. If a file_name is provided, it will save the plot to disk.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nint\nThe number of formants to plot. Defaults to 3.\nrequired\n\n\nmaximum_frequency\nfloat\nThe frequency range the spectrogram and formants will be plotted up to. Defaults to 3500.\nrequired\n\n\ntracks\nbool\nWhether or not to plot the formant tracks. Defaults to True. If False, just the spectogram will be plotted.\nrequired\n\n\ndynamic_range\nfloat\nA all spectrogram values below the dynamic range. will be plotted as white. Defaults to 60.\nrequired\n\n\nfigsize\ntuple[float, float]\nWidth and height of the figure in inches. Defaults to (8,5).\nrequired\n\n\ncolor_scale\nstr\nA named matplotlib color scale for the spectrogram. Defaults to “Greys”. See here for more options.\nrequired\n\n\nfile_name\nPath | None\nIf provided, how to save the spectrogram. If not provided (None) the plot will show interactively. Defaults to None.\nrequired\n\n\ndpi\nfloat\nIf the plot is being saved, its image resolution in dots per inch. Defaults to 100.\nrequired\n\n\n\n\n\n\n\nOneTrack.to_df(output='formants')\nOutput either the formant values or the formant smoothing parameters as a polars dataframe\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\noutput\nLiteral[‘formants’, ‘param’, ‘log_param’]\nWhether to output the formants or the smoothing parameters. Defaults to “formants”.\n'formants'\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\npl.DataFrame\nA polars.DataFrame",
+    "text": "OneTrack(self, maximum_formant, sound=None, samples=None, sampling_frequency=None, xmin=0.0, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])\nA single formant track.\nYou can provide either\n\nA parselmouth Sound object to the sound argument\n\nxor\n\nAn array of audio samples to the samples argument\nThe sampling frequency to the sampling_frequency argument\nAny optional time offset to the xmin argument.\n\nIf a Sound object is passed to sound, any values passed to samples, sampling_frequency and xmin are ignored.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nNone\n\n\nsamples\nnp.ndarray\nA numpy array of audio samples.\nNone\n\n\nsampling_frequency\nfloat\nThe audio sampling frequency.\nNone\n\n\nxmin\nfloat\nThe time offset for the audio. Defaults to 0.0.\n0.0\n\n\nmaximum_formant\nfloat\nmax formant\nrequired\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\nmaximum_formant\nfloat\nThe max formant\n\n\ntime_domain\nnp.array\nThe time domain of the formant estimates\n\n\nformants\nnp.ndarray\nA (formants, time) array of values. The formants as initially estimated by praat-parselmouth\n\n\nsmoothed_formants\nnp.ndarray\nThe smoothed formant values, using the method passed to smoother.\n\n\nparameters\nnp.ndarray\nThe smoothing parameters.\n\n\nsmooth_error\nfloat\nThe error term between formants and smoothed formants.\n\n\nfile_name\nstr\nThe filename of the audio file, if set.\n\n\ninterval\naligned_textgrid.SequenceInterval\nThe textgrid interval of the sound, if set.\n\n\nid\nstr\nThe interval id of the sound, if set.\n\n\ngroup\nstr\nThe tier group name of the sound, if set.\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\nspectrogram\nThis will plot the spectrogram and formant tracks\n\n\nto_df\nOutput either the formant values or the formant smoothing parameters as a polars dataframe\n\n\n\n\n\nOneTrack.spectrogram(**kwargs)\nThis will plot the spectrogram and formant tracks of a single candidate track. If a file_name is provided, it will save the plot to disk.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nint\nThe number of formants to plot. Defaults to 3.\nrequired\n\n\nmaximum_frequency\nfloat\nThe frequency range the spectrogram and formants will be plotted up to. Defaults to 3500.\nrequired\n\n\ntracks\nbool\nWhether or not to plot the formant tracks. Defaults to True. If False, just the spectogram will be plotted.\nrequired\n\n\ndynamic_range\nfloat\nA all spectrogram values below the dynamic range. will be plotted as white. Defaults to 60.\nrequired\n\n\nfigsize\ntuple[float, float]\nWidth and height of the figure in inches. Defaults to (8,5).\nrequired\n\n\ncolor_scale\nstr\nA named matplotlib color scale for the spectrogram. Defaults to “Greys”. See here for more options.\nrequired\n\n\nfile_name\nPath | None\nIf provided, how to save the spectrogram. If not provided (None) the plot will show interactively. Defaults to None.\nrequired\n\n\ndpi\nfloat\nIf the plot is being saved, its image resolution in dots per inch. Defaults to 100.\nrequired\n\n\n\n\n\n\n\nOneTrack.to_df(output='formants')\nOutput either the formant values or the formant smoothing parameters as a polars dataframe\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\noutput\nLiteral[‘formants’, ‘param’, ‘log_param’]\nWhether to output the formants or the smoothing parameters. Defaults to “formants”.\n'formants'\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\npl.DataFrame\nA polars.DataFrame",
     "crumbs": [
       "Classes",
       "OneTrack"
@@ -154,7 +88,7 @@
     "href": "reference/OneTrack.html#parameters",
     "title": "OneTrack",
     "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nNone\n\n\nsamples\nnp.ndarray\nA numpy array of audio samples.\nNone\n\n\nsampling_frequency\nfloat\nThe audio sampling frequency.\nNone\n\n\nxmin\nfloat\nThe time offset for the audio. Defaults to 0.0.\n0.0\n\n\nmaximum_formant\nfloat\nmax formant\nrequired\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nNone\n\n\nsamples\nnp.ndarray\nA numpy array of audio samples.\nNone\n\n\nsampling_frequency\nfloat\nThe audio sampling frequency.\nNone\n\n\nxmin\nfloat\nThe time offset for the audio. Defaults to 0.0.\n0.0\n\n\nmaximum_formant\nfloat\nmax formant\nrequired\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]",
     "crumbs": [
       "Classes",
       "OneTrack"
@@ -183,388 +117,36 @@
     ]
   },
   {
-    "objectID": "reference/Smoother.html",
-    "href": "reference/Smoother.html",
-    "title": "Smoother",
+    "objectID": "reference/SpacingHeuristic.html",
+    "href": "reference/SpacingHeuristic.html",
+    "title": "SpacingHeuristic",
     "section": "",
-    "text": "Smoother(self, method='dct_smooth_regression', **kwargs)\nA smoother function factory\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\nThe smoothing method to use. Defaults to “dct_smooth”. Can be a custom smoother such that it takes a 1D array as input and returns a Smoothed class.\n'dct_smooth_regression'\n\n\nkwargs\n\nAny additional arguments or parameters for the method.\n{}\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\nsmooth\nApply the smoother function to the data\n\n\n\n\n\nSmoother.smooth(x)\nApply the smoother function to the data\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\na 1D numpy array\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nA Smoothed object",
+    "text": "SpacingHeuristic(top=field(default_factory=lambda : [3]), bottom=field(default_factory=lambda : [1, 2]), top_diff=2000, bottom_diff=500)\nA class for defining formant spacing heuristics.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntop\nlist[int]\nThe top formants to evaluate spacing on (or value, if the list is only 1 value long).\nfield(default_factory=lambda : [3])\n\n\nbottom\nlist[int]\nThe bottom formants to evaluate spacing on.\nfield(default_factory=lambda : [1, 2])\n\n\ntop_diff\nfloat | int | np.floating\nThe spacing of the top formants\n2000\n\n\nbottom_diff\nfloat | int | np.floating\nThe spacing of the bottom formants\n500\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\neval\nEvaluate whether or not the track passes\n\n\n\n\n\nSpacingHeuristic.eval(track)\nEvaluate whether or not the track passes the heuriustic\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntrack\nOneTrack\nThe track to evaluate.\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nLiteral[0 | np.inf]\nIf the track passes, 0. If the track doesn’t pass, np.inf.",
     "crumbs": [
-      "Smoothers",
-      "Smoother"
+      "Heuristic Classes",
+      "SpacingHeuristic"
     ]
   },
   {
-    "objectID": "reference/Smoother.html#parameters",
-    "href": "reference/Smoother.html#parameters",
-    "title": "Smoother",
+    "objectID": "reference/SpacingHeuristic.html#parameters",
+    "href": "reference/SpacingHeuristic.html#parameters",
+    "title": "SpacingHeuristic",
     "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\nThe smoothing method to use. Defaults to “dct_smooth”. Can be a custom smoother such that it takes a 1D array as input and returns a Smoothed class.\n'dct_smooth_regression'\n\n\nkwargs\n\nAny additional arguments or parameters for the method.\n{}",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\ntop\nlist[int]\nThe top formants to evaluate spacing on (or value, if the list is only 1 value long).\nfield(default_factory=lambda : [3])\n\n\nbottom\nlist[int]\nThe bottom formants to evaluate spacing on.\nfield(default_factory=lambda : [1, 2])\n\n\ntop_diff\nfloat | int | np.floating\nThe spacing of the top formants\n2000\n\n\nbottom_diff\nfloat | int | np.floating\nThe spacing of the bottom formants\n500",
     "crumbs": [
-      "Smoothers",
-      "Smoother"
+      "Heuristic Classes",
+      "SpacingHeuristic"
     ]
   },
   {
-    "objectID": "reference/Smoother.html#methods",
-    "href": "reference/Smoother.html#methods",
-    "title": "Smoother",
+    "objectID": "reference/SpacingHeuristic.html#methods",
+    "href": "reference/SpacingHeuristic.html#methods",
+    "title": "SpacingHeuristic",
     "section": "",
-    "text": "Name\nDescription\n\n\n\n\nsmooth\nApply the smoother function to the data\n\n\n\n\n\nSmoother.smooth(x)\nApply the smoother function to the data\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\na 1D numpy array\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nA Smoothed object",
+    "text": "Name\nDescription\n\n\n\n\neval\nEvaluate whether or not the track passes\n\n\n\n\n\nSpacingHeuristic.eval(track)\nEvaluate whether or not the track passes the heuriustic\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntrack\nOneTrack\nThe track to evaluate.\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nLiteral[0 | np.inf]\nIf the track passes, 0. If the track doesn’t pass, np.inf.",
     "crumbs": [
-      "Smoothers",
-      "Smoother"
-    ]
-  },
-  {
-    "objectID": "reference/utils.safely.html",
-    "href": "reference/utils.safely.html",
-    "title": "utils.safely",
-    "section": "",
-    "text": "utils.safely",
-    "crumbs": [
-      "Utilities",
-      "utils.safely"
-    ]
-  },
-  {
-    "objectID": "reference/utils.safely.html#functions",
-    "href": "reference/utils.safely.html#functions",
-    "title": "utils.safely",
-    "section": "Functions",
-    "text": "Functions\n\n\n\nName\nDescription\n\n\n\n\nfilter_nones\nFilter lists based on the presence of None values.\n\n\nsafely\nA decorator for more graceful failing.\n\n\n\n\nfilter_nones\nutils.safely.filter_nones(filterer, to_filter)\nFilter lists based on the presence of None values.\n\nUsage:\n\n# on a single list\nfrom fasttrackpy.utils.safely import filter_nones\na = [1, 2, None, 6]\n\n# value unpacking\na, = filter_nones(a, [a])\nprint(a)\n\n[1, 2, 6]\n\n\n\nfrom fasttrackpy.utils.safely import filter_nones\na = [1, 2, None, 6]\nb = [\"a\", \"b\", \"c\", \"d\"]\n\na,b = filter_nones(a, [a,b])\nprint(a)\nprint(b)\n\n[1, 2, 6]\n['a', 'b', 'd']\n\n\n\n\nParameters\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nfilterer\nSequence\nThe filterer list that may contain None values\nrequired\n\n\nto_filter\nlist[Sequence]\nA list of lists to filter.\nrequired\n\n\n\n\n\nReturns\n\n\n\nType\nDescription\n\n\n\n\nlist[Sequence]\nlist[Sequence]: description\n\n\n\n\n\n\nsafely\nutils.safely.safely(message=f'There was a problem a function's application.')\nA decorator for more graceful failing. If the decorated function raises an exception, it will return None.\n\nParameters\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmessage\nstr\nA warning message in the case of an exception. Defaults to f\"There was a problem a function's application.\".\nf'There was a problem a function's application.'",
-    "crumbs": [
-      "Utilities",
-      "utils.safely"
-    ]
-  },
-  {
-    "objectID": "reference/processors.outputs.pickle_candidates.html",
-    "href": "reference/processors.outputs.pickle_candidates.html",
-    "title": "processors.outputs.pickle_candidates",
-    "section": "",
-    "text": "processors.outputs.pickle_candidates(candidates, file)\nThis will save a CandidateTracks object to disk as a “pickle” file. Due to the way sound objects are handled, only use unpickle_candidates() to re-load the pickle object.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ncandidates\nCandidateTracks\nA CandidateTracks object to pickle.\nrequired\n\n\nfile\nPath | str\nThe file location to save the pickle file to.\nrequired",
-    "crumbs": [
-      "Outputs",
-      "processors.outputs.pickle_candidates"
-    ]
-  },
-  {
-    "objectID": "reference/processors.outputs.pickle_candidates.html#parameters",
-    "href": "reference/processors.outputs.pickle_candidates.html#parameters",
-    "title": "processors.outputs.pickle_candidates",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\ncandidates\nCandidateTracks\nA CandidateTracks object to pickle.\nrequired\n\n\nfile\nPath | str\nThe file location to save the pickle file to.\nrequired",
-    "crumbs": [
-      "Outputs",
-      "processors.outputs.pickle_candidates"
-    ]
-  },
-  {
-    "objectID": "reference/Loss.html",
-    "href": "reference/Loss.html",
-    "title": "Loss",
-    "section": "",
-    "text": "Loss(self, method='lmse', **kwargs)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “lmse”.\n'lmse'",
-    "crumbs": [
-      "Losses",
-      "Loss"
-    ]
-  },
-  {
-    "objectID": "reference/Loss.html#parameters",
-    "href": "reference/Loss.html#parameters",
-    "title": "Loss",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “lmse”.\n'lmse'",
-    "crumbs": [
-      "Losses",
-      "Loss"
-    ]
-  },
-  {
-    "objectID": "reference/process_audio_file.html",
-    "href": "reference/process_audio_file.html",
-    "title": "process_audio_file",
-    "section": "",
-    "text": "process_audio_file(path, xmin=0, xmax=None, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nGiven the path to a single audio file, return a candidates track object.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npath\nstr | Path\nPath to the audio file\nrequired\n\n\nxmin\nfloat\nStart time to process the audio. Defaults to 0.\n0\n\n\nxmax\nfloat\nEnd tome for processing audio. If None, defaults to the maximum time. Defaults to None.\nNone\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nCandidateTracks\nA CandidateTracks object to use.",
-    "crumbs": [
-      "Processing Functions",
-      "process_audio_file"
-    ]
-  },
-  {
-    "objectID": "reference/process_audio_file.html#parameters",
-    "href": "reference/process_audio_file.html#parameters",
-    "title": "process_audio_file",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npath\nstr | Path\nPath to the audio file\nrequired\n\n\nxmin\nfloat\nStart time to process the audio. Defaults to 0.\n0\n\n\nxmax\nfloat\nEnd tome for processing audio. If None, defaults to the maximum time. Defaults to None.\nNone\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()",
-    "crumbs": [
-      "Processing Functions",
-      "process_audio_file"
-    ]
-  },
-  {
-    "objectID": "reference/process_audio_file.html#returns",
-    "href": "reference/process_audio_file.html#returns",
-    "title": "process_audio_file",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nCandidateTracks\nA CandidateTracks object to use.",
-    "crumbs": [
-      "Processing Functions",
-      "process_audio_file"
-    ]
-  },
-  {
-    "objectID": "reference/processors.outputs.unpickle_candidates.html",
-    "href": "reference/processors.outputs.unpickle_candidates.html",
-    "title": "processors.outputs.unpickle_candidates",
-    "section": "",
-    "text": "processors.outputs.unpickle_candidates(file)\nThis will load a CandidateTracks object that was pickled with pickle_candidates().\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nfile\nPath | str\nThe pickled CandidateTracks object to unpickle.\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nCandidateTracks\nA CandidateTracks object.",
-    "crumbs": [
-      "Outputs",
-      "processors.outputs.unpickle_candidates"
-    ]
-  },
-  {
-    "objectID": "reference/processors.outputs.unpickle_candidates.html#parameters",
-    "href": "reference/processors.outputs.unpickle_candidates.html#parameters",
-    "title": "processors.outputs.unpickle_candidates",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nfile\nPath | str\nThe pickled CandidateTracks object to unpickle.\nrequired",
-    "crumbs": [
-      "Outputs",
-      "processors.outputs.unpickle_candidates"
-    ]
-  },
-  {
-    "objectID": "reference/processors.outputs.unpickle_candidates.html#returns",
-    "href": "reference/processors.outputs.unpickle_candidates.html#returns",
-    "title": "processors.outputs.unpickle_candidates",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nCandidateTracks\nA CandidateTracks object.",
-    "crumbs": [
-      "Outputs",
-      "processors.outputs.unpickle_candidates"
-    ]
-  },
-  {
-    "objectID": "reference/process_directory.html",
-    "href": "reference/process_directory.html",
-    "title": "process_directory",
-    "section": "",
-    "text": "process_directory(path, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nGiven a path to a directoy of audio files, process them all.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npath\nstr | Path\nPath to the directory to process.\nrequired\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.05\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of CandidateTracks objects.",
-    "crumbs": [
-      "Processing Functions",
-      "process_directory"
-    ]
-  },
-  {
-    "objectID": "reference/process_directory.html#parameters",
-    "href": "reference/process_directory.html#parameters",
-    "title": "process_directory",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npath\nstr | Path\nPath to the directory to process.\nrequired\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.05\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()",
-    "crumbs": [
-      "Processing Functions",
-      "process_directory"
-    ]
-  },
-  {
-    "objectID": "reference/process_directory.html#returns",
-    "href": "reference/process_directory.html#returns",
-    "title": "process_directory",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of CandidateTracks objects.",
-    "crumbs": [
-      "Processing Functions",
-      "process_directory"
-    ]
-  },
-  {
-    "objectID": "reference/process_audio_textgrid.html",
-    "href": "reference/process_audio_textgrid.html",
-    "title": "process_audio_textgrid",
-    "section": "",
-    "text": "process_audio_textgrid(audio_path, textgrid_path, entry_classes=['Word', 'Phone'], target_tier='Phone', target_labels='[AEIOU]', min_duration=0.05, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nProcess an audio and TextGrid file together.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\naudio_path\nstr | Path\nPath to an audio file.\nrequired\n\n\ntextgrid_path\nstr | Path\nPath to a TextGrid\nrequired\n\n\nentry_classes\nlist\nEntry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].\n['Word', 'Phone']\n\n\ntarget_tier\nstr\nThe tier to target. Defaults to “Phone”.\n'Phone'\n\n\ntarget_labels\nstr\nA regex that will match intervals to target. Defaults to “[AEIOU]”.\n'[AEIOU]'\n\n\nmin_duration\nfloat\nMinimum vowel duration to mention. Defaults to 0.05.\n0.05\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of candidate tracks.",
-    "crumbs": [
-      "Processing Functions",
-      "process_audio_textgrid"
-    ]
-  },
-  {
-    "objectID": "reference/process_audio_textgrid.html#parameters",
-    "href": "reference/process_audio_textgrid.html#parameters",
-    "title": "process_audio_textgrid",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\naudio_path\nstr | Path\nPath to an audio file.\nrequired\n\n\ntextgrid_path\nstr | Path\nPath to a TextGrid\nrequired\n\n\nentry_classes\nlist\nEntry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].\n['Word', 'Phone']\n\n\ntarget_tier\nstr\nThe tier to target. Defaults to “Phone”.\n'Phone'\n\n\ntarget_labels\nstr\nA regex that will match intervals to target. Defaults to “[AEIOU]”.\n'[AEIOU]'\n\n\nmin_duration\nfloat\nMinimum vowel duration to mention. Defaults to 0.05.\n0.05\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()",
-    "crumbs": [
-      "Processing Functions",
-      "process_audio_textgrid"
-    ]
-  },
-  {
-    "objectID": "reference/process_audio_textgrid.html#returns",
-    "href": "reference/process_audio_textgrid.html#returns",
-    "title": "process_audio_textgrid",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of candidate tracks.",
-    "crumbs": [
-      "Processing Functions",
-      "process_audio_textgrid"
-    ]
-  },
-  {
-    "objectID": "reference/Agg.html",
-    "href": "reference/Agg.html",
-    "title": "Agg",
-    "section": "",
-    "text": "Agg(self, method='agg_sum', **kwargs)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “agg_sum”.\n'agg_sum'",
-    "crumbs": [
-      "Aggs",
-      "Agg"
-    ]
-  },
-  {
-    "objectID": "reference/Agg.html#parameters",
-    "href": "reference/Agg.html#parameters",
-    "title": "Agg",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “agg_sum”.\n'agg_sum'",
-    "crumbs": [
-      "Aggs",
-      "Agg"
-    ]
-  },
-  {
-    "objectID": "reference/processors.smoothers.Smoothed.html",
-    "href": "reference/processors.smoothers.Smoothed.html",
-    "title": "processors.smoothers.Smoothed",
-    "section": "",
-    "text": "processors.smoothers.Smoothed(self, smoothed, params=None)\nSmooothed formant tracks\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nsmoothed\nnp.ndarray\na (formants, time) shaped numpy array of smoothed formant values\nrequired\n\n\nparams\nnp.ndarray\nParameters (if any) of the smoother. Defaults to None.\nNone",
-    "crumbs": [
-      "Smoothers",
-      "processors.smoothers.Smoothed"
-    ]
-  },
-  {
-    "objectID": "reference/processors.smoothers.Smoothed.html#parameters",
-    "href": "reference/processors.smoothers.Smoothed.html#parameters",
-    "title": "processors.smoothers.Smoothed",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nsmoothed\nnp.ndarray\na (formants, time) shaped numpy array of smoothed formant values\nrequired\n\n\nparams\nnp.ndarray\nParameters (if any) of the smoother. Defaults to None.\nNone",
-    "crumbs": [
-      "Smoothers",
-      "processors.smoothers.Smoothed"
-    ]
-  },
-  {
-    "objectID": "reference/processors.aggs.agg_sum.html",
-    "href": "reference/processors.aggs.agg_sum.html",
-    "title": "processors.aggs.agg_sum",
-    "section": "",
-    "text": "processors.aggs.agg_sum\nprocessors.aggs.agg_sum(error, axis=0)\nSum the error",
-    "crumbs": [
-      "Aggs",
-      "processors.aggs.agg_sum"
-    ]
-  },
-  {
-    "objectID": "reference/processors.losses.mse.html",
-    "href": "reference/processors.losses.mse.html",
-    "title": "processors.losses.mse",
-    "section": "",
-    "text": "processors.losses.mse(formants, smoothed, axis=1)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description",
-    "crumbs": [
-      "Losses",
-      "processors.losses.mse"
-    ]
-  },
-  {
-    "objectID": "reference/processors.losses.mse.html#parameters",
-    "href": "reference/processors.losses.mse.html#parameters",
-    "title": "processors.losses.mse",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1",
-    "crumbs": [
-      "Losses",
-      "processors.losses.mse"
-    ]
-  },
-  {
-    "objectID": "reference/processors.losses.mse.html#returns",
-    "href": "reference/processors.losses.mse.html#returns",
-    "title": "processors.losses.mse",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description",
-    "crumbs": [
-      "Losses",
-      "processors.losses.mse"
-    ]
-  },
-  {
-    "objectID": "reference/process_corpus.html",
-    "href": "reference/process_corpus.html",
-    "title": "process_corpus",
-    "section": "",
-    "text": "process_corpus(corpus_path, entry_classes=['Word', 'Phone'], target_tier='Phone', target_labels='[AEIOU]', min_duration=0.05, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nGiven a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ncorpus_path\nstr | Path\nA path to the corpus\nrequired\n\n\nentry_classes\nlist\nEntry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].\n['Word', 'Phone']\n\n\ntarget_tier\nstr\nThe tier to target. Defaults to “Phone”.\n'Phone'\n\n\ntarget_labels\nstr\nA regex that will match intervals to target. Defaults to “[AEIOU]”.\n'[AEIOU]'\n\n\nmin_duration\nfloat\nMinimum vowel duration to mention. Defaults to 0.05.\n0.05\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of candidate tracks.",
-    "crumbs": [
-      "Processing Functions",
-      "process_corpus"
-    ]
-  },
-  {
-    "objectID": "reference/process_corpus.html#parameters",
-    "href": "reference/process_corpus.html#parameters",
-    "title": "process_corpus",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\ncorpus_path\nstr | Path\nA path to the corpus\nrequired\n\n\nentry_classes\nlist\nEntry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].\n['Word', 'Phone']\n\n\ntarget_tier\nstr\nThe tier to target. Defaults to “Phone”.\n'Phone'\n\n\ntarget_labels\nstr\nA regex that will match intervals to target. Defaults to “[AEIOU]”.\n'[AEIOU]'\n\n\nmin_duration\nfloat\nMinimum vowel duration to mention. Defaults to 0.05.\n0.05\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()",
-    "crumbs": [
-      "Processing Functions",
-      "process_corpus"
-    ]
-  },
-  {
-    "objectID": "reference/process_corpus.html#returns",
-    "href": "reference/process_corpus.html#returns",
-    "title": "process_corpus",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of candidate tracks.",
-    "crumbs": [
-      "Processing Functions",
-      "process_corpus"
-    ]
-  },
-  {
-    "objectID": "reference/processors.smoothers.dct_smooth_regression.html",
-    "href": "reference/processors.smoothers.dct_smooth_regression.html",
-    "title": "processors.smoothers.dct_smooth_regression",
-    "section": "",
-    "text": "processors.smoothers.dct_smooth_regression(x, order=5)\nA DCT Smoother using regression\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array to smooth\nrequired\n\n\norder\nint\nOrder of the DCT smoother. Defaults to 5.\n5\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nSee smoothed",
-    "crumbs": [
-      "Smoothers",
-      "processors.smoothers.dct_smooth_regression"
-    ]
-  },
-  {
-    "objectID": "reference/processors.smoothers.dct_smooth_regression.html#parameters",
-    "href": "reference/processors.smoothers.dct_smooth_regression.html#parameters",
-    "title": "processors.smoothers.dct_smooth_regression",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array to smooth\nrequired\n\n\norder\nint\nOrder of the DCT smoother. Defaults to 5.\n5",
-    "crumbs": [
-      "Smoothers",
-      "processors.smoothers.dct_smooth_regression"
-    ]
-  },
-  {
-    "objectID": "reference/processors.smoothers.dct_smooth_regression.html#returns",
-    "href": "reference/processors.smoothers.dct_smooth_regression.html#returns",
-    "title": "processors.smoothers.dct_smooth_regression",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nSmoothed\nSee smoothed",
-    "crumbs": [
-      "Smoothers",
-      "processors.smoothers.dct_smooth_regression"
+      "Heuristic Classes",
+      "SpacingHeuristic"
     ]
   },
   {
@@ -572,7 +154,7 @@
     "href": "reference/index.html",
     "title": "Function reference",
     "section": "",
-    "text": "functions\n\n\n\nprocess_audio_file\nGiven the path to a single audio file, return a candidates track object.\n\n\nprocess_directory\nGiven a path to a directoy of audio files, process them all.\n\n\nprocess_audio_textgrid\nProcess an audio and TextGrid file together.\n\n\nprocess_corpus\nGiven a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.\n\n\n\n\n\n\nClasses\n\n\n\nOneTrack\nA single formant track.\n\n\nCandidateTracks\nA class for candidate tracks for a single formant\n\n\n\n\n\n\nData outputs\n\n\n\nprocessors.outputs.pickle_candidates\nThis will save a CandidateTracks object to\n\n\nprocessors.outputs.unpickle_candidates\nThis will load a CandidateTracks object\n\n\n\n\n\n\nSmoother\n\n\n\nSmoother\nA smoother function factory\n\n\nprocessors.smoothers.Smoothed\nSmooothed formant tracks\n\n\nprocessors.smoothers.dct_smooth\nA DCT Smoother\n\n\nprocessors.smoothers.dct_smooth_regression\nA DCT Smoother using regression\n\n\n\n\n\n\nLosses\n\n\n\nLoss\nsummary\n\n\nprocessors.losses.lmse\nsummary\n\n\nprocessors.losses.mse\nsummary\n\n\n\n\n\n\nAggs\n\n\n\nAgg\nsummary\n\n\nprocessors.aggs.agg_sum\nSum the error\n\n\n\n\n\n\n\n\n\nutils.safely",
+    "text": "functions\n\n\n\nprocess_audio_file\nGiven the path to a single audio file, return a candidates track object.\n\n\nprocess_directory\nGiven a path to a directoy of audio files, process them all.\n\n\nprocess_audio_textgrid\nProcess an audio and TextGrid file together.\n\n\nprocess_corpus\nGiven a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.\n\n\n\n\n\n\nClasses\n\n\n\nOneTrack\nA single formant track.\n\n\nCandidateTracks\nA class for candidate tracks for a single formant\n\n\n\n\n\n\nData outputs\n\n\n\nprocessors.outputs.pickle_candidates\nThis will save a CandidateTracks object to\n\n\nprocessors.outputs.unpickle_candidates\nThis will load a CandidateTracks object\n\n\n\n\n\n\nSmoother\n\n\n\nSmoother\nA smoother function factory\n\n\nprocessors.smoothers.Smoothed\nSmooothed formant tracks\n\n\nprocessors.smoothers.dct_smooth\nA DCT Smoother\n\n\nprocessors.smoothers.dct_smooth_regression\nA DCT Smoother using regression\n\n\n\n\n\n\nLosses\n\n\n\nLoss\nsummary\n\n\nprocessors.losses.lmse\nsummary\n\n\nprocessors.losses.mse\nsummary\n\n\n\n\n\n\nAggs\n\n\n\nAgg\nsummary\n\n\nprocessors.aggs.agg_sum\nSum the error\n\n\n\n\n\n\nHeuristics Classes\n\n\n\nMinMaxHeuristic\nA heuristic class for min/max frequencies and bandwidths\n\n\nSpacingHeuristic\nA class for defining formant spacing heuristics.\n\n\n\n\n\n\nPre-specified Heuristics\n\n\n\nprocessors.heuristic\n\n\n\n\n\n\n\n\n\n\nutils.safely",
     "crumbs": [
       "Function reference"
     ]
@@ -638,6 +220,26 @@
     ]
   },
   {
+    "objectID": "reference/index.html#heuristic-classes",
+    "href": "reference/index.html#heuristic-classes",
+    "title": "Function reference",
+    "section": "",
+    "text": "Heuristics Classes\n\n\n\nMinMaxHeuristic\nA heuristic class for min/max frequencies and bandwidths\n\n\nSpacingHeuristic\nA class for defining formant spacing heuristics.",
+    "crumbs": [
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/index.html#pre-specified-heuristics",
+    "href": "reference/index.html#pre-specified-heuristics",
+    "title": "Function reference",
+    "section": "",
+    "text": "Pre-specified Heuristics\n\n\n\nprocessors.heuristic",
+    "crumbs": [
+      "Function reference"
+    ]
+  },
+  {
     "objectID": "reference/index.html#utilities",
     "href": "reference/index.html#utilities",
     "title": "Function reference",
@@ -648,113 +250,256 @@
     ]
   },
   {
-    "objectID": "reference/processors.smoothers.dct_smooth.html",
-    "href": "reference/processors.smoothers.dct_smooth.html",
-    "title": "processors.smoothers.dct_smooth",
+    "objectID": "reference/processors.outputs.pickle_candidates.html",
+    "href": "reference/processors.outputs.pickle_candidates.html",
+    "title": "processors.outputs.pickle_candidates",
     "section": "",
-    "text": "processors.smoothers.dct_smooth(x, order=5)\nA DCT Smoother\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array of values to smooth.\nrequired\n\n\norder\nint\nDCT Order. Defaults to 5.\n5\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nSee Smoothed",
+    "text": "processors.outputs.pickle_candidates(candidates, file)\nThis will save a CandidateTracks object to disk as a “pickle” file. Due to the way sound objects are handled, only use unpickle_candidates() to re-load the pickle object.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ncandidates\nCandidateTracks\nA CandidateTracks object to pickle.\nrequired\n\n\nfile\nPath | str\nThe file location to save the pickle file to.\nrequired",
     "crumbs": [
-      "Smoothers",
-      "processors.smoothers.dct_smooth"
+      "Outputs",
+      "processors.outputs.pickle_candidates"
     ]
   },
   {
-    "objectID": "reference/processors.smoothers.dct_smooth.html#parameters",
-    "href": "reference/processors.smoothers.dct_smooth.html#parameters",
-    "title": "processors.smoothers.dct_smooth",
+    "objectID": "reference/processors.outputs.pickle_candidates.html#parameters",
+    "href": "reference/processors.outputs.pickle_candidates.html#parameters",
+    "title": "processors.outputs.pickle_candidates",
     "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array of values to smooth.\nrequired\n\n\norder\nint\nDCT Order. Defaults to 5.\n5",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\ncandidates\nCandidateTracks\nA CandidateTracks object to pickle.\nrequired\n\n\nfile\nPath | str\nThe file location to save the pickle file to.\nrequired",
     "crumbs": [
-      "Smoothers",
-      "processors.smoothers.dct_smooth"
+      "Outputs",
+      "processors.outputs.pickle_candidates"
     ]
   },
   {
-    "objectID": "reference/processors.smoothers.dct_smooth.html#returns",
-    "href": "reference/processors.smoothers.dct_smooth.html#returns",
-    "title": "processors.smoothers.dct_smooth",
+    "objectID": "reference/Loss.html",
+    "href": "reference/Loss.html",
+    "title": "Loss",
     "section": "",
-    "text": "Type\nDescription\n\n\n\n\nSmoothed\nSee Smoothed",
-    "crumbs": [
-      "Smoothers",
-      "processors.smoothers.dct_smooth"
-    ]
-  },
-  {
-    "objectID": "reference/CandidateTracks.html",
-    "href": "reference/CandidateTracks.html",
-    "title": "CandidateTracks",
-    "section": "",
-    "text": "CandidateTracks(self, sound=None, samples=None, sampling_frequency=None, xmin=0.0, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg())\nA class for candidate tracks for a single formant\nYou can provide either\n\nA parselmouth Sound object to the sound argument\n\nxor\n\nAn array of audio samples to the samples argument\nThe sampling frequency to the sampling_frequency argument\nAny optional time offset to the xmin argument.\n\nIf a Sound object is passed to sound, any values passed to samples, sampling_frequency and xmin are ignored.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nNone\n\n\nsamples\nnp.ndarray\nA numpy array of audio samples.\nNone\n\n\nsampling_frequency\nfloat\nThe audio sampling frequency.\nNone\n\n\nxmin\nfloat\nThe time offset for the audio. Defaults to 0.0.\n0.0\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ncandidates\nlist[OneTrack, …]\nA list of OneTrack tracks.\n\n\nsmooth_errors\nnp.array\nThe error terms for each treack in candidates\n\n\nwinner_idx\nint\nThe candidate track with the smallest error term\n\n\nwinner\nOneTrack\nThe winning OneTrack track.\n\n\nfile_name\nstr\nThe filename of the audio file, if set.\n\n\ninterval\naligned_textgrid.SequenceInterval\nThe textgrid interval of the sound, if set.\n\n\nid\nstr\nThe interval id of the sound, if set.\n\n\ngroup\nstr\nThe tier group name of the sound, if set.\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\nspectrograms\nThis will plot a grid of the candidate formant\n\n\nto_df\nReturn a polars dataframe of the candidate tracks\n\n\n\n\n\nCandidateTracks.spectrograms(**kwargs)\nThis will plot a grid of the candidate formant tracks and their spectrograms. If a file_name is provided, it will save the plot to disk.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nint\nThe number of formants to plot. Defaults to 3.\nrequired\n\n\nmaximum_frequency\nfloat\nThe frequency range the spectrogram and formants will be plotted up to. Defaults to 3500.\nrequired\n\n\ndynamic_range\nfloat\nA all spectrogram values below the dynamic range. will be plotted as white. Defaults to 60.\nrequired\n\n\nfigsize\ntuple[float, float]\nWidth and height of the figure in inches. Defaults to (8,5).\nrequired\n\n\nfile_name\nPath | None\nIf provided, how to save the spectrogram. If not provided (None) the plot will show interactively. Defaults to None.\nrequired\n\n\ndpi\nfloat\nIf the plot is being saved, its image resolution in dots per inch. Defaults to 75\nrequired\n\n\n\n\n\n\n\nCandidateTracks.to_df(which='winner', output='formants')\nReturn a polars dataframe of the candidate tracks\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nwhich\nLiteral[‘winner’, ‘all’]\nReturn just the winner track data, or all candidates. Defaults to “winner”.\n'winner'\n\n\noutput\nLiteral[‘formants’, ‘param’, ‘log_param’]\nWhether to output the formants or the smoothing parameters. Defaults to “formants”.\n'formants'\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\npl.DataFrame\nA polars.DataFrame",
-    "crumbs": [
-      "Classes",
-      "CandidateTracks"
-    ]
-  },
-  {
-    "objectID": "reference/CandidateTracks.html#parameters",
-    "href": "reference/CandidateTracks.html#parameters",
-    "title": "CandidateTracks",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nNone\n\n\nsamples\nnp.ndarray\nA numpy array of audio samples.\nNone\n\n\nsampling_frequency\nfloat\nThe audio sampling frequency.\nNone\n\n\nxmin\nfloat\nThe time offset for the audio. Defaults to 0.0.\n0.0\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()",
-    "crumbs": [
-      "Classes",
-      "CandidateTracks"
-    ]
-  },
-  {
-    "objectID": "reference/CandidateTracks.html#attributes",
-    "href": "reference/CandidateTracks.html#attributes",
-    "title": "CandidateTracks",
-    "section": "",
-    "text": "Name\nType\nDescription\n\n\n\n\ncandidates\nlist[OneTrack, …]\nA list of OneTrack tracks.\n\n\nsmooth_errors\nnp.array\nThe error terms for each treack in candidates\n\n\nwinner_idx\nint\nThe candidate track with the smallest error term\n\n\nwinner\nOneTrack\nThe winning OneTrack track.\n\n\nfile_name\nstr\nThe filename of the audio file, if set.\n\n\ninterval\naligned_textgrid.SequenceInterval\nThe textgrid interval of the sound, if set.\n\n\nid\nstr\nThe interval id of the sound, if set.\n\n\ngroup\nstr\nThe tier group name of the sound, if set.",
-    "crumbs": [
-      "Classes",
-      "CandidateTracks"
-    ]
-  },
-  {
-    "objectID": "reference/CandidateTracks.html#methods",
-    "href": "reference/CandidateTracks.html#methods",
-    "title": "CandidateTracks",
-    "section": "",
-    "text": "Name\nDescription\n\n\n\n\nspectrograms\nThis will plot a grid of the candidate formant\n\n\nto_df\nReturn a polars dataframe of the candidate tracks\n\n\n\n\n\nCandidateTracks.spectrograms(**kwargs)\nThis will plot a grid of the candidate formant tracks and their spectrograms. If a file_name is provided, it will save the plot to disk.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nint\nThe number of formants to plot. Defaults to 3.\nrequired\n\n\nmaximum_frequency\nfloat\nThe frequency range the spectrogram and formants will be plotted up to. Defaults to 3500.\nrequired\n\n\ndynamic_range\nfloat\nA all spectrogram values below the dynamic range. will be plotted as white. Defaults to 60.\nrequired\n\n\nfigsize\ntuple[float, float]\nWidth and height of the figure in inches. Defaults to (8,5).\nrequired\n\n\nfile_name\nPath | None\nIf provided, how to save the spectrogram. If not provided (None) the plot will show interactively. Defaults to None.\nrequired\n\n\ndpi\nfloat\nIf the plot is being saved, its image resolution in dots per inch. Defaults to 75\nrequired\n\n\n\n\n\n\n\nCandidateTracks.to_df(which='winner', output='formants')\nReturn a polars dataframe of the candidate tracks\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nwhich\nLiteral[‘winner’, ‘all’]\nReturn just the winner track data, or all candidates. Defaults to “winner”.\n'winner'\n\n\noutput\nLiteral[‘formants’, ‘param’, ‘log_param’]\nWhether to output the formants or the smoothing parameters. Defaults to “formants”.\n'formants'\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\npl.DataFrame\nA polars.DataFrame",
-    "crumbs": [
-      "Classes",
-      "CandidateTracks"
-    ]
-  },
-  {
-    "objectID": "reference/processors.losses.lmse.html",
-    "href": "reference/processors.losses.lmse.html",
-    "title": "processors.losses.lmse",
-    "section": "",
-    "text": "processors.losses.lmse(formants, smoothed, axis=1)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description",
+    "text": "Loss(self, method='lmse', **kwargs)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “lmse”.\n'lmse'",
     "crumbs": [
       "Losses",
-      "processors.losses.lmse"
+      "Loss"
     ]
   },
   {
-    "objectID": "reference/processors.losses.lmse.html#parameters",
-    "href": "reference/processors.losses.lmse.html#parameters",
-    "title": "processors.losses.lmse",
+    "objectID": "reference/Loss.html#parameters",
+    "href": "reference/Loss.html#parameters",
+    "title": "Loss",
     "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “lmse”.\n'lmse'",
     "crumbs": [
       "Losses",
-      "processors.losses.lmse"
+      "Loss"
     ]
   },
   {
-    "objectID": "reference/processors.losses.lmse.html#returns",
-    "href": "reference/processors.losses.lmse.html#returns",
-    "title": "processors.losses.lmse",
+    "objectID": "reference/heuristics.html",
+    "href": "reference/heuristics.html",
+    "title": "processors.heuristic",
     "section": "",
-    "text": "Type\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description",
+    "text": "processors.heuristic\n\n\n\n\n\nName\nDescription\n\n\n\n\nF1_Max\nMinMaxHeuristic: F1 should not be greater than 1200 Hz\n\n\nF4_Min\nMinMaxHeuristic: F4 should not be less than 2900 Hz\n\n\nB2_Max\nMinMaxHeuristic: B2 should not be greater than 500 Hz\n\n\nB3_Max\nMinMaxHeuristic: B3 should not be greater than 600 Hz\n\n\nRhotic\nSpacingHeuristic: If F3 &lt; 2000 Hz, F1 and F2 should be at least 500 Hz apart.\n\n\nF3_F4_Sep\nSpacingHeuristic: If F4 - F3 &lt; 500 Hz, F2-F1 &gt; 1500.",
     "crumbs": [
-      "Losses",
-      "processors.losses.lmse"
+      "Pre-specified Heuristics",
+      "processors.heuristic"
+    ]
+  },
+  {
+    "objectID": "reference/heuristics.html#attributes",
+    "href": "reference/heuristics.html#attributes",
+    "title": "processors.heuristic",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nF1_Max\nMinMaxHeuristic: F1 should not be greater than 1200 Hz\n\n\nF4_Min\nMinMaxHeuristic: F4 should not be less than 2900 Hz\n\n\nB2_Max\nMinMaxHeuristic: B2 should not be greater than 500 Hz\n\n\nB3_Max\nMinMaxHeuristic: B3 should not be greater than 600 Hz\n\n\nRhotic\nSpacingHeuristic: If F3 &lt; 2000 Hz, F1 and F2 should be at least 500 Hz apart.\n\n\nF3_F4_Sep\nSpacingHeuristic: If F4 - F3 &lt; 500 Hz, F2-F1 &gt; 1500.",
+    "crumbs": [
+      "Pre-specified Heuristics",
+      "processors.heuristic"
+    ]
+  },
+  {
+    "objectID": "reference/Smoother.html",
+    "href": "reference/Smoother.html",
+    "title": "Smoother",
+    "section": "",
+    "text": "Smoother(self, method='dct_smooth_regression', **kwargs)\nA smoother function factory\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\nThe smoothing method to use. Defaults to “dct_smooth”. Can be a custom smoother such that it takes a 1D array as input and returns a Smoothed class.\n'dct_smooth_regression'\n\n\nkwargs\n\nAny additional arguments or parameters for the method.\n{}\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\nsmooth\nApply the smoother function to the data\n\n\n\n\n\nSmoother.smooth(x)\nApply the smoother function to the data\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\na 1D numpy array\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nA Smoothed object",
+    "crumbs": [
+      "Smoothers",
+      "Smoother"
+    ]
+  },
+  {
+    "objectID": "reference/Smoother.html#parameters",
+    "href": "reference/Smoother.html#parameters",
+    "title": "Smoother",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\nThe smoothing method to use. Defaults to “dct_smooth”. Can be a custom smoother such that it takes a 1D array as input and returns a Smoothed class.\n'dct_smooth_regression'\n\n\nkwargs\n\nAny additional arguments or parameters for the method.\n{}",
+    "crumbs": [
+      "Smoothers",
+      "Smoother"
+    ]
+  },
+  {
+    "objectID": "reference/Smoother.html#methods",
+    "href": "reference/Smoother.html#methods",
+    "title": "Smoother",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nsmooth\nApply the smoother function to the data\n\n\n\n\n\nSmoother.smooth(x)\nApply the smoother function to the data\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\na 1D numpy array\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nA Smoothed object",
+    "crumbs": [
+      "Smoothers",
+      "Smoother"
+    ]
+  },
+  {
+    "objectID": "reference/processors.outputs.unpickle_candidates.html",
+    "href": "reference/processors.outputs.unpickle_candidates.html",
+    "title": "processors.outputs.unpickle_candidates",
+    "section": "",
+    "text": "processors.outputs.unpickle_candidates(file)\nThis will load a CandidateTracks object that was pickled with pickle_candidates().\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nfile\nPath | str\nThe pickled CandidateTracks object to unpickle.\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nCandidateTracks\nA CandidateTracks object.",
+    "crumbs": [
+      "Outputs",
+      "processors.outputs.unpickle_candidates"
+    ]
+  },
+  {
+    "objectID": "reference/processors.outputs.unpickle_candidates.html#parameters",
+    "href": "reference/processors.outputs.unpickle_candidates.html#parameters",
+    "title": "processors.outputs.unpickle_candidates",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nfile\nPath | str\nThe pickled CandidateTracks object to unpickle.\nrequired",
+    "crumbs": [
+      "Outputs",
+      "processors.outputs.unpickle_candidates"
+    ]
+  },
+  {
+    "objectID": "reference/processors.outputs.unpickle_candidates.html#returns",
+    "href": "reference/processors.outputs.unpickle_candidates.html#returns",
+    "title": "processors.outputs.unpickle_candidates",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nCandidateTracks\nA CandidateTracks object.",
+    "crumbs": [
+      "Outputs",
+      "processors.outputs.unpickle_candidates"
+    ]
+  },
+  {
+    "objectID": "reference/process_directory.html",
+    "href": "reference/process_directory.html",
+    "title": "process_directory",
+    "section": "",
+    "text": "process_directory(path, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])\nGiven a path to a directoy of audio files, process them all.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npath\nstr | Path\nPath to the directory to process.\nrequired\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.05\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of CandidateTracks objects.",
+    "crumbs": [
+      "Processing Functions",
+      "process_directory"
+    ]
+  },
+  {
+    "objectID": "reference/process_directory.html#parameters",
+    "href": "reference/process_directory.html#parameters",
+    "title": "process_directory",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npath\nstr | Path\nPath to the directory to process.\nrequired\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.05\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]",
+    "crumbs": [
+      "Processing Functions",
+      "process_directory"
+    ]
+  },
+  {
+    "objectID": "reference/process_directory.html#returns",
+    "href": "reference/process_directory.html#returns",
+    "title": "process_directory",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of CandidateTracks objects.",
+    "crumbs": [
+      "Processing Functions",
+      "process_directory"
+    ]
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth_regression.html",
+    "href": "reference/processors.smoothers.dct_smooth_regression.html",
+    "title": "processors.smoothers.dct_smooth_regression",
+    "section": "",
+    "text": "processors.smoothers.dct_smooth_regression(x, order=5)\nA DCT Smoother using regression\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array to smooth\nrequired\n\n\norder\nint\nOrder of the DCT smoother. Defaults to 5.\n5\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nSee smoothed",
+    "crumbs": [
+      "Smoothers",
+      "processors.smoothers.dct_smooth_regression"
+    ]
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth_regression.html#parameters",
+    "href": "reference/processors.smoothers.dct_smooth_regression.html#parameters",
+    "title": "processors.smoothers.dct_smooth_regression",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array to smooth\nrequired\n\n\norder\nint\nOrder of the DCT smoother. Defaults to 5.\n5",
+    "crumbs": [
+      "Smoothers",
+      "processors.smoothers.dct_smooth_regression"
+    ]
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth_regression.html#returns",
+    "href": "reference/processors.smoothers.dct_smooth_regression.html#returns",
+    "title": "processors.smoothers.dct_smooth_regression",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nSmoothed\nSee smoothed",
+    "crumbs": [
+      "Smoothers",
+      "processors.smoothers.dct_smooth_regression"
+    ]
+  },
+  {
+    "objectID": "usage/getting_started.html",
+    "href": "usage/getting_started.html",
+    "title": "Quickstart",
+    "section": "",
+    "text": "After installing fasttrackpy, you can use the fasttrack commandline executable. For a full list of all settable options, see All FastTrack Options",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "usage/getting_started.html#audio-file-only-processing",
+    "href": "usage/getting_started.html#audio-file-only-processing",
+    "title": "Quickstart",
+    "section": "Audio File Only Processing",
+    "text": "Audio File Only Processing\nYou can process either a single audio file or a directory of audio files with fasttrack audio. To use the fasttrack defaults, just provide fasttrack audio with the path to the input file or directory, and an output file or directory.\nfasttrack audio --file assets/audio/ay.wav --dest assets/audio\nThis will save the formant tracks for this single wav file to assets/audio/ay.csv/.\nTo process an entire directory of files, instead pass the directory to --dir.\nfasttrack audio --dir assets/audio/ --dest assets/audio\nThis will save the formant tracks for each audio file with the same file name to the output directory.",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "usage/getting_started.html#audio-file-textgrid-processing",
+    "href": "usage/getting_started.html#audio-file-textgrid-processing",
+    "title": "Quickstart",
+    "section": "Audio File + TextGrid Processing",
+    "text": "Audio File + TextGrid Processing\nYou can process an audio file + textgrid combination with fasttrack audio-textgrid. The defaults assume you are passing a textgrid with a Word and Phone tier from forced alignment, but this can be overriden.\nfasttrack audio-textgrid --audio speaker.wav \\\n    --textgrid speaker.TextGrid \\\n    --dest output\n\nAdjusting the assumed TextGrid format\nIf your textgrid is not formatted as force aligned textgrid, you need to pass --entry-classes the value SequenceInterval and --target-tier the name of the tier you want to analyze.\nfasttrack audio-textgrid --audio speaker.wav \\\n    --textgrid speaker.TextGrid \\\n    --dest output \\\n    --entry-classes SequenceInterval \\\n    --target-tier phones\n\n\nAdjusting the target intervals\nYou can configure fasttrack to only process certain intervals by passing --target-labels a regular expression matching values in your textgrid. For example, if you have segmented only the vowels you want to analyze, you can pass --target-labels the value \".\".\nfasttrack audio-textgrid --audio speaker.wav \\\n    --textgrid speaker.TextGrid \\\n    --dest output \\\n    --entry-classes SequenceInterval \\\n    --target-tier phones \\\n    --target-labels \".\"",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "usage/getting_started.html#processing-a-corpus",
+    "href": "usage/getting_started.html#processing-a-corpus",
+    "title": "Quickstart",
+    "section": "Processing a corpus",
+    "text": "Processing a corpus\nIf you have a corpus of audio + textgrid pairs, you can process them with fasttrack corpus. You can either write the output to one large file, or have it separated by original file name & speaker with the --separate-output flag.\nfasttrack corpus --corpus data \\\n    --dest output \\\n    --separate-output",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "usage/getting_started.html#using-a-config-file",
+    "href": "usage/getting_started.html#using-a-config-file",
+    "title": "Quickstart",
+    "section": "Using a config file",
+    "text": "Using a config file\nThere are many possible options to set for both fasttrack audio and fasttrack audio-textgrid. Instead of passing them all at the commandline, you can pass either command a yaml config file.\n# config.yml\nmin_max_formant: 3000\nmax_max_formant: 6000\nnstep: 10\nfasttrack audio --file ay.wav \\\n    --dest output \\\n    --config config.yml",
+    "crumbs": [
+      "Home",
+      "Quickstart"
     ]
   },
   {
@@ -795,10 +540,54 @@
     "href": "usage/all_arguments.html#shared-options",
     "title": "All FastTrack Options",
     "section": "Shared Options",
-    "text": "Shared Options\nThe Following options are general across most fasttrack commands.\n\nOutput Destinations\n\n\n\nOption\nMeaning\n\n\n\n\noutput\nOutput file name\n\n\ndest\nOutput directory\n\n\n\nIf an output file name is not provided, fasttrack will try to use a reasonable name based on the input audio file name.\n\n\nOutput Options\n\n\n\n\n\n\n\n\nOption\nMeaning\nDefault\n\n\n\n\nwhich_output\nWhether to save just the winning track (winner) or all candidates (all)\nwinner\n\n\ndata_output\nWhether to save the formant tracks (formants) or the smoothing parameters (param)\nformants\n\n\nseparate_output\nWhen processing a corpus, save each file/group to a separate file?\nFalse\n\n\n\n\n\nTextGrid Processing Options\n\n\n\n\n\n\n\n\nOption\nMeaning\nDefault\n\n\n\n\nentry_classes\nFormat of the TextGrid.\n\"Word|Phone\"\n\n\ntarget_tier\nThe tier to target for processing\nPhone\n\n\ntarget_labels\nA regex for the labels to target for processing\n\"[AEIOU]\"\n\n\n\n\nNotes:\n\nIf your textgrid is not the output of a forced-aligner, change the entry_classes value to SequenceInterval and the value of target_tier to whatever the tier name is that you want to process.\nAny string that can be interpreted as a regular expression can be passed to processing.\n\n\n\n\nAudio Processing Options\n\n\n\n\n\n\n\n\nOption\nMeaning\nDefault\n\n\n\n\nmin_duration\nThe minumum duration segment to analyze\n0.05 (s)\n\n\nmin_max_formant\nThe lowest maximum formant to try\n4000(hz)\n\n\nmax_max_formant\nThe highest maximum formant to try\n7000(hz)\n\n\nnstep\nThe number of steps between the lowest and the highest maximum formant\n20\n\n\nn_formants\nThe number of formants to try to track in the audio\n4\n\n\nwindow_length\nThe formant analysis window length\n0.025 (s)\n\n\ntime_step\nThe formant analysis step size\n0.002 (s)\n\n\npre_emphasis_from\nPre-emphasis to be applied before formant tracking\n50 (hz)\n\n\n\n\n\nSmoother Options\n\n\n\n\n\n\n\n\nOption\nMeaning\nDefault\n\n\n\n\nsmoother_method\nThe smoothing method to use. It’s not recommended you change this from the default.\ndct_smooth_regression\n\n\nsmoother_order\nThe “order” of the smooth. More is wigglier.\n5\n\n\nloss_method\nMethod for calculating the error between the smooth and measured formants. It’s not recommended that you change the default\nlmse",
+    "text": "Shared Options\nThe Following options are general across most fasttrack commands.\n\nOutput Destinations\n\n\n\nOption\nMeaning\n\n\n\n\noutput\nOutput file name\n\n\ndest\nOutput directory\n\n\n\nIf an output file name is not provided, fasttrack will try to use a reasonable name based on the input audio file name.\n\n\nOutput Options\n\n\n\n\n\n\n\n\nOption\nMeaning\nDefault\n\n\n\n\nwhich_output\nWhether to save just the winning track (winner) or all candidates (all)\nwinner\n\n\ndata_output\nWhether to save the formant tracks (formants) or the smoothing parameters (param)\nformants\n\n\nseparate_output\nWhen processing a corpus, save each file/group to a separate file?\nFalse\n\n\n\n\n\nTextGrid Processing Options\n\n\n\n\n\n\n\n\nOption\nMeaning\nDefault\n\n\n\n\nentry_classes\nFormat of the TextGrid.\n\"Word|Phone\"\n\n\ntarget_tier\nThe tier to target for processing\nPhone\n\n\ntarget_labels\nA regex for the labels to target for processing\n\"[AEIOU]\"\n\n\n\n\nNotes:\n\nIf your textgrid is not the output of a forced-aligner, change the entry_classes value to SequenceInterval and the value of target_tier to whatever the tier name is that you want to process.\nAny string that can be interpreted as a regular expression can be passed to processing.\n\n\n\n\nAudio Processing Options\n\n\n\n\n\n\n\n\nOption\nMeaning\nDefault\n\n\n\n\nmin_duration\nThe minumum duration segment to analyze\n0.05 (s)\n\n\nmin_max_formant\nThe lowest maximum formant to try\n4000(hz)\n\n\nmax_max_formant\nThe highest maximum formant to try\n7000(hz)\n\n\nnstep\nThe number of steps between the lowest and the highest maximum formant\n20\n\n\nn_formants\nThe number of formants to try to track in the audio\n4\n\n\nwindow_length\nThe formant analysis window length\n0.025 (s)\n\n\ntime_step\nThe formant analysis step size\n0.002 (s)\n\n\npre_emphasis_from\nPre-emphasis to be applied before formant tracking\n50 (hz)\n\n\n\n\n\nSmoother Options\n\n\n\n\n\n\n\n\nOption\nMeaning\nDefault\n\n\n\n\nsmoother_method\nThe smoothing method to use. It’s not recommended you change this from the default.\ndct_smooth_regression\n\n\nsmoother_order\nThe “order” of the smooth. More is wigglier.\n5\n\n\nloss_method\nMethod for calculating the error between the smooth and measured formants. It’s not recommended that you change the default\nlmse\n\n\n\n\n\nHeuristic Options\nThese flags turn on the described formant tracking heuristic.\n\n\n\n\n\n\n\nOption\nMeaning\n\n\n\n\nf1-max-heuristic\nF1 should not be greater than 1200 Hz\n\n\nf4-min-heuristic\nF4 should not be less than 2900 Hz\n\n\nb2-max-heuristic\nB2 should not be greater than 500 Hz.\n\n\nb3-max-heuristic\nB3 should not be greater than 600 hz\n\n\nrhotic-heuristic\nIf F3 &lt; 2000 Hz, F1 and F2 should be at least 500 Hz apart.\n\n\nf3-f4-heuristic\nIf F4 - F3 &lt; 500 Hz, F2-F1 &gt; 1500.",
     "crumbs": [
       "Home",
       "All FastTrack Options"
+    ]
+  },
+  {
+    "objectID": "usage/dct.html",
+    "href": "usage/dct.html",
+    "title": "Working with the smoothing parameters",
+    "section": "",
+    "text": "FastTrackPy smooths formant trajectories using a form of Discrete Cosine Transform. Here’s how you can convert the DCT parameters back into formant track smooths after, e.g. averaging them.\nimport polars as pl\nimport matplotlib.pyplot as plt\nfrom scipy.fft import dct, idct\nimport numpy as np\nfrom fasttrackpy import process_corpus\nfrom pathlib import Path\ncorpus_path = Path(\"..\",\"assets\", \"corpus\")\nmeasurements = process_corpus(corpus_path)\n\n100%|██████████| 65/65 [00:01&lt;00:00, 62.80it/s]\n100%|██████████| 274/274 [00:01&lt;00:00, 224.56it/s]\nLet’s just look at /ay/ from these speakers.\nays = [track for track in measurements if track.label == \"AY1\"]\nays[0].winner.spectrogram()",
+    "crumbs": [
+      "Home",
+      "Working with the smoothing parameters"
+    ]
+  },
+  {
+    "objectID": "usage/dct.html#the-discrete-cosine-transform",
+    "href": "usage/dct.html#the-discrete-cosine-transform",
+    "title": "Working with the smoothing parameters",
+    "section": "The Discrete Cosine Transform",
+    "text": "The Discrete Cosine Transform\nThe smoothed formants are a 5th order discrete cosine transform. The DCT parameters are estimated via regression, using the following basis.\n\ntime = ays[0].winner.time_domain\nN = time.size\norder = 5\n\nfull_basis = dct(\n    np.eye(N), \n    orthogonalize=True, \n    norm = \"backward\"\n)\n\nbasis = full_basis[:,:order]\n\nplt.plot(time, basis)\nplt.legend(range(5))\nplt.show()\n\n\n\n\n\n\n\n\nDCT coefficients define how to weight and sum this bank of cosine functions to match the input signal.\n\n# the dct coefs for f1\nf1_params = ays[0].winner.parameters[0,:]\n\n# the formant track\nf1 = ays[0].winner.formants[0,:]\n\nplt.plot(time, basis * f1_params)\nplt.title(\"weighted coefficients\")\nplt.show()\n\n\n\n\n\n\n\n\n\nplt.plot(time, basis @ f1_params)\nplt.plot(time, f1)\nplt.title(\"weighted and summed\")\nplt.legend([\"DCT\", \"F1\"])\nplt.show()\n\n\n\n\n\n\n\n\nIt’s possible to estimate DCT coefficients directly with scipy.fft.dct, but because there is potential for missing data in some formant tracks, FastTrackPy instead estimates the DCT coefficients using regression.\n\ndef reg_fit(x, basis):\n    params = np.linalg.inv(basis.T @ basis) @ (basis.T @ x)\n    return params\n\nparams = reg_fit(f1, basis)\nprint(params)\n\n[480.35423508  42.95237019 -25.847216    43.60350087 -21.40266949]",
+    "crumbs": [
+      "Home",
+      "Working with the smoothing parameters"
+    ]
+  },
+  {
+    "objectID": "usage/dct.html#inverting-the-dct",
+    "href": "usage/dct.html#inverting-the-dct",
+    "title": "Working with the smoothing parameters",
+    "section": "Inverting the DCT",
+    "text": "Inverting the DCT\nIt’s possible to invert the DCT parameters with scipy.fft.idct(), with orthognalize = True and norm = \"forward\". You also need to define how large you want the resulting smooth to be with n\n\nf1_smooth = idct(\n    params, \n    n = time.size, \n    orthogonalize=True, \n    norm = \"forward\"\n    )\n\nplt.plot(time, f1_smooth)\nplt.plot(time, f1)\nplt.legend([\"smooth\", \"F1\"])\nplt.show()",
+    "crumbs": [
+      "Home",
+      "Working with the smoothing parameters"
+    ]
+  },
+  {
+    "objectID": "usage/dct.html#benefits-of-using-the-dct-parameters",
+    "href": "usage/dct.html#benefits-of-using-the-dct-parameters",
+    "title": "Working with the smoothing parameters",
+    "section": "Benefits of using the DCT parameters",
+    "text": "Benefits of using the DCT parameters\n\n“Down sampling”\nIt’s somewhat commmon to reduce the number of measurement points from a formant track to a common number (e.g. 20 evenly spaced points). We can achieve that by inverting the DCT parameters and using differently sized outputs.\n\nsmooth_100 = idct(params, n = 100, orthogonalize=True, norm = \"forward\")\nsmooth_20 = idct(params, n = 20, orthogonalize=True, norm = \"forward\")\n\nplt.scatter(\n    np.arange(100)/99,\n    smooth_100\n)\n\nplt.scatter(\n    np.arange(20)/19,\n    smooth_20\n)\nplt.legend([\"100\", \"20\"])\nplt.show()\n\n\n\n\n\n\n\n\n\n\nAveraging\nInstead of point-wise averaging over formant tracks, you can instead average over the DCT parameters, then invert the average. We can get a polars data frame of all of the parameters of /ays/ from these speakers with the .to_df() method,\n\nall_ay_param = pl.concat([\n    ay.to_df(output = \"param\")\n    for ay in ays\n])\nall_ay_param.head()\n\n\nshape: (5, 10)\n\n\n\nparam\nF1\nF2\nF3\nF4\nerror\nfile_name\nid\ngroup\nlabel\n\n\nu32\nf64\nf64\nf64\nf64\nf64\nstr\nstr\nstr\nstr\n\n\n\n\n0\n480.354235\n979.982402\n1844.645657\n2375.309331\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n1\n42.95237\n-130.966974\n-15.909405\n2.074594\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n2\n-25.847216\n13.467448\n-67.211033\n-35.364144\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n3\n43.603501\n4.180242\n-84.055828\n18.796364\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n4\n-21.402669\n-2.113492\n-42.2589\n-20.556695\n0.007663\n\"KY25A_1\"\n\"0-0-8-1\"\n\"KY25A\"\n\"AY1\"\n\n\n\n\n\n\nTo get the the average of each parameter for each speaker, we need to group the dataframe by the param, file_name and group columns, then aggregate them.\n\nay_param_means = (all_ay_param\n .group_by(\n     [\"param\", \"file_name\", \"group\", ], \n     maintain_order = True)\n .agg(\n     pl.col(\"F1\").mean()\n )\n)\nay_param_means.head()\n\n\nshape: (5, 4)\n\n\n\nparam\nfile_name\ngroup\nF1\n\n\nu32\nstr\nstr\nf64\n\n\n\n\n0\n\"KY25A_1\"\n\"KY25A\"\n509.370491\n\n\n1\n\"KY25A_1\"\n\"KY25A\"\n44.866749\n\n\n2\n\"KY25A_1\"\n\"KY25A\"\n-8.803074\n\n\n3\n\"KY25A_1\"\n\"KY25A\"\n27.038315\n\n\n4\n\"KY25A_1\"\n\"KY25A\"\n-11.637004\n\n\n\n\n\n\nHere’s the fitted F1 for the first speaker.\n\nspeaker_params = ay_param_means[\"F1\"][0:5]\nspeaker_fit = idct(\n    speaker_params,\n    n = 100,\n    orthogonalize=True,\n    norm=\"forward\"\n)\n\nplt.plot(speaker_fit)\nplt.show()\n\n\n\n\n\n\n\n\nThe code below for getting fitted F1 tracks for each speaker is a bit detailed with respect to how polars dataframes work, but the process could be replicated in whatever way a user feels comfortable.\n\nay_fits = (\n    ay_param_means\n    .group_by([\"file_name\", \"group\"])\n    .agg(pl.col(\"F1\"))\n    .with_columns(\n        f1_fit =pl.col(\"F1\")\n                  .map_elements(\n                      lambda x: idct(x, n = 100, orthogonalize=True, norm = \"forward\").tolist(),\n                      return_dtype=pl.List(pl.Float64)\n                      ),\n        time = pl.lit(np.linspace(0,1,100).tolist())\n    )\n    .explode([\"f1_fit\", \"time\"])\n)\n\n\nay_fits.plot(\n    \"time\",\n    \"f1_fit\",\n    by = \"group\"\n)\n\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n  \n\n\n\n\n\n\nGetting derivatives\nIf we wanted to get the first derivative (or the rate of change) of the formant track smooths, this can also be calculated (code modified from here.)\n\nfrom scipy.fft import idst\n\ndef first_deriv(coefs, size = 100):\n    hatu = coefs.copy()\n    for i in range(hatu.size):\n        hatu[i]=-(i)*hatu[i]\n    hatu[:-1]=hatu[1:]\n    hatu[-1]=0\n    dotu=idst(hatu, n = size, type=2)\n    return dotu\n\n\nspeaker_fit = (\n    ay_fits\n    .filter(pl.col(\"group\").str.contains(\"group\"))\n)\n\nspeaker_params = (\n    ay_param_means\n    .filter(pl.col(\"group\").str.contains(\"group\"))\n    .select(\"F1\")\n)\n\nspeaker_rate = first_deriv(speaker_params[\"F1\"].to_numpy(), size = 100)\n\n\nfig, axes = plt.subplots(nrows= 1, ncols=2)\naxes[0].plot(speaker_fit[\"f1_fit\"])\naxes[0].set_title(\"f1\")\naxes[1].plot(speaker_rate)\naxes[1].set_title(\"first derivative\")\nplt.show()",
+    "crumbs": [
+      "Home",
+      "Working with the smoothing parameters"
     ]
   },
   {
@@ -817,7 +606,7 @@
     "href": "usage/pythonic_use.html#function-use",
     "title": "Pythonic Use",
     "section": "Function use",
-    "text": "Function use\nThe easiest way to start using fasttrackpy directly will be by calling one of the process_* functions, which will either return a single CandidateTracks object, or a list of CandidateTracks objects.\n\nProcess an audio file\nYou can process an audio file, and adjust the relevant settings with process_audio().\n\naudio_path = Path(\"..\", \"assets\", \"audio\", \"ay.wav\")\nIPython.display.Audio(audio_path)\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\ncandidates = process_audio_file(\n    path=audio_path,\n    min_max_formant=3000,\n    max_max_formant=6000\n    )\n\n\nInspecting the candidates object.\nThere are a few key attributes you can get from the candidates object, including\n\nThe error terms for each smooth.\nThe winning candidate\n\n\ncandidates.smooth_errors\n\narray([0.22375927, 0.25078503, 0.18971138, 0.14314098, 0.13560708,\n       0.11605314, 0.11936134, 0.03661058, 0.03557605, 0.05296531,\n       0.06031541, 0.07804997, 0.1034784 , 0.07002199, 0.0586435 ,\n       0.03941962, 0.02852621, 0.05098893, 0.03282294, 0.03173693])\n\n\n\ncandidates.winner\n\nA formant track object. (4, 385)\n\n\n\n\nInspecting the candidates.winner object\nThe candidates.winner object has a few useful attributes to access as well, including the maximum formant.\n\ncandidates.winner.maximum_formant\n\n5526.315789473684\n\n\n\n\nData output - Spectrograms\nYou can get a spectrogram plot out of either the candidates.winner or the candidates itself.\n\ncandidates.winner.spectrogram()\n\n\n\n\n\n\n\n\n\ncandidates.spectrograms()\n\n\n\n\n\n\n\n\n\n\nData Output - DataFrames\nYou can output the candidates to a polars dataframe.\n\ncandidates.to_df(which = \"winner\").head()\n\n\nshape: (5, 14)\n\n\n\nF1\nF2\nF3\nF4\nF1_s\nF2_s\nF3_s\nF4_s\nerror\ntime\nmax_formant\nn_formant\nsmooth_method\nfile_name\n\n\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\ni32\nstr\nstr\n\n\n\n\n604.374108\n1175.26731\n2636.119643\n2820.424313\n630.934881\n1196.361693\n2541.865094\n2975.642101\n0.028526\n0.025406\n5526.315789\n4\n\"dct_smooth_reg…\n\"ay.wav\"\n\n\n613.663049\n1183.807981\n2638.781798\n2764.336825\n630.93103\n1196.374946\n2541.857538\n2975.593274\n0.028526\n0.027406\n5526.315789\n4\n\"dct_smooth_reg…\n\"ay.wav\"\n\n\n620.821348\n1196.465294\n2629.617697\n2645.793985\n630.919489\n1196.414696\n2541.834875\n2975.446894\n0.028526\n0.029406\n5526.315789\n4\n\"dct_smooth_reg…\n\"ay.wav\"\n\n\n627.364908\n1212.220604\n2490.175081\n2648.947744\n630.900286\n1196.480913\n2541.797116\n2975.203274\n0.028526\n0.031406\n5526.315789\n4\n\"dct_smooth_reg…\n\"ay.wav\"\n\n\n633.400922\n1227.997019\n2396.727652\n2646.907343\n630.873472\n1196.573552\n2541.744282\n2974.862929\n0.028526\n0.033406\n5526.315789\n4\n\"dct_smooth_reg…\n\"ay.wav\"",
+    "text": "Function use\nThe easiest way to start using fasttrackpy directly will be by calling one of the process_* functions, which will either return a single CandidateTracks object, or a list of CandidateTracks objects.\n\nProcess an audio file\nYou can process an audio file, and adjust the relevant settings with process_audio().\n\naudio_path = Path(\"..\", \"assets\", \"audio\", \"ay.wav\")\nIPython.display.Audio(audio_path)\n\n\n                \n                    \n                    Your browser does not support the audio element.\n                \n              \n\n\n\ncandidates = process_audio_file(\n    path=audio_path,\n    min_max_formant=3000,\n    max_max_formant=6000\n    )\n\n\nInspecting the candidates object.\nThere are a few key attributes you can get from the candidates object, including\n\nThe error terms for each smooth.\nThe winning candidate\n\n\ncandidates.smooth_errors\n\narray([0.22544256, 0.25078883, 0.18968704, 0.14313632, 0.13567622,\n       0.11614815, 0.11945207, 0.03664588, 0.03567658, 0.05305987,\n       0.06046965, 0.07819208, 0.10361329, 0.07013581, 0.05866597,\n       0.0394219 , 0.02852071, 0.05098306, 0.03279   , 0.03167985])\n\n\n\ncandidates.winner\n\nA formant track object. (4, 385)\n\n\n\n\nInspecting the candidates.winner object\nThe candidates.winner object has a few useful attributes to access as well, including the maximum formant.\n\ncandidates.winner.maximum_formant\n\n5526.315789473684\n\n\n\n\nData output - Spectrograms\nYou can get a spectrogram plot out of either the candidates.winner or the candidates itself.\n\ncandidates.winner.spectrogram()\n\n\n\n\n\n\n\n\n\ncandidates.spectrograms()\n\n\n\n\n\n\n\n\n\n\nData Output - DataFrames\nYou can output the candidates to a polars dataframe.\n\ncandidates.to_df(which = \"winner\").head()\n\n\nshape: (5, 18)\n\n\n\nF1\nF2\nF3\nF4\nF1_s\nF2_s\nF3_s\nF4_s\nB1\nB2\nB3\nB4\nerror\ntime\nmax_formant\nn_formant\nsmooth_method\nfile_name\n\n\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\nf64\ni32\nstr\nstr\n\n\n\n\n604.374108\n1175.26731\n2636.119643\n2820.424313\n631.116096\n1196.387362\n2542.421732\n2978.273932\n250.189519\n92.942056\n292.110777\n797.16362\n0.028521\n0.025406\n5526.315789\n4\n\"dct_smooth_regression\"\n\"ay.wav\"\n\n\n613.663049\n1183.807981\n2638.781798\n2764.336825\n631.108164\n1196.413506\n2542.406271\n2978.173053\n250.177347\n92.935681\n292.228197\n797.053295\n0.028521\n0.027406\n5526.315789\n4\n\"dct_smooth_regression\"\n\"ay.wav\"\n\n\n620.821348\n1196.465294\n2629.617697\n2645.793985\n631.09232\n1196.465775\n2542.375357\n2977.971503\n250.153031\n92.922935\n292.463006\n796.832788\n0.028521\n0.029406\n5526.315789\n4\n\"dct_smooth_regression\"\n\"ay.wav\"\n\n\n627.364908\n1212.220604\n2490.175081\n2648.947744\n631.068604\n1196.544133\n2542.329008\n2977.669702\n250.116629\n92.903827\n292.815137\n796.502384\n0.028521\n0.031406\n5526.315789\n4\n\"dct_smooth_regression\"\n\"ay.wav\"\n\n\n633.400922\n1227.997019\n2396.727652\n2646.907343\n631.037077\n1196.648522\n2542.267248\n2977.268279\n250.068224\n92.878371\n293.284494\n796.062508\n0.028521\n0.033406\n5526.315789\n4\n\"dct_smooth_regression\"\n\"ay.wav\"",
     "crumbs": [
       "Home",
       "Pythonic Use"
@@ -828,7 +617,7 @@
     "href": "usage/pythonic_use.html#processing-an-audio-textgrid-combination.",
     "title": "Pythonic Use",
     "section": "Processing an Audio + TextGrid combination.",
-    "text": "Processing an Audio + TextGrid combination.\nTo process a combination of an audio + textgrid, you can use the process_audio_textgrid() function. There are a few more options to add here related to textgrid processing.\n\nTextGrid Processing\n\nentry_classes\nfasttrackpy uses aligned-textgrid to process TextGrids. By default, it will assume your textgrid is formatted as the output of forced alignment with a Word and Phone tier. If your textgrid doesn’t have these tiers, you can pass entry_classes [SequenceInterval] instead.\n\n\ntarget_tier\nYou need to lest process_audio_textgrid() know which tier(s) to process, either by telling it which entry class to target (defaults to \"Phone\") or by the name of the tier.\n\n\ntarget_labels\nTo process only specific textgrid intervals (say, the vowels), you can pass target_labels a regex string that will match the labels of intervals.\n\n\n\nRunning the processing\n\nspeaker_audio = Path(\"..\", \"assets\" , \"corpus\", \"josef-fruehwald_speaker.wav\")\nspeaker_textgrid = Path(\"..\", \"assets\", \"corpus\", \"josef-fruehwald_speaker.TextGrid\")\n\n\nall_vowels = process_audio_textgrid(\n    audio_path=speaker_audio,\n    textgrid_path=speaker_textgrid,\n    entry_classes=[\"Word\", \"Phone\"],\n    target_tier=\"Phone\",\n    # just stressed vowels\n    target_labels=\"[AEIOU].1\",\n    min_duration=0.05,\n    min_max_formant=3000,\n    max_max_formant=6000,\n    n_formants=4\n)\n\n100%|██████████| 174/174 [00:01&lt;00:00, 144.35it/s]\n\n\n\n\nInspecting the results\nThe all_vowels object is a list of CandidateTracks. Each candidate track object has the same attributes discussed above, but a few additional values added from the textgrid interval.\n\nThe SequenceInterval object\nYou can access the aligned-textgrid.SequenceInterval itself, and its related attributes.\n\nall_vowels[0].interval.label\n\n'AY1'\n\n\n\nall_vowels[0].interval.fol.label\n\n'K'\n\n\n\nall_vowels[0].interval.inword.label\n\n'strikes'\n\n\n\n\nLabels & Ids\nInterval properties also get added to the CandidateTracks object itself, including .label, which contains the interval label, and .id, which contains a unique id for the interval within the textgrid.\n\n[all_vowels[0].label,\n all_vowels[0].id]\n\n['AY1', '0-0-4-3']\n\n\n\n\nOutputting to a dataframe.\nIn order to output the results to one large dataframe. You’ll have to use polars.concat().\n\nimport polars as pl\nimport plotly.express as px\n\n\nall_df = [vowel.to_df() for vowel in all_vowels]\nbig_df = pl.concat(all_df, how=\"diagonal\")\n\n\nbig_df.shape\n\n(8012, 17)\n\n\n\nmax_formants = big_df\\\n    .group_by([\"id\", \"label\"])\\\n    .agg(\n        pl.col(\"max_formant\").mean()\n    )\n\n\nfig = px.violin(max_formants, y = \"max_formant\", points=\"all\")\nfig.show()",
+    "text": "Processing an Audio + TextGrid combination.\nTo process a combination of an audio + textgrid, you can use the process_audio_textgrid() function. There are a few more options to add here related to textgrid processing.\n\nTextGrid Processing\n\nentry_classes\nfasttrackpy uses aligned-textgrid to process TextGrids. By default, it will assume your textgrid is formatted as the output of forced alignment with a Word and Phone tier. If your textgrid doesn’t have these tiers, you can pass entry_classes [SequenceInterval] instead.\n\n\ntarget_tier\nYou need to lest process_audio_textgrid() know which tier(s) to process, either by telling it which entry class to target (defaults to \"Phone\") or by the name of the tier.\n\n\ntarget_labels\nTo process only specific textgrid intervals (say, the vowels), you can pass target_labels a regex string that will match the labels of intervals.\n\n\n\nRunning the processing\n\nspeaker_audio = Path(\"..\", \"assets\" , \"corpus\", \"josef-fruehwald_speaker.wav\")\nspeaker_textgrid = Path(\"..\", \"assets\", \"corpus\", \"josef-fruehwald_speaker.TextGrid\")\n\n\nall_vowels = process_audio_textgrid(\n    audio_path=speaker_audio,\n    textgrid_path=speaker_textgrid,\n    entry_classes=[\"Word\", \"Phone\"],\n    target_tier=\"Phone\",\n    # just stressed vowels\n    target_labels=\"[AEIOU].1\",\n    min_duration=0.05,\n    min_max_formant=3000,\n    max_max_formant=6000,\n    n_formants=4\n)\n\n100%|██████████| 174/174 [00:06&lt;00:00, 27.08it/s]\n\n\n\n\nInspecting the results\nThe all_vowels object is a list of CandidateTracks. Each candidate track object has the same attributes discussed above, but a few additional values added from the textgrid interval.\n\nThe SequenceInterval object\nYou can access the aligned-textgrid.SequenceInterval itself, and its related attributes.\n\nall_vowels[0].interval.label\n\n'AY1'\n\n\n\nall_vowels[0].interval.fol.label\n\n'K'\n\n\n\nall_vowels[0].interval.inword.label\n\n'strikes'\n\n\n\n\nLabels & Ids\nInterval properties also get added to the CandidateTracks object itself, including .label, which contains the interval label, and .id, which contains a unique id for the interval within the textgrid.\n\n[all_vowels[0].label,\n all_vowels[0].id]\n\n['AY1', '0-0-4-3']\n\n\n\n\nOutputting to a dataframe.\nIn order to output the results to one large dataframe. You’ll have to use polars.concat().\n\nimport polars as pl\nimport plotly.express as px\n\n\nall_df = [vowel.to_df() for vowel in all_vowels]\nbig_df = pl.concat(all_df, how=\"diagonal\")\n\n\nbig_df.shape\n\n(8012, 21)\n\n\n\nmax_formants = big_df\\\n    .group_by([\"id\", \"label\"])\\\n    .agg(\n        pl.col(\"max_formant\").mean()\n    )\n\n\nfig = px.violin(max_formants, y = \"max_formant\", points=\"all\")\nfig.show()",
     "crumbs": [
       "Home",
       "Pythonic Use"
@@ -839,10 +628,351 @@
     "href": "usage/pythonic_use.html#processing-a-corpus",
     "title": "Pythonic Use",
     "section": "Processing a corpus",
-    "text": "Processing a corpus\nTo process all audio/textgrid pairs in a given directory, you can use process_corpus(), which will return a list of all CandidateTracks from the corpus.\n\ncorpus_path = Path(\"..\", \"assets\" , \"corpus\")\nall_vowels = process_corpus(corpus_path)\n\n100%|██████████| 65/65 [00:00&lt;00:00, 254.32it/s]\n100%|██████████| 274/274 [00:01&lt;00:00, 250.69it/s]\n\n\nJust like processing an audio file + textgrid combination, you’ll need to use polars.concat() to get one large data frame as output. The columns file_name and group will distinguish between measurements from different files and from different speakers within the files.\n\nbig_df = pl.concat(\n    [cand.to_df() for cand in all_vowels],\n    how = \"diagonal\"\n    )\n\n\nunique_groups = big_df \\\n    .select(\"file_name\", \"group\", \"id\") \\\n    .unique() \\\n    .group_by([\"file_name\", \"group\"]) \\\n    .count()",
+    "text": "Processing a corpus\nTo process all audio/textgrid pairs in a given directory, you can use process_corpus(), which will return a list of all CandidateTracks from the corpus.\n\ncorpus_path = Path(\"..\", \"assets\" , \"corpus\")\nall_vowels = process_corpus(corpus_path)\n\n100%|██████████| 65/65 [00:00&lt;00:00, 154.23it/s]\n100%|██████████| 273/273 [00:01&lt;00:00, 152.10it/s]\n\n\nJust like processing an audio file + textgrid combination, you’ll need to use polars.concat() to get one large data frame as output. The columns file_name and group will distinguish between measurements from different files and from different speakers within the files.\n\nbig_df = pl.concat(\n    [cand.to_df() for cand in all_vowels],\n    how = \"diagonal\"\n    )\n\n\nunique_groups = big_df \\\n    .select(\"file_name\", \"group\", \"id\") \\\n    .unique() \\\n    .group_by([\"file_name\", \"group\"]) \\\n    .count()\n\n/var/folders/sf/84lgr1c10pggym7_8p8f54r40000gp/T/ipykernel_28952/3440171901.py:5: DeprecationWarning:\n\n`count` is deprecated. It has been renamed to `len`.",
     "crumbs": [
       "Home",
       "Pythonic Use"
+    ]
+  },
+  {
+    "objectID": "usage/pythonic_use.html#formant-tracking-heuristics",
+    "href": "usage/pythonic_use.html#formant-tracking-heuristics",
+    "title": "Pythonic Use",
+    "section": "Formant tracking heuristics",
+    "text": "Formant tracking heuristics\nThere are a few pre-specified heuristics for formant tracking implemented in fasttrackpy. You can import them and pass them in a list the heuristics argument of any processing function. For example, F1_Max specifies that F1 can’t be higher than 1200 Hz. Here’s an example of using it for formant tracking.\n\nfrom fasttrackpy import F1_Max\n\ncandidates = process_audio_file(\n    path=audio_path,\n    min_max_formant=3000,\n    max_max_formant=6000,\n    heuristics=[F1_Max]\n)\n\nThe heuristic results can be accessed from the .heuristic_error attribute of the candidates object. Candidates that pass the heuristic recieve 0, and any that violate the heurostoc recieve np.inf.\n\ncandidates.heuristic_errors\n\narray([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])\n\n\n\nCustom Heuristics\nThe F1_Max heuristic is an instance of the MinMaxHeuristic class. If you wanted to create your own custom heuristic, you can do so by creating a new instance.\n\nfrom fasttrackpy import MinMaxHeuristic\n\n## The first formant average must not be higher\n## than 500 Hz.\nLowF1 = MinMaxHeuristic(\n    edge=\"max\",\n    measure=\"frequency\",\n    number=1,\n    boundary=500\n)\n\n\ncandidates = process_audio_file(\n    path=audio_path,\n    min_max_formant=3000,\n    max_max_formant=6000,\n    heuristics=[LowF1]\n)\n\ncandidates.heuristic_errors\n\narray([ 0.,  0.,  0.,  0.,  0., inf,  0., inf, inf, inf, inf, inf, inf,\n       inf, inf, inf, inf, inf, inf, inf])",
+    "crumbs": [
+      "Home",
+      "Pythonic Use"
+    ]
+  },
+  {
+    "objectID": "reference/processors.smoothers.Smoothed.html",
+    "href": "reference/processors.smoothers.Smoothed.html",
+    "title": "processors.smoothers.Smoothed",
+    "section": "",
+    "text": "processors.smoothers.Smoothed(self, smoothed, params=None)\nSmooothed formant tracks\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nsmoothed\nnp.ndarray\na (formants, time) shaped numpy array of smoothed formant values\nrequired\n\n\nparams\nnp.ndarray\nParameters (if any) of the smoother. Defaults to None.\nNone",
+    "crumbs": [
+      "Smoothers",
+      "processors.smoothers.Smoothed"
+    ]
+  },
+  {
+    "objectID": "reference/processors.smoothers.Smoothed.html#parameters",
+    "href": "reference/processors.smoothers.Smoothed.html#parameters",
+    "title": "processors.smoothers.Smoothed",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nsmoothed\nnp.ndarray\na (formants, time) shaped numpy array of smoothed formant values\nrequired\n\n\nparams\nnp.ndarray\nParameters (if any) of the smoother. Defaults to None.\nNone",
+    "crumbs": [
+      "Smoothers",
+      "processors.smoothers.Smoothed"
+    ]
+  },
+  {
+    "objectID": "reference/processors.losses.mse.html",
+    "href": "reference/processors.losses.mse.html",
+    "title": "processors.losses.mse",
+    "section": "",
+    "text": "processors.losses.mse(formants, smoothed, axis=1)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description",
+    "crumbs": [
+      "Losses",
+      "processors.losses.mse"
+    ]
+  },
+  {
+    "objectID": "reference/processors.losses.mse.html#parameters",
+    "href": "reference/processors.losses.mse.html#parameters",
+    "title": "processors.losses.mse",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nformants\nnp.ndarray\ndescription\nrequired\n\n\nsmoothed\nnp.ndarray\ndescription\nrequired\n\n\naxis\nint\ndescription. Defaults to 1.\n1",
+    "crumbs": [
+      "Losses",
+      "processors.losses.mse"
+    ]
+  },
+  {
+    "objectID": "reference/processors.losses.mse.html#returns",
+    "href": "reference/processors.losses.mse.html#returns",
+    "title": "processors.losses.mse",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nnp.ndarray\nnp.ndarray: description",
+    "crumbs": [
+      "Losses",
+      "processors.losses.mse"
+    ]
+  },
+  {
+    "objectID": "reference/CandidateTracks.html",
+    "href": "reference/CandidateTracks.html",
+    "title": "CandidateTracks",
+    "section": "",
+    "text": "CandidateTracks(self, sound=None, samples=None, sampling_frequency=None, xmin=0.0, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])\nA class for candidate tracks for a single formant\nYou can provide either\n\nA parselmouth Sound object to the sound argument\n\nxor\n\nAn array of audio samples to the samples argument\nThe sampling frequency to the sampling_frequency argument\nAny optional time offset to the xmin argument.\n\nIf a Sound object is passed to sound, any values passed to samples, sampling_frequency and xmin are ignored.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nNone\n\n\nsamples\nnp.ndarray\nA numpy array of audio samples.\nNone\n\n\nsampling_frequency\nfloat\nThe audio sampling frequency.\nNone\n\n\nxmin\nfloat\nThe time offset for the audio. Defaults to 0.0.\n0.0\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ncandidates\nlist[OneTrack, …]\nA list of OneTrack tracks.\n\n\nsmooth_errors\nnp.array\nThe error terms for each treack in candidates\n\n\nwinner_idx\nint\nThe candidate track with the smallest error term\n\n\nwinner\nOneTrack\nThe winning OneTrack track.\n\n\nfile_name\nstr\nThe filename of the audio file, if set.\n\n\ninterval\naligned_textgrid.SequenceInterval\nThe textgrid interval of the sound, if set.\n\n\nid\nstr\nThe interval id of the sound, if set.\n\n\ngroup\nstr\nThe tier group name of the sound, if set.\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\nspectrograms\nThis will plot a grid of the candidate formant\n\n\nto_df\nReturn a polars dataframe of the candidate tracks\n\n\n\n\n\nCandidateTracks.spectrograms(**kwargs)\nThis will plot a grid of the candidate formant tracks and their spectrograms. If a file_name is provided, it will save the plot to disk.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nint\nThe number of formants to plot. Defaults to 3.\nrequired\n\n\nmaximum_frequency\nfloat\nThe frequency range the spectrogram and formants will be plotted up to. Defaults to 3500.\nrequired\n\n\ndynamic_range\nfloat\nA all spectrogram values below the dynamic range. will be plotted as white. Defaults to 60.\nrequired\n\n\nfigsize\ntuple[float, float]\nWidth and height of the figure in inches. Defaults to (8,5).\nrequired\n\n\nfile_name\nPath | None\nIf provided, how to save the spectrogram. If not provided (None) the plot will show interactively. Defaults to None.\nrequired\n\n\ndpi\nfloat\nIf the plot is being saved, its image resolution in dots per inch. Defaults to 75\nrequired\n\n\n\n\n\n\n\nCandidateTracks.to_df(which='winner', output='formants')\nReturn a polars dataframe of the candidate tracks\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nwhich\nLiteral[‘winner’, ‘all’]\nReturn just the winner track data, or all candidates. Defaults to “winner”.\n'winner'\n\n\noutput\nLiteral[‘formants’, ‘param’, ‘log_param’]\nWhether to output the formants or the smoothing parameters. Defaults to “formants”.\n'formants'\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\npl.DataFrame\nA polars.DataFrame",
+    "crumbs": [
+      "Classes",
+      "CandidateTracks"
+    ]
+  },
+  {
+    "objectID": "reference/CandidateTracks.html#parameters",
+    "href": "reference/CandidateTracks.html#parameters",
+    "title": "CandidateTracks",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nsound\npm.Sound\nA parselmouth.Sound object.\nNone\n\n\nsamples\nnp.ndarray\nA numpy array of audio samples.\nNone\n\n\nsampling_frequency\nfloat\nThe audio sampling frequency.\nNone\n\n\nxmin\nfloat\nThe time offset for the audio. Defaults to 0.0.\n0.0\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]",
+    "crumbs": [
+      "Classes",
+      "CandidateTracks"
+    ]
+  },
+  {
+    "objectID": "reference/CandidateTracks.html#attributes",
+    "href": "reference/CandidateTracks.html#attributes",
+    "title": "CandidateTracks",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\ncandidates\nlist[OneTrack, …]\nA list of OneTrack tracks.\n\n\nsmooth_errors\nnp.array\nThe error terms for each treack in candidates\n\n\nwinner_idx\nint\nThe candidate track with the smallest error term\n\n\nwinner\nOneTrack\nThe winning OneTrack track.\n\n\nfile_name\nstr\nThe filename of the audio file, if set.\n\n\ninterval\naligned_textgrid.SequenceInterval\nThe textgrid interval of the sound, if set.\n\n\nid\nstr\nThe interval id of the sound, if set.\n\n\ngroup\nstr\nThe tier group name of the sound, if set.",
+    "crumbs": [
+      "Classes",
+      "CandidateTracks"
+    ]
+  },
+  {
+    "objectID": "reference/CandidateTracks.html#methods",
+    "href": "reference/CandidateTracks.html#methods",
+    "title": "CandidateTracks",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nspectrograms\nThis will plot a grid of the candidate formant\n\n\nto_df\nReturn a polars dataframe of the candidate tracks\n\n\n\n\n\nCandidateTracks.spectrograms(**kwargs)\nThis will plot a grid of the candidate formant tracks and their spectrograms. If a file_name is provided, it will save the plot to disk.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nformants\nint\nThe number of formants to plot. Defaults to 3.\nrequired\n\n\nmaximum_frequency\nfloat\nThe frequency range the spectrogram and formants will be plotted up to. Defaults to 3500.\nrequired\n\n\ndynamic_range\nfloat\nA all spectrogram values below the dynamic range. will be plotted as white. Defaults to 60.\nrequired\n\n\nfigsize\ntuple[float, float]\nWidth and height of the figure in inches. Defaults to (8,5).\nrequired\n\n\nfile_name\nPath | None\nIf provided, how to save the spectrogram. If not provided (None) the plot will show interactively. Defaults to None.\nrequired\n\n\ndpi\nfloat\nIf the plot is being saved, its image resolution in dots per inch. Defaults to 75\nrequired\n\n\n\n\n\n\n\nCandidateTracks.to_df(which='winner', output='formants')\nReturn a polars dataframe of the candidate tracks\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nwhich\nLiteral[‘winner’, ‘all’]\nReturn just the winner track data, or all candidates. Defaults to “winner”.\n'winner'\n\n\noutput\nLiteral[‘formants’, ‘param’, ‘log_param’]\nWhether to output the formants or the smoothing parameters. Defaults to “formants”.\n'formants'\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\npl.DataFrame\nA polars.DataFrame",
+    "crumbs": [
+      "Classes",
+      "CandidateTracks"
+    ]
+  },
+  {
+    "objectID": "reference/process_audio_file.html",
+    "href": "reference/process_audio_file.html",
+    "title": "process_audio_file",
+    "section": "",
+    "text": "process_audio_file(path, xmin=0, xmax=None, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])\nGiven the path to a single audio file, return a candidates track object.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npath\nstr | Path\nPath to the audio file\nrequired\n\n\nxmin\nfloat\nStart time to process the audio. Defaults to 0.\n0\n\n\nxmax\nfloat\nEnd tome for processing audio. If None, defaults to the maximum time. Defaults to None.\nNone\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nCandidateTracks\nA CandidateTracks object to use.",
+    "crumbs": [
+      "Processing Functions",
+      "process_audio_file"
+    ]
+  },
+  {
+    "objectID": "reference/process_audio_file.html#parameters",
+    "href": "reference/process_audio_file.html#parameters",
+    "title": "process_audio_file",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npath\nstr | Path\nPath to the audio file\nrequired\n\n\nxmin\nfloat\nStart time to process the audio. Defaults to 0.\n0\n\n\nxmax\nfloat\nEnd tome for processing audio. If None, defaults to the maximum time. Defaults to None.\nNone\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]",
+    "crumbs": [
+      "Processing Functions",
+      "process_audio_file"
+    ]
+  },
+  {
+    "objectID": "reference/process_audio_file.html#returns",
+    "href": "reference/process_audio_file.html#returns",
+    "title": "process_audio_file",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nCandidateTracks\nA CandidateTracks object to use.",
+    "crumbs": [
+      "Processing Functions",
+      "process_audio_file"
+    ]
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth.html",
+    "href": "reference/processors.smoothers.dct_smooth.html",
+    "title": "processors.smoothers.dct_smooth",
+    "section": "",
+    "text": "processors.smoothers.dct_smooth(x, order=5)\nA DCT Smoother\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array of values to smooth.\nrequired\n\n\norder\nint\nDCT Order. Defaults to 5.\n5\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nSmoothed\nSee Smoothed",
+    "crumbs": [
+      "Smoothers",
+      "processors.smoothers.dct_smooth"
+    ]
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth.html#parameters",
+    "href": "reference/processors.smoothers.dct_smooth.html#parameters",
+    "title": "processors.smoothers.dct_smooth",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nx\nnp.array\nA 1D array of values to smooth.\nrequired\n\n\norder\nint\nDCT Order. Defaults to 5.\n5",
+    "crumbs": [
+      "Smoothers",
+      "processors.smoothers.dct_smooth"
+    ]
+  },
+  {
+    "objectID": "reference/processors.smoothers.dct_smooth.html#returns",
+    "href": "reference/processors.smoothers.dct_smooth.html#returns",
+    "title": "processors.smoothers.dct_smooth",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nSmoothed\nSee Smoothed",
+    "crumbs": [
+      "Smoothers",
+      "processors.smoothers.dct_smooth"
+    ]
+  },
+  {
+    "objectID": "reference/utils.safely.html",
+    "href": "reference/utils.safely.html",
+    "title": "utils.safely",
+    "section": "",
+    "text": "utils.safely",
+    "crumbs": [
+      "Utilities",
+      "utils.safely"
+    ]
+  },
+  {
+    "objectID": "reference/utils.safely.html#functions",
+    "href": "reference/utils.safely.html#functions",
+    "title": "utils.safely",
+    "section": "Functions",
+    "text": "Functions\n\n\n\nName\nDescription\n\n\n\n\nfilter_nones\nFilter lists based on the presence of None values.\n\n\nsafely\nA decorator for more graceful failing.\n\n\n\n\nfilter_nones\nutils.safely.filter_nones(filterer, to_filter)\nFilter lists based on the presence of None values.\n\nUsage:\n\n# on a single list\nfrom fasttrackpy.utils.safely import filter_nones\na = [1, 2, None, 6]\n\n# value unpacking\na, = filter_nones(a, [a])\nprint(a)\n\n[1, 2, 6]\n\n\n\nfrom fasttrackpy.utils.safely import filter_nones\na = [1, 2, None, 6]\nb = [\"a\", \"b\", \"c\", \"d\"]\n\na,b = filter_nones(a, [a,b])\nprint(a)\nprint(b)\n\n[1, 2, 6]\n['a', 'b', 'd']\n\n\n\n\nParameters\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nfilterer\nSequence\nThe filterer list that may contain None values\nrequired\n\n\nto_filter\nlist[Sequence]\nA list of lists to filter.\nrequired\n\n\n\n\n\nReturns\n\n\n\nType\nDescription\n\n\n\n\nlist[Sequence]\nlist[Sequence]: description\n\n\n\n\n\n\nsafely\nutils.safely.safely(message=f'There was a problem a function's application.')\nA decorator for more graceful failing. If the decorated function raises an exception, it will return None.\n\nParameters\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmessage\nstr\nA warning message in the case of an exception. Defaults to f\"There was a problem a function's application.\".\nf'There was a problem a function's application.'",
+    "crumbs": [
+      "Utilities",
+      "utils.safely"
+    ]
+  },
+  {
+    "objectID": "reference/Agg.html",
+    "href": "reference/Agg.html",
+    "title": "Agg",
+    "section": "",
+    "text": "Agg(self, method='agg_sum', **kwargs)\nsummary\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “agg_sum”.\n'agg_sum'",
+    "crumbs": [
+      "Aggs",
+      "Agg"
+    ]
+  },
+  {
+    "objectID": "reference/Agg.html#parameters",
+    "href": "reference/Agg.html#parameters",
+    "title": "Agg",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmethod\nUnion[str, Callable]\ndescription. Defaults to “agg_sum”.\n'agg_sum'",
+    "crumbs": [
+      "Aggs",
+      "Agg"
+    ]
+  },
+  {
+    "objectID": "reference/processors.aggs.agg_sum.html",
+    "href": "reference/processors.aggs.agg_sum.html",
+    "title": "processors.aggs.agg_sum",
+    "section": "",
+    "text": "processors.aggs.agg_sum\nprocessors.aggs.agg_sum(error, axis=0)\nSum the error",
+    "crumbs": [
+      "Aggs",
+      "processors.aggs.agg_sum"
+    ]
+  },
+  {
+    "objectID": "reference/process_audio_textgrid.html",
+    "href": "reference/process_audio_textgrid.html",
+    "title": "process_audio_textgrid",
+    "section": "",
+    "text": "process_audio_textgrid(audio_path, textgrid_path, entry_classes=['Word', 'Phone'], target_tier='Phone', target_labels='[AEIOU]', min_duration=0.05, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])\nProcess an audio and TextGrid file together.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\naudio_path\nstr | Path\nPath to an audio file.\nrequired\n\n\ntextgrid_path\nstr | Path\nPath to a TextGrid\nrequired\n\n\nentry_classes\nlist\nEntry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].\n['Word', 'Phone']\n\n\ntarget_tier\nstr\nThe tier to target. Defaults to “Phone”.\n'Phone'\n\n\ntarget_labels\nstr\nA regex that will match intervals to target. Defaults to “[AEIOU]”.\n'[AEIOU]'\n\n\nmin_duration\nfloat\nMinimum vowel duration to mention. Defaults to 0.05.\n0.05\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of candidate tracks.",
+    "crumbs": [
+      "Processing Functions",
+      "process_audio_textgrid"
+    ]
+  },
+  {
+    "objectID": "reference/process_audio_textgrid.html#parameters",
+    "href": "reference/process_audio_textgrid.html#parameters",
+    "title": "process_audio_textgrid",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\naudio_path\nstr | Path\nPath to an audio file.\nrequired\n\n\ntextgrid_path\nstr | Path\nPath to a TextGrid\nrequired\n\n\nentry_classes\nlist\nEntry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].\n['Word', 'Phone']\n\n\ntarget_tier\nstr\nThe tier to target. Defaults to “Phone”.\n'Phone'\n\n\ntarget_labels\nstr\nA regex that will match intervals to target. Defaults to “[AEIOU]”.\n'[AEIOU]'\n\n\nmin_duration\nfloat\nMinimum vowel duration to mention. Defaults to 0.05.\n0.05\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]",
+    "crumbs": [
+      "Processing Functions",
+      "process_audio_textgrid"
+    ]
+  },
+  {
+    "objectID": "reference/process_audio_textgrid.html#returns",
+    "href": "reference/process_audio_textgrid.html#returns",
+    "title": "process_audio_textgrid",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of candidate tracks.",
+    "crumbs": [
+      "Processing Functions",
+      "process_audio_textgrid"
+    ]
+  },
+  {
+    "objectID": "reference/process_corpus.html",
+    "href": "reference/process_corpus.html",
+    "title": "process_corpus",
+    "section": "",
+    "text": "process_corpus(corpus_path, entry_classes=['Word', 'Phone'], target_tier='Phone', target_labels='[AEIOU]', min_duration=0.05, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])\nGiven a directory to a corpus of audio/textgrid pairs, return candidates for all vowels.\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ncorpus_path\nstr | Path\nA path to the corpus\nrequired\n\n\nentry_classes\nlist\nEntry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].\n['Word', 'Phone']\n\n\ntarget_tier\nstr\nThe tier to target. Defaults to “Phone”.\n'Phone'\n\n\ntarget_labels\nstr\nA regex that will match intervals to target. Defaults to “[AEIOU]”.\n'[AEIOU]'\n\n\nmin_duration\nfloat\nMinimum vowel duration to mention. Defaults to 0.05.\n0.05\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of candidate tracks.",
+    "crumbs": [
+      "Processing Functions",
+      "process_corpus"
+    ]
+  },
+  {
+    "objectID": "reference/process_corpus.html#parameters",
+    "href": "reference/process_corpus.html#parameters",
+    "title": "process_corpus",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\ncorpus_path\nstr | Path\nA path to the corpus\nrequired\n\n\nentry_classes\nlist\nEntry classes for the textgrid tiers. Defaults to [“Word”, “Phone”].\n['Word', 'Phone']\n\n\ntarget_tier\nstr\nThe tier to target. Defaults to “Phone”.\n'Phone'\n\n\ntarget_labels\nstr\nA regex that will match intervals to target. Defaults to “[AEIOU]”.\n'[AEIOU]'\n\n\nmin_duration\nfloat\nMinimum vowel duration to mention. Defaults to 0.05.\n0.05\n\n\nmin_max_formant\nfloat\nThe lowest max-formant value to try. Defaults to 4000.\n4000\n\n\nmax_max_formant\nfloat\nThe highest max formant to try. Defaults to 7000.\n7000\n\n\nnstep\nint\nThe number of steps from the min to the max max formant. Defaults to 20.\n20\n\n\nn_formants\nint\nThe number of formants to track. Defaults to 4.\n4\n\n\nwindow_length\nfloat\nWindow length of the formant analysis. Defaults to 0.025.\n0.025\n\n\ntime_step\nfloat\nTime step of the formant analyusis window. Defaults to 0.002.\n0.002\n\n\npre_emphasis_from\nfloat\nPre-emphasis threshold. Defaults to 50.\n50\n\n\nsmoother\nSmoother\nThe smoother method to use. Defaults to Smoother().\nSmoother()\n\n\nloss_fun\nLoss\nThe loss function to use. Defaults to Loss().\nLoss()\n\n\nagg_fun\nAgg\nThe loss aggregation function to use. Defaults to Agg().\nAgg()\n\n\nheuristics\nlist[MinMaxHeuristic | SpacingHeuristic]\nA list of formant tracking heuristics to use.\n[]",
+    "crumbs": [
+      "Processing Functions",
+      "process_corpus"
+    ]
+  },
+  {
+    "objectID": "reference/process_corpus.html#returns",
+    "href": "reference/process_corpus.html#returns",
+    "title": "process_corpus",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nlist[CandidateTracks]\nA list of candidate tracks.",
+    "crumbs": [
+      "Processing Functions",
+      "process_corpus"
+    ]
+  },
+  {
+    "objectID": "reference/MinMaxHeuristic.html",
+    "href": "reference/MinMaxHeuristic.html",
+    "title": "MinMaxHeuristic",
+    "section": "",
+    "text": "MinMaxHeuristic(edge='max', measure='frequency', number=1, boundary=1200)\nA heuristic class for min/max frequencies and bandwidths\n\n\nTo define an F1 maximum:\nF1_Max = MinMaxHeuristic(    \n    edge=\"max\",\n    measure=\"frequency\",\n    number=1,\n    boundary=1200\n    )\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nedge\nLiteral[‘min’, ‘max’]\nWhether this heuristic defines a min or a max\n'max'\n\n\nmeasure\nLiteral[‘frequency’, ‘bandwidth’]\n(Literal[“frequency”, “bandwidth”]): Whether this heuristic is defined over frequencies or bandwidths\n'frequency'\n\n\nnumber\nint\nThe formant number\n1\n\n\nboundary\nfloat | int | np.floating\nThe min or max value.\n1200\n\n\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\neval\nEvaluate whether or not the track passes the\n\n\n\n\n\nMinMaxHeuristic.eval(track)\nEvaluate whether or not the track passes the heuristic\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntrack\nOneTrack\nThe track to evaluate\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nLiteral[0 | np.inf]\nIf it passes the heuristic, 0. If it doesn’t, np.inf",
+    "crumbs": [
+      "Heuristic Classes",
+      "MinMaxHeuristic"
+    ]
+  },
+  {
+    "objectID": "reference/MinMaxHeuristic.html#examples",
+    "href": "reference/MinMaxHeuristic.html#examples",
+    "title": "MinMaxHeuristic",
+    "section": "",
+    "text": "To define an F1 maximum:\nF1_Max = MinMaxHeuristic(    \n    edge=\"max\",\n    measure=\"frequency\",\n    number=1,\n    boundary=1200\n    )",
+    "crumbs": [
+      "Heuristic Classes",
+      "MinMaxHeuristic"
+    ]
+  },
+  {
+    "objectID": "reference/MinMaxHeuristic.html#parameters",
+    "href": "reference/MinMaxHeuristic.html#parameters",
+    "title": "MinMaxHeuristic",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nedge\nLiteral[‘min’, ‘max’]\nWhether this heuristic defines a min or a max\n'max'\n\n\nmeasure\nLiteral[‘frequency’, ‘bandwidth’]\n(Literal[“frequency”, “bandwidth”]): Whether this heuristic is defined over frequencies or bandwidths\n'frequency'\n\n\nnumber\nint\nThe formant number\n1\n\n\nboundary\nfloat | int | np.floating\nThe min or max value.\n1200",
+    "crumbs": [
+      "Heuristic Classes",
+      "MinMaxHeuristic"
+    ]
+  },
+  {
+    "objectID": "reference/MinMaxHeuristic.html#methods",
+    "href": "reference/MinMaxHeuristic.html#methods",
+    "title": "MinMaxHeuristic",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\neval\nEvaluate whether or not the track passes the\n\n\n\n\n\nMinMaxHeuristic.eval(track)\nEvaluate whether or not the track passes the heuristic\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\ntrack\nOneTrack\nThe track to evaluate\nrequired\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nLiteral[0 | np.inf]\nIf it passes the heuristic, 0. If it doesn’t, np.inf",
+    "crumbs": [
+      "Heuristic Classes",
+      "MinMaxHeuristic"
     ]
   }
 ]
