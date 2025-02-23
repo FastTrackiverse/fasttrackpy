@@ -1,17 +1,18 @@
 name: pypi publish
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-    publish:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-              with: 
-                ref: main
-            - uses: JRubics/poetry-publish@v2.0
-              with:
-                pypi_token: ${{ secrets.PYPI_TOKEN }}
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: 
+          ref: main
+      - uses: JRubics/poetry-publish@v2.0
+        with:
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
