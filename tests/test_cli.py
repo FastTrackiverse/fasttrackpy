@@ -29,6 +29,25 @@ class TestCLI:
         [x.unlink() for x in out_files]
         out_dir.rmdir()
 
+    def test_file_usage_heuristic(self):
+        out_dir = self.sound_path.parent.joinpath("output")
+        if not out_dir.is_dir():
+            out_dir.mkdir()
+
+        runner = CliRunner()
+        result = runner.invoke(
+            fasttrack,
+            ["audio", 
+             "--file", self.sound_path, 
+             "--dest", out_dir, 
+             "--f1-max-heuristic"]
+        )
+
+        assert result.exit_code == 0, result.output
+        out_files = list(out_dir.glob("*"))
+        [x.unlink() for x in out_files]
+        out_dir.rmdir()        
+
     def test_config_file(self):
         config_path = Path("tests", "test_data", "config.yml")
         with config_path.open() as file:

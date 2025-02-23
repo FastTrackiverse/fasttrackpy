@@ -3,6 +3,16 @@ from fasttrackpy.processors.outputs import write_data
 from fasttrackpy.processors.aggs import Agg
 from fasttrackpy.processors.smoothers import Smoother
 from fasttrackpy.processors.losses import Loss
+from fasttrackpy.processors.heuristic import (
+    MinMaxHeuristic,
+    SpacingHeuristic,
+    F1_Max, 
+    B2_Max,
+    B3_Max,
+    F4_Min,
+    Rhotic,
+    F3_F4_Sep
+)
 from fasttrackpy.patterns.just_audio import process_audio_file, \
                                             process_directory,\
                                             is_audio
@@ -19,6 +29,15 @@ from importlib.resources import files
 import yaml
 
 import logging
+
+heuristic_dict = {
+  "f1_max_heuristic": F1_Max,
+  "f4_min_heuristic": F4_Min,
+  "b2_max_heuristic": B2_Max,
+  "b3_max_heuristic": B3_Max,
+  "rhotic_heuristic": Rhotic,
+  "f3_f4_heuristic": F3_F4_Sep
+}
 
 DEFAULT_CONFIG = str(files("fasttrackpy").joinpath("resources", "config.yml"))
 
@@ -134,6 +153,47 @@ smoother_options = cloup.option_group(
     )
 )
 
+
+heuristic_options = cloup.option_group(
+    "Formant Tracking Heuristics",
+    cloup.option(
+        "--f1-max-heuristic",
+       is_flag=True,
+       default=False,
+       help="F1 should not be greater than 1200 Hz"
+    ),
+    cloup.option(
+        "--f4-min-heuristic",
+        is_flag=True,
+        default=False,
+        help="F4 should not be less than 2900 Hz"
+    ),
+    cloup.option(
+        "--b2-max-heuristic",
+        is_flag=True,
+        default=False,
+        help="B2 should not be greater than 500 Hz."
+    ),
+    cloup.option(
+        "--b3-max-heuristic",
+        is_flag=True,
+        default=False,
+        help = "B3 should not be greater than 600 hz"
+    ),
+    cloup.option(
+        "--rhotic-heuristic",
+        is_flag=True,
+        default=False,
+        help="If F3 < 2000 Hz, F1 and F2 should be at least 500 Hz apart."
+    ),
+    cloup.option(
+        "--f3-f4-heuristic",
+        is_flag=True,
+        default=False,
+        help="If F4 - F3 < 500 Hz, F2-F1 > 1500."
+    )
+)
+
 output_options = cloup.option_group(
     "Output Options",
     cloup.option(
@@ -232,6 +292,7 @@ def fasttrack():
 @output_options
 @audio_processing
 @smoother_options
+@heuristic_options
 def audio(
         file: Union[str, Path] = None,
         dir: Union[str,Path] = None,
@@ -295,11 +356,17 @@ def audio(
 
     loss_kwargs = {
         "method": loss_method
-    }
+    }    
 
     smoother = Smoother(**smoother_kwargs)
     loss_fun = Loss(**loss_kwargs)
     agg_fun = Agg()
+
+    heuristics = [
+        heuristic_dict[k]
+        for k in kwargs
+        if k in heuristic_dict
+    ]            
 
     if file and is_audio(file):
 
@@ -316,7 +383,8 @@ def audio(
             pre_emphasis_from=pre_emphasis_from,
             smoother=smoother,
             loss_fun=loss_fun,
-            agg_fun=agg_fun
+            agg_fun=agg_fun,
+            heuristics=heuristics
         )
 
         write_data(candidates=candidates, 
@@ -373,6 +441,7 @@ def audio(
 @textgrid_processing
 @audio_processing
 @smoother_options
+@heuristic_options
 def audio_textgrid(
         audio: Union[str, Path] = None,
         textgrid: Union[str,Path] = None,
@@ -444,6 +513,12 @@ def audio_textgrid(
     loss_fun = Loss(**loss_kwargs)
     agg_fun = Agg()
 
+    heuristics = [
+        heuristic_dict[k]
+        for k in kwargs
+        if k in heuristic_dict
+    ]     
+
     entry_classes = entry_classes.split("|")
 
     all_candidates = process_audio_textgrid(
@@ -462,7 +537,8 @@ def audio_textgrid(
         pre_emphasis_from=pre_emphasis_from,
         smoother=smoother,
         loss_fun=loss_fun,
-        agg_fun=agg_fun
+        agg_fun=agg_fun,
+        heuristics=heuristics
     )
 
     write_data(candidates=all_candidates, 
@@ -491,6 +567,7 @@ def audio_textgrid(
 @textgrid_processing
 @audio_processing
 @smoother_options
+@heuristic_options
 def corpus(
         corpus: str|Path = None,
         entry_classes: str = None,
@@ -511,7 +588,8 @@ def corpus(
         n_formants: int = 4,
         window_length: float = 0.025,
         time_step: float = 0.002,
-        pre_emphasis_from: float = 50
+        pre_emphasis_from: float = 50,
+        **kwargs
 ):
     smoother_kwargs = {
         "method": smoother_method,
@@ -525,6 +603,12 @@ def corpus(
     smoother = Smoother(**smoother_kwargs)
     loss_fun = Loss(**loss_kwargs)
     agg_fun = Agg()
+
+    heuristics = [
+        heuristic_dict[k]
+        for k in kwargs
+        if k in heuristic_dict
+    ]         
 
     entry_classes = entry_classes.split("|")
 
@@ -543,7 +627,8 @@ def corpus(
         pre_emphasis_from = pre_emphasis_from,
         smoother = smoother,
         loss_fun = loss_fun,
-        agg_fun = agg_fun
+        agg_fun = agg_fun,
+        heuristics=heuristics
     )
 
     write_data(

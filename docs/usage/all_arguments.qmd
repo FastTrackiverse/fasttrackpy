@@ -1,11 +1,12 @@
 ---
 title: All FastTrack Options
 ---
+
 ## Use of a config file
 
 Instead of needing to include every option you wish to cusotomize as a command line entry, you can set them in a config file, and pass it to the `fasttrack` command with config. For example
 
-```yaml
+``` yaml
 # config.yml file
 audio: speaker.wav
 textgrid: speaker.TextGrid
@@ -16,7 +17,7 @@ target_labels: "..1"
 smoother_order: 6
 ```
 
-```bash
+``` bash
 # at the command line: 
 fasttrack audio-textgrid --config config.yml
 ```
@@ -25,19 +26,17 @@ fasttrack audio-textgrid --config config.yml
 
 ### Just Audio Options
 
-| Option | Meaning |
-| :----  | :---- |
-| `file` | A single audio file to process |
-| `dir` | A directory of audio files to process | 
-
+| Option | Meaning                               |
+|:-------|:--------------------------------------|
+| `file` | A single audio file to process        |
+| `dir`  | A directory of audio files to process |
 
 ### Audio + TextGrid Options
 
-| Option | Meaning |
-| :----  | :---- |
-| `audio` | Path to an audio file to process |
-| `textgrid` | Path to a textgrid to process | 
-
+| Option     | Meaning                          |
+|:-----------|:---------------------------------|
+| `audio`    | Path to an audio file to process |
+| `textgrid` | Path to a textgrid to process    |
 
 ## Shared Options
 
@@ -45,17 +44,17 @@ The Following options are general across most fasttrack commands.
 
 ### Output Destinations
 
-| Option | Meaning |
-| :---- | :---- | 
+| Option   | Meaning          |
+|:---------|:-----------------|
 | `output` | Output file name |
-| `dest` | Output directory | 
+| `dest`   | Output directory |
 
 If an `output` file name is not provided, `fasttrack` will try to use a reasonable name based on the input audio file name.
 
 ### Output Options
 
 | Option | Meaning | Default |
-| :----  | :---- | :----  |
+|:-----------------------|:-----------------------|:-----------------------|
 | `which_output` | Whether to save just the winning track (`winner`) or all candidates (`all`) | `winner` |
 | `data_output` | Whether to save the formant tracks (`formants`) or the smoothing parameters (`param`) | `formants` |
 | `separate_output` | When processing a corpus, save each file/group to a separate file? | `False` |
@@ -63,24 +62,23 @@ If an `output` file name is not provided, `fasttrack` will try to use a reasonab
 ### TextGrid Processing Options
 
 | Option | Meaning | Default |
-| :---   | :----- | ----: | 
-| `entry_classes` | Format of the TextGrid. | `"Word|Phone"`|
-| `target_tier` | The tier to target for processing | `Phone`|
+|:-------------------|:----------------------------|-----------------------:|
+| `entry_classes` | Format of the TextGrid. | `"Word|Phone"` |
+| `target_tier` | The tier to target for processing | `Phone` |
 | `target_labels` | A regex for the labels to target for processing | `"[AEIOU]"` |
 
 #### Notes:
 
-- If your textgrid is not the output of a forced-aligner, change the `entry_classes` value to `SequenceInterval` and the value of `target_tier` to whatever the tier name is that you want to process.
-- Any string that can be interpreted as a regular expression can be passed to `processing`.
-
+-   If your textgrid is not the output of a forced-aligner, change the `entry_classes` value to `SequenceInterval` and the value of `target_tier` to whatever the tier name is that you want to process.
+-   Any string that can be interpreted as a regular expression can be passed to `processing`.
 
 ### Audio Processing Options
 
 | Option | Meaning | Default |
-| :---   | :----- | ----: | 
-| `min_duration` | The minumum duration segment to analyze | 0.05 (s)| 
-| `min_max_formant` | The lowest maximum formant to try | 4000(hz)|
-| `max_max_formant` | The highest maximum formant to try | 7000(hz)|
+|:-------------------|:----------------------------|-----------------------:|
+| `min_duration` | The minumum duration segment to analyze | 0.05 (s) |
+| `min_max_formant` | The lowest maximum formant to try | 4000(hz) |
+| `max_max_formant` | The highest maximum formant to try | 7000(hz) |
 | `nstep` | The number of steps between the lowest and the highest maximum formant | 20 |
 | `n_formants` | The number of formants to try to track in the audio | 4 |
 | `window_length` | The formant analysis window length | 0.025 (s) |
@@ -90,8 +88,20 @@ If an `output` file name is not provided, `fasttrack` will try to use a reasonab
 ### Smoother Options
 
 | Option | Meaning | Default |
-| :---   | :----- | ----: | 
-| `smoother_method` | The smoothing method to use. It's not recommended you change this from the default.  | `dct_smooth_regression` |
+|:-------------------|:----------------------------|-----------------------:|
+| `smoother_method` | The smoothing method to use. It's not recommended you change this from the default. | `dct_smooth_regression` |
 | `smoother_order` | The "order" of the smooth. More is wigglier. | 5 |
 | `loss_method` | Method for calculating the error between the smooth and measured formants. It's not recommended that you change the default | `lmse` |
 
+### Heuristic Options
+
+These flags turn on the described formant tracking heuristic.
+
+| Option             | Meaning                               |
+|:-------------------|:--------------------------------------|
+| `f1-max-heuristic` | F1 should not be greater than 1200 Hz |
+| `f4-min-heuristic` | F4 should not be less than 2900 Hz    |
+| `b2-max-heuristic` | B2 should not be greater than 500 Hz.  |
+| `b3-max-heuristic` | B3 should not be greater than 600 hz  |
+| `rhotic-heuristic` | If F3 \< 2000 Hz, F1 and F2 should be at least 500 Hz apart.  |
+| `f3-f4-heuristic` | If F4 - F3 \< 500 Hz, F2-F1 \> 1500. |

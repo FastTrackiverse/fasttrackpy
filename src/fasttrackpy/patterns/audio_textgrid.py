@@ -2,6 +2,7 @@ import parselmouth as pm
 from aligned_textgrid import AlignedTextGrid, Word, Phone, SequenceInterval, SequenceTier
 import aligned_textgrid
 from fasttrackpy import CandidateTracks, Smoother, Loss, Agg
+from fasttrackpy.processors.heuristic import MinMaxHeuristic, SpacingHeuristic
 from fasttrackpy.patterns.just_audio import create_audio_checker
 from fasttrackpy.utils.safely import safely, filter_nones
 import re
@@ -113,7 +114,8 @@ def process_audio_textgrid(
         pre_emphasis_from: float = 50,
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
-        agg_fun: Agg = Agg()
+        agg_fun: Agg = Agg(),
+        heuristics: list[MinMaxHeuristic|SpacingHeuristic] = []     
 )->list[CandidateTracks]:
     """Process an audio and TextGrid file together.
 
@@ -147,6 +149,9 @@ def process_audio_textgrid(
             Defaults to Loss().
         agg_fun (Agg, optional): The loss aggregation function to use. 
             Defaults to Agg().
+        heuristics (list[MinMaxHeuristic|SpacingHeuristic]):
+            A list of formant tracking heuristics to use.
+
 
     Returns:
         (list[CandidateTracks]): A list of candidate tracks.
@@ -186,7 +191,8 @@ def process_audio_textgrid(
             "pre_emphasis_from": pre_emphasis_from,
             "smoother": smoother,
             "loss_fun":loss_fun,
-            "agg_fun": agg_fun
+            "agg_fun": agg_fun,
+            "heuristics": heuristics
         } for x, interval in zip(sound_parts, target_intervals)
     ]
     
