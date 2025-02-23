@@ -227,6 +227,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#audio-processing-options" id="toc-audio-processing-options" class="nav-link" data-scroll-target="#audio-processing-options">Audio Processing Options</a></li>
   <li><a href="#smoother-options" id="toc-smoother-options" class="nav-link" data-scroll-target="#smoother-options">Smoother Options</a></li>
+  <li><a href="#heuristic-options" id="toc-heuristic-options" class="nav-link" data-scroll-target="#heuristic-options">Heuristic Options</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -375,9 +376,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="textgrid-processing-options">TextGrid Processing Options</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 26%">
-<col style="width: 40%">
-<col style="width: 33%">
+<col style="width: 27%">
+<col style="width: 39%">
+<col style="width: 32%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -416,9 +417,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="audio-processing-options">Audio Processing Options</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 26%">
-<col style="width: 40%">
-<col style="width: 33%">
+<col style="width: 27%">
+<col style="width: 39%">
+<col style="width: 32%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -475,9 +476,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="smoother-options">Smoother Options</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 26%">
-<col style="width: 40%">
-<col style="width: 33%">
+<col style="width: 27%">
+<col style="width: 39%">
+<col style="width: 32%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -501,6 +502,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;"><code>loss_method</code></td>
 <td style="text-align: left;">Method for calculating the error between the smooth and measured formants. It’s not recommended that you change the default</td>
 <td style="text-align: right;"><code>lmse</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="heuristic-options" class="level3">
+<h3 class="anchored" data-anchor-id="heuristic-options">Heuristic Options</h3>
+<p>These flags turn on the described formant tracking heuristic.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>f1-max-heuristic</code></td>
+<td style="text-align: left;">F1 should not be greater than 1200 Hz</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>f4-min-heuristic</code></td>
+<td style="text-align: left;">F4 should not be less than 2900 Hz</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>b2-max-heuristic</code></td>
+<td style="text-align: left;">B2 should not be greater than 500 Hz.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>b3-max-heuristic</code></td>
+<td style="text-align: left;">B3 should not be greater than 600 hz</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>rhotic-heuristic</code></td>
+<td style="text-align: left;">If F3 &lt; 2000 Hz, F1 and F2 should be at least 500 Hz apart.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>f3-f4-heuristic</code></td>
+<td style="text-align: left;">If F4 - F3 &lt; 500 Hz, F2-F1 &gt; 1500.</td>
 </tr>
 </tbody>
 </table>

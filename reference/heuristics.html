@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>process_audio_file – fasttrackpy</title>
+<title>heuristics – fasttrackpy</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../reference/process_directory.html" rel="next">
-<link href="../reference/index.html" rel="prev">
+<link href="../reference/utils.safely.html" rel="next">
+<link href="../reference/SpacingHeuristic.html" rel="prev">
 <link href="../assets/logo_f2.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -120,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/process_audio_file.html">Processing Functions</a></li><li class="breadcrumb-item"><a href="../reference/process_audio_file.html">process_audio_file</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/heuristics.html">Pre-specified Heuristics</a></li><li class="breadcrumb-item"><a href="../reference/heuristics.html">processors.heuristic</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -154,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/process_audio_file.html" class="sidebar-item-text sidebar-link active">
+  <a href="../reference/process_audio_file.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">process_audio_file</span></a>
   </div>
 </li>
@@ -345,7 +345,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/heuristics.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/heuristics.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">processors.heuristic</span></a>
   </div>
 </li>
@@ -378,136 +378,55 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#fasttrackpy.process_audio_file" id="toc-fasttrackpy.process_audio_file" class="nav-link active" data-scroll-target="#fasttrackpy.process_audio_file">process_audio_file</a>
+  <li><a href="#fasttrackpy.processors.heuristic" id="toc-fasttrackpy.processors.heuristic" class="nav-link active" data-scroll-target="#fasttrackpy.processors.heuristic">processors.heuristic</a>
   <ul>
-  <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
-  <li><a href="#returns" id="toc-returns" class="nav-link" data-scroll-target="#returns">Returns</a></li>
+  <li><a href="#attributes" id="toc-attributes" class="nav-link" data-scroll-target="#attributes">Attributes</a></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/process_audio_file.html">Processing Functions</a></li><li class="breadcrumb-item"><a href="../reference/process_audio_file.html">process_audio_file</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/heuristics.html">Pre-specified Heuristics</a></li><li class="breadcrumb-item"><a href="../reference/heuristics.html">processors.heuristic</a></li></ol></nav></header>
 
 
 
 
-<section id="fasttrackpy.process_audio_file" class="level1">
-<h1>process_audio_file</h1>
-<p><code>process_audio_file(path, xmin=0, xmax=None, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])</code></p>
-<p>Given the path to a single audio file, return a candidates track object.</p>
-<section id="parameters" class="level2">
-<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
+<section id="fasttrackpy.processors.heuristic" class="level1">
+<h1>processors.heuristic</h1>
+<p><code>processors.heuristic</code></p>
+<section id="attributes" class="level2">
+<h2 class="anchored" data-anchor-id="attributes">Attributes</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>path</code></td>
-<td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></td>
-<td>Path to the audio file</td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td><code>xmin</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
-<td>Start time to process the audio. Defaults to 0.</td>
-<td><code>0</code></td>
-</tr>
-<tr class="odd">
-<td><code>xmax</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
-<td>End tome for processing audio. If None, defaults to the maximum time. Defaults to None.</td>
-<td><code>None</code></td>
-</tr>
-<tr class="even">
-<td><code>min_max_formant</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
-<td>The lowest max-formant value to try. Defaults to 4000.</td>
-<td><code>4000</code></td>
-</tr>
-<tr class="odd">
-<td><code>max_max_formant</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
-<td>The highest max formant to try. Defaults to 7000.</td>
-<td><code>7000</code></td>
-</tr>
-<tr class="even">
-<td><code>nstep</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
-<td>The number of steps from the min to the max max formant. Defaults to 20.</td>
-<td><code>20</code></td>
-</tr>
-<tr class="odd">
-<td><code>n_formants</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
-<td>The number of formants to track. Defaults to 4.</td>
-<td><code>4</code></td>
-</tr>
-<tr class="even">
-<td><code>window_length</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
-<td>Window length of the formant analysis. Defaults to 0.025.</td>
-<td><code>0.025</code></td>
-</tr>
-<tr class="odd">
-<td><code>time_step</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
-<td>Time step of the formant analyusis window. Defaults to 0.002.</td>
-<td><code>0.002</code></td>
-</tr>
-<tr class="even">
-<td><code>pre_emphasis_from</code></td>
-<td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
-<td>Pre-emphasis threshold. Defaults to 50.</td>
-<td><code>50</code></td>
-</tr>
-<tr class="odd">
-<td><code>smoother</code></td>
-<td><a href="../reference/Smoother.html#fasttrackpy.Smoother">Smoother</a></td>
-<td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
-<td><code>Smoother()</code></td>
-</tr>
-<tr class="even">
-<td><code>loss_fun</code></td>
-<td><a href="../reference/Loss.html#fasttrackpy.Loss">Loss</a></td>
-<td>The loss function to use. Defaults to Loss().</td>
-<td><code>Loss()</code></td>
-</tr>
-<tr class="odd">
-<td><code>agg_fun</code></td>
-<td><a href="../reference/Agg.html#fasttrackpy.Agg">Agg</a></td>
-<td>The loss aggregation function to use. Defaults to Agg().</td>
-<td><code>Agg()</code></td>
-</tr>
-<tr class="even">
-<td><code>heuristics</code></td>
-<td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="../reference/MinMaxHeuristic.html#fasttrackpy.MinMaxHeuristic">MinMaxHeuristic</a> | <a href="../reference/SpacingHeuristic.html#fasttrackpy.SpacingHeuristic">SpacingHeuristic</a>]</td>
-<td>A list of formant tracking heuristics to use.</td>
-<td><code>[]</code></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="returns" class="level2">
-<h2 class="anchored" data-anchor-id="returns">Returns</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Type</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="../reference/CandidateTracks.html#fasttrackpy.CandidateTracks">CandidateTracks</a></td>
-<td>A <code>CandidateTracks</code> object to use.</td>
+<td><a href="#fasttrackpy.processors.heuristic.F1_Max">F1_Max</a></td>
+<td><a href="../reference/MinMaxHeuristic.html#fasttrackpy.MinMaxHeuristic"><code>MinMaxHeuristic</code></a>: F1 should not be greater than 1200 Hz</td>
+</tr>
+<tr class="even">
+<td><a href="#fasttrackpy.processors.heuristic.F4_Min">F4_Min</a></td>
+<td><a href="../reference/MinMaxHeuristic.html#fasttrackpy.MinMaxHeuristic"><code>MinMaxHeuristic</code></a>: F4 should not be less than 2900 Hz</td>
+</tr>
+<tr class="odd">
+<td><a href="#fasttrackpy.processors.heuristic.B2_Max">B2_Max</a></td>
+<td><a href="../reference/MinMaxHeuristic.html#fasttrackpy.MinMaxHeuristic"><code>MinMaxHeuristic</code></a>: B2 should not be greater than 500 Hz</td>
+</tr>
+<tr class="even">
+<td><a href="#fasttrackpy.processors.heuristic.B3_Max">B3_Max</a></td>
+<td><a href="../reference/MinMaxHeuristic.html#fasttrackpy.MinMaxHeuristic"><code>MinMaxHeuristic</code></a>: B3 should not be greater than 600 Hz</td>
+</tr>
+<tr class="odd">
+<td><a href="#fasttrackpy.processors.heuristic.Rhotic">Rhotic</a></td>
+<td><a href="../reference/SpacingHeuristic.html#fasttrackpy.SpacingHeuristic"><code>SpacingHeuristic</code></a>: If F3 &lt; 2000 Hz, F1 and F2 should be at least 500 Hz apart.</td>
+</tr>
+<tr class="even">
+<td><a href="#fasttrackpy.processors.heuristic.F3_F4_Sep">F3_F4_Sep</a></td>
+<td><a href="../reference/SpacingHeuristic.html#fasttrackpy.SpacingHeuristic"><code>SpacingHeuristic</code></a>: If F4 - F3 &lt; 500 Hz, F2-F1 &gt; 1500.</td>
 </tr>
 </tbody>
 </table>
@@ -1080,13 +999,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../reference/index.html" class="pagination-link" aria-label="Function reference">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Function reference</span>
+      <a href="../reference/SpacingHeuristic.html" class="pagination-link" aria-label="SpacingHeuristic">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">SpacingHeuristic</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../reference/process_directory.html" class="pagination-link" aria-label="process_directory">
-        <span class="nav-page-text">process_directory</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../reference/utils.safely.html" class="pagination-link" aria-label="utils.safely">
+        <span class="nav-page-text">utils.safely</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
