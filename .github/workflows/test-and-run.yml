@@ -10,17 +10,21 @@ jobs:
   lint-and-test:
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
         os: [ubuntu-latest, windows-latest, macos-latest]
         exclude:
           - os: windows-latest
             python-version: "3.9"
+
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v4
+    - name: libmagic install
+      if: ${{ contains(matrix.os, 'macos') }}
+      run: brew install libmagic
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
@@ -39,7 +43,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        python -m pytest --cov=./ --cov-report=xml tests/
+        python -m pytest --cov=./ --cov-report=xml tests/ -p no:faulthandler
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4
       env:
