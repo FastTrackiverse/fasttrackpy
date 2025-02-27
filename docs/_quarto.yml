@@ -128,3 +128,4 @@ quartodoc:
     - title: Utilities
       contents:
         - utils.safely
+        - patterns.just_audio.is_audio
