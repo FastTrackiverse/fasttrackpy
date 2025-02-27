@@ -22,9 +22,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: libmagic install
-      if: ${{ contains(matrix.os, 'macos') }}
-      run: brew install libmagic
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
