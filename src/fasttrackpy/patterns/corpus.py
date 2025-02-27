@@ -3,7 +3,7 @@ from aligned_textgrid import AlignedTextGrid, Word, Phone, SequenceInterval, Seq
 import aligned_textgrid
 from fasttrackpy import CandidateTracks, Smoother, Loss, Agg
 from fasttrackpy.processors.heuristic import MinMaxHeuristic, SpacingHeuristic
-from fasttrackpy.patterns.just_audio import create_audio_checker
+from fasttrackpy.patterns.just_audio import is_audio
 from fasttrackpy.patterns.audio_textgrid import get_interval_classes
 from fasttrackpy.utils.safely import safely, filter_nones
 import re
@@ -16,20 +16,6 @@ from joblib import Parallel, cpu_count, delayed
 import warnings
 import os
 import sys
-
-
-try:
-    import magic
-    no_magic = False
-except:
-    warnings.warn("libmagic not found. "\
-                "Some audio file types won't be discovered by fasttrack. "\
-                "(mp3, ogg, ...)")
-    import sndhdr
-    from sndhdr import SndHeaders
-    no_magic = True
-
-is_audio = create_audio_checker(no_magic=no_magic)
 
 CorpusPair = namedtuple("CorpusPair", field_names=["wav", "tg"])
 
