@@ -10,6 +10,8 @@ from fasttrackpy import CandidateTracks,\
 from fasttrackpy.processors.heuristic import MinMaxHeuristic, SpacingHeuristic
 from fasttrackpy.utils.safely import safely, filter_nones
 
+import filetype
+
 from tqdm import tqdm
 from joblib import Parallel, cpu_count, delayed
 import os
@@ -17,58 +19,21 @@ import sys
 import logging
 logging.basicConfig(level=logging.INFO)
 
-try:
-    import magic
-    no_magic = False
-except:
-    warnings.warn("libmagic not found. "\
-                "Some audio file types won't be discovered by fasttrack. "\
-                "(mp3, ogg, ...)")
-    import sndhdr
-    from sndhdr import SndHeaders
-    no_magic = True
 
-def create_audio_checker(no_magic:bool = no_magic) -> Callable:
-    """Return an audio checker, dependent on 
-       availability of libmagic.
+
+def is_audio(path: str|Path)->bool:
+    """Checks whether a file is an audio file
 
     Args:
-        no_magic (bool): is libmagic available
+        path (str): Path to the file in question
 
     Returns:
-        (Callable): A sound file checker
-    """
-
-    def magic_checker(path: str)->bool:
-        """Checks whether a file is an audio file using libmagic
-
-        Args:
-            path (str): Path to the file in question
-
-        Returns:
-            (bool): Whether or not the file is an audio file
-        """
-        file_mime = magic.from_file(str(path), mime=True)
-        return "audio" in file_mime
-    
-    def sndhdr_checker(path: str)->bool:
-        """Checks whether a file is an audio file using `sndhdr`
-
-        Args:
-            path (str): Path to the file
-
-        Returns:
-            (bool): Whether or not the file is an audio file.
-        """
-        hdr_info = sndhdr.what(str(path))
-        return isinstance(hdr_info, SndHeaders)
-    
-    if no_magic:
-        return sndhdr_checker
-    
-    return magic_checker
-
-is_audio = create_audio_checker(no_magic=no_magic)
+        (bool): Whether or not the file is an audio file
+    """    
+    info = filetype.guess(path)
+    if info is not None:
+        return "audio" in info.mime
+    return False
 
 def process_audio_file(
         path: str|Path,
