@@ -1,9 +1,3 @@
-# try:
-#     import magic
-#     no_magic = False
-# except:
-#     no_magic = True
-#     import sndhdr
 from pathlib import Path
 import pytest
 from fasttrackpy.patterns.just_audio import is_audio
