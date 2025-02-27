@@ -1,29 +1,30 @@
-try:
-    import magic
-    no_magic = False
-except:
-    no_magic = True
-    import sndhdr
+# try:
+#     import magic
+#     no_magic = False
+# except:
+#     no_magic = True
+#     import sndhdr
 from pathlib import Path
 import pytest
-from fasttrackpy.patterns.just_audio import create_audio_checker,\
-                                            is_audio
+from fasttrackpy.patterns.just_audio import is_audio
 
-class TestMagicImport:
-    @pytest.mark.skipif(no_magic, reason = "libmagic unavailable")
-    def test_magic_import(self):
-        audio_path = Path("tests", "test_data", "ay.wav")
-        x = magic.from_file(str(audio_path), mime=True)
-        assert x
-        assert "audio" in x
+class TestAudioCheck():
+    def test_audio_files(self):
+        data_path = Path("tests", "test_data")
+        wavs = data_path.glob("*.wav")
+        for w in wavs:
+            assert is_audio(w)
+    
+    def test_all_files(self):
+        data_path = Path("tests", "test_data")
+        all_files = data_path.glob("*")
+      
 
-    def test_conditional_checker(self):
-        checker = create_audio_checker(no_magic=no_magic)
-        assert checker
-        audio_path = Path("tests", "test_data", "ay.wav")
-        is_audio = checker(str(audio_path))
-        assert is_audio
+        all_files = [f for f in all_files if f.is_file()]
+        assert len(all_files) > 0
 
-    def test_universal_checker(self):
-        audio_path = Path("tests", "test_data", "ay.wav")
-        assert is_audio(str(audio_path))
+        for f in all_files:
+            if f.suffix == ".wav":
+                assert is_audio(f)
+            else:
+                assert not is_audio(f)
