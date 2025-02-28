@@ -161,7 +161,7 @@ class OneTrack(Track):
         )
         self.maximum_formant = maximum_formant
 
-        self.formants, self.bandwidths, self.time_domain = self._track_formants()
+        self.formants, self.bandwidths, self._time_domain = self._track_formants()
         self.smoothed_list = self._smooth_formants()
         self.smoothed_b_list = self._smooth_bandwidths()
         self.smoothed_b_log_list = self._smooth_log_bandwidths()
@@ -238,6 +238,13 @@ class OneTrack(Track):
             for x in np.log(self.bandwidths)
         ]
         return smoothed_b_list
+
+    @property
+    def time_domain(self):
+        if self.interval:
+            return self._time_domain + self.interval.start
+        return self._time_domain
+
 
     @property
     def smoothed_formants(self):
