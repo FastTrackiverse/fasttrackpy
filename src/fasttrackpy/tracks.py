@@ -178,7 +178,7 @@ class OneTrack(Track):
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
 
-    def _track_formants(self):
+    def _track_formants(self)->tuple[np.array, np.array, np.array]:
         formant_obj = self.sound.to_formant_burg(
             time_step = self.time_step,
             max_number_of_formants = 5.5,
@@ -241,9 +241,10 @@ class OneTrack(Track):
 
     @property
     def time_domain(self):
+        half = self._time_domain.min()/2
         if self.interval:
-            return self._time_domain + self.interval.start
-        return self._time_domain
+            return self._time_domain + self.interval.start - half
+        return self._time_domain-half
 
 
     @property
