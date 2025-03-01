@@ -49,7 +49,7 @@ def get_target_intervals(
         interval 
         for tier in target_tiers 
         for interval in tier
-        if re.match(target_labels, interval.label) and
+        if re.search(target_labels, interval.label) and
         (interval.end - interval.start) > min_duration
     ]
 
