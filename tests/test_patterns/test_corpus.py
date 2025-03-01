@@ -106,10 +106,23 @@ class TestHelpers:
                 for tiers in all_tiers
             ]
         
+        stressed_intervals = [
+            get_target_intervals(tiers, target_labels="1")
+            for tiers in all_tiers
+        ]
+
+        stressed_labels = [
+            "1" in interval.label
+            for group in stressed_intervals
+            for interval in group
+        ]
+
         assert [isinstance(interval, SequenceInterval)
                 for group in all_intervals 
                 for interval in group
                 ]
+        
+        assert all(stressed_labels)
         
         assert [hasattr(interval, "wav")
                 for group in all_intervals 
