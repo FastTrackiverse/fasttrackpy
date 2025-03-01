@@ -161,7 +161,7 @@ class OneTrack(Track):
         )
         self.maximum_formant = maximum_formant
 
-        self.formants, self.bandwidths, self.time_domain = self._track_formants()
+        self.formants, self.bandwidths, self._time_domain = self._track_formants()
         self.smoothed_list = self._smooth_formants()
         self.smoothed_b_list = self._smooth_bandwidths()
         self.smoothed_b_log_list = self._smooth_log_bandwidths()
@@ -178,7 +178,7 @@ class OneTrack(Track):
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
 
-    def _track_formants(self):
+    def _track_formants(self)->tuple[np.array, np.array, np.array]:
         formant_obj = self.sound.to_formant_burg(
             time_step = self.time_step,
             max_number_of_formants = 5.5,
@@ -238,6 +238,14 @@ class OneTrack(Track):
             for x in np.log(self.bandwidths)
         ]
         return smoothed_b_list
+
+    @property
+    def time_domain(self):
+        half = self._time_domain.min()/2
+        if self.interval:
+            return self._time_domain + self.interval.start - half
+        return self._time_domain-half
+
 
     @property
     def smoothed_formants(self):
