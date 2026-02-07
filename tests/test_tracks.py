@@ -9,9 +9,17 @@ import parselmouth as pm
 import polars as pl
 import numpy as np
 from pathlib import Path
+import pytest
 
 SOUND_PATH = Path("tests", "test_data", "ay.wav")
 SOUND = pm.Sound(str(SOUND_PATH))
+
+@pytest.fixture
+def candidates():
+    candidates = CandidateTracks(
+            sound = SOUND
+        )
+    return candidates
 
 class TestTrack:
 
@@ -65,10 +73,7 @@ class TestOneTrack:
 
 class TestCandidateTracks:
 
-    def test_candidate_tracks_default(self):
-        candidates = CandidateTracks(
-            sound = SOUND
-        )
+    def test_candidate_tracks_default(self, candidates):
 
         assert candidates
         assert len(candidates.candidates) == 20
@@ -101,12 +106,12 @@ class TestCandidateTracks:
         assert isinstance(big_df3, pl.DataFrame)
         assert isinstance(big_df4, pl.DataFrame)
 
-    def test_candidate_sequence(self):
-        candidates = CandidateTracks(
-            sound = SOUND
-        )
+    def test_candidate_sequence(self, candidates):
 
         assert len(candidates) == 20
 
         one_cand = candidates[0]
         assert isinstance(one_cand, OneTrack)
+
+    def test_f0(self, candidates):
+        assert candidates.candidates[0].time_domain.shape == candidates.f0.shape

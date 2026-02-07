@@ -1,5 +1,6 @@
 import parselmouth as pm
 import numpy as np
+import numpy.typing as npt
 from fasttrackpy.processors.smoothers import Smoother
 from fasttrackpy.processors.losses import Loss
 from fasttrackpy.processors.aggs import Agg
@@ -37,9 +38,9 @@ class Track:
 
     def __init__(
             self,
-            sound: pm.Sound = None,
-            samples: np.array = None,
-            sampling_frequency: float = None,
+            sound: pm.Sound|None = None,
+            samples: npt.NDArray|None = None,
+            sampling_frequency: float|None = None,
             xmin: float = 0.0,            
             n_formants: int = 4,
             window_length: float = 0.05,
@@ -133,9 +134,9 @@ class OneTrack(Track):
     def __init__(
             self,
             maximum_formant: float,
-            sound: pm.Sound = None,
-            samples: np.array = None,
-            sampling_frequency: float = None,
+            sound: pm.Sound|None = None,
+            samples: npt.NDArray|None = None,
+            sampling_frequency: float|None = None,
             xmin: float = 0.0,
             n_formants: int = 4,
             window_length: float = 0.025,
@@ -178,7 +179,7 @@ class OneTrack(Track):
     def __repr__(self):
         return f"A formant track object. {self.formants.shape}"
 
-    def _track_formants(self)->tuple[np.array, np.array, np.array]:
+    def _track_formants(self) -> tuple[npt.NDArray, npt.NDArray, npt.NDArray]:
         formant_obj = self.sound.to_formant_burg(
             time_step = self.time_step,
             max_number_of_formants = 5.5,
@@ -481,8 +482,8 @@ class CandidateTracks(Track, Sequence):
     def __init__(
         self,
         sound: pm.Sound = None,
-        samples: np.array = None,
-        sampling_frequency: float = None,
+        samples: npt.NDArray|None = None,
+        sampling_frequency: float|None = None,
         xmin: float = 0.0,
         min_max_formant: float = 4000,
         max_max_formant: float = 7000,
@@ -564,12 +565,29 @@ class CandidateTracks(Track, Sequence):
 
         self.winner_idx = np.argmin(self.total_errors)
         self.winner = self.candidates[self.winner_idx]
-    
+        self.f0 = self.__get_pitch()
+        self.f0_smooth = self.smoother.smooth(self.f0)
+        self.intensity = self.__get_intensty()
+        self.intensity_smooth = self.smoother.smooth(self.intensity)
+
     def __getitem__(self, idx:int) -> OneTrack:
         return self.candidates[idx]
     
     def __len__(self) -> int:
         return len(self.candidates)
+    
+    def __get_pitch(self) -> npt.NDArray:
+        pitch_obj = self.sound.to_pitch(time_step = self.time_step)
+        pitch_array = np.array([
+            pitch_obj.get_value_at_time(t)
+            for t in self.candidates[0].time_domain
+        ])
+        return pitch_array
+    
+    def __get_intensty(self) -> npt.NDArray:
+        intensity_obj = self.sound.to_intensity(time_step = self.time_step)
+        return intensity_obj.values[0]
+
 
     @property
     def file_name(self):

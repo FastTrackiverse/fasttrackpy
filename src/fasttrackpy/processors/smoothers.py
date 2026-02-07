@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.typing as npt
 import scipy.fft
 from typing import Union
 from collections.abc import Callable
@@ -15,8 +16,8 @@ class Smoothed:
 
     def __init__(
         self,
-        smoothed: np.ndarray,
-        params: np.ndarray = None
+        smoothed: npt.NDArray,
+        params: npt.NDArray|None = None
     ):
         self.smoothed = smoothed
         self.params = params
@@ -84,7 +85,7 @@ def dct_smooth(
 
 
 def dct_smooth_regression(
-        x:np.array, 
+        x:npt.NDArray, 
         order:int = 5
     ) -> Smoothed:
     """A DCT Smoother using regression
