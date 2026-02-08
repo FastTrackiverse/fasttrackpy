@@ -241,10 +241,7 @@ class OneTrack(Track):
 
     @property
     def time_domain(self):
-        half = self._time_domain.min()/2
-        if self.interval:
-            return self._time_domain + self.interval.start - half
-        return self._time_domain-half
+        return self._time_domain
 
 
     @property
