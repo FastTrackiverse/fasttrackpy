@@ -586,7 +586,11 @@ class CandidateTracks(Track, Sequence):
     
     def __get_intensty(self) -> npt.NDArray:
         intensity_obj = self.sound.to_intensity(time_step = self.time_step)
-        return intensity_obj.values[0]
+        intensity = np.array([
+            intensity_obj.get_value(time = t)
+            for t in self.candidates[0].time_domain
+        ])
+        return intensity
 
 
     @property
