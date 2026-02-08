@@ -44,7 +44,7 @@ def add_metadata(self, out_df):
 
     return out_df
 
-def formant_to_dataframe(self):
+def formant_to_dataframe(self)->pl.DataFrame:
     """Return data as a data frame
 
     Returns:
@@ -135,7 +135,7 @@ def log_param_to_dataframe(self):
 
     return param_df
 
-def get_big_df(self, output):
+def get_big_df(self, output) -> pl.DataFrame:
         all_df = [x.to_df(output = output) for x in self.candidates]
         all_df = [
             x.with_columns(
