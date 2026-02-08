@@ -459,6 +459,8 @@ class CandidateTracks(Track, Sequence):
             Defaults to 0.002.
         pre_emphasis_from (float, optional): Pre-emphasis threshold.
             Defaults to 50.
+        pitch_floor (float, optional): Pitch floor for f0 tracking.
+            Defaults to 75.
         smoother (Smoother, optional): The smoother method to use.
             Defaults to `Smoother()`.
         loss_fun (Loss, optional): The loss function to use.
@@ -492,6 +494,7 @@ class CandidateTracks(Track, Sequence):
         window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
+        pitch_floor: float = 75,
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg(),
@@ -513,6 +516,7 @@ class CandidateTracks(Track, Sequence):
 
         self.min_max_formant = min_max_formant
         self.max_max_formant = max_max_formant
+        self.pitch_floor = pitch_floor
         self.nstep = nstep
         self.max_formants = np.linspace(
             start = self.min_max_formant,
@@ -577,7 +581,10 @@ class CandidateTracks(Track, Sequence):
         return len(self.candidates)
     
     def __get_pitch(self) -> npt.NDArray:
-        pitch_obj = self.sound.to_pitch(time_step = self.time_step)
+        pitch_obj = self.sound.to_pitch(
+            time_step = self.time_step, 
+            pitch_floor = self.pitch_floor
+        )
         pitch_array = np.array([
             pitch_obj.get_value_at_time(t)
             for t in self.candidates[0].time_domain
