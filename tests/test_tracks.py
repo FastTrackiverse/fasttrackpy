@@ -117,4 +117,4 @@ class TestCandidateTracks:
         assert candidates.candidates[0].time_domain.shape == candidates.f0.shape
 
     def test_intensity(self, candidates):
-        assert candidates.candidates[0].time_domain.shape == candidates.intensity.shape        
+        assert candidates.candidates[0].time_domain.shape == candidates.intensity.shape

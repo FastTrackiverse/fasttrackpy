@@ -571,8 +571,10 @@ class CandidateTracks(Track, Sequence):
         self.winner = self.candidates[self.winner_idx]
         self.f0 = self.__get_pitch()
         self.f0_smooth = self.smoother.smooth(self.f0)
-        self.intensity = self.__get_intensty()
+        self.f0_log_smooth = self.smoother.smooth(np.log(self.f0))
+        self.intensity = self.__get_intensty()        
         self.intensity_smooth = self.smoother.smooth(self.intensity)
+        self.intensity_log_smooth = self.smoother.smooth(np.log(self.intensity))        
 
     def __getitem__(self, idx:int) -> OneTrack:
         return self.candidates[idx]
@@ -665,8 +667,31 @@ class CandidateTracks(Track, Sequence):
         Returns:
             (pl.DataFrame): A `polars.DataFrame`
         """
+
         if which == "winner":
-            return self.winner.to_df(output=output)
+            out_df = self.winner.to_df(output=output)
+            if output == "formants":
+                out_df = out_df.with_columns(
+                    f0 = pl.Series(self.f0),
+                    f0_s = pl.Series(self.f0_smooth.smoothed),
+                    intensity = pl.Series(self.intensity),
+                    intensity_s = pl.Series(self.intensity_smooth.smoothed)
+                )
+                return out_df
+            
+            if output == "param":
+                out_df = out_df.with_columns(
+                    f0 = pl.Series(self.f0_smooth.params),
+                    intensity = pl.Series(self.intensity_smooth.params)
+                )
+                return out_df
+            
+            if output == "log_param":
+                out_df = out_df.with_columns(
+                    f0 = pl.Series(self.f0_log_smooth.params),
+                    intensith = pl.Series(self.intensity_log_smooth.params)
+                )
+                return out_df
 
         if output == "formants"\
             and not isinstance(self._formant_df, pl.DataFrame):

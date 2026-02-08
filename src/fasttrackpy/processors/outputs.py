@@ -276,7 +276,7 @@ def spectrogram(
 
     data = data\
         .select(["time"]+all_cols)\
-        .melt(id_vars = "time")\
+        .unpivot(index = "time")\
         .with_columns(
             pl.col("variable")\
             .replace(ptolmap)\
@@ -377,7 +377,7 @@ def candidate_spectrograms(
 
             data = data\
                 .select(["time"]+all_cols)\
-                .melt(id_vars = "time")\
+                .unpivot(index = "time")\
                 .with_columns(
                     pl.col("variable")\
                     .replace(ptolmap)\
