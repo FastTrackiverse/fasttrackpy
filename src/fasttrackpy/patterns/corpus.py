@@ -144,6 +144,7 @@ def process_corpus(
         window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
+        pitch_floor: float = 75,
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg(),
@@ -174,6 +175,8 @@ def process_corpus(
             Defaults to 0.002.
         pre_emphasis_from (float, optional): Pre-emphasis threshold. 
             Defaults to 50.
+        pitch_floor (float, optional): Pitch floor for f0 tracking.
+            Defaults to 75.            
         smoother (Smoother, optional): The smoother method to use. 
             Defaults to `Smoother()`.
         loss_fun (Loss, optional): The loss function to use. 
@@ -218,6 +221,7 @@ def process_corpus(
                 "window_length": window_length,
                 "time_step" : time_step,
                 "pre_emphasis_from": pre_emphasis_from,
+                "pitch_floor": pitch_floor,
                 "smoother": smoother,
                 "loss_fun":loss_fun,
                 "agg_fun": agg_fun,

@@ -5,9 +5,12 @@ import polars as pl
 from aligned_textgrid import SequenceInterval
 from pathlib import Path
 import matplotlib.pyplot as mp
+import matplotlib
 import copy
 import logging
 import sys
+
+matplotlib.use('Agg')
 
 ptolmap = {"F1" :"#4477AA",
            "F1_s": "#4477AA",
@@ -276,7 +279,7 @@ def spectrogram(
 
     data = data\
         .select(["time"]+all_cols)\
-        .melt(id_vars = "time")\
+        .unpivot(index = "time")\
         .with_columns(
             pl.col("variable")\
             .replace(ptolmap)\
@@ -377,7 +380,7 @@ def candidate_spectrograms(
 
             data = data\
                 .select(["time"]+all_cols)\
-                .melt(id_vars = "time")\
+                .unpivot(index = "time")\
                 .with_columns(
                     pl.col("variable")\
                     .replace(ptolmap)\
