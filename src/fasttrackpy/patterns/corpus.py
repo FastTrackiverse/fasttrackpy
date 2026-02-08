@@ -17,6 +17,8 @@ import warnings
 import os
 import sys
 
+from collections.abc import Sequence
+
 CorpusPair = namedtuple("CorpusPair", field_names=["wav", "tg"])
 
 def get_audio_files(
@@ -32,7 +34,7 @@ def get_audio_files(
 
 def get_corpus(
         audio_files:list[Path]
-        ) -> list[tuple[Path, Path]]:
+        ) -> Sequence[CorpusPair]:
     wav_tg = [
         CorpusPair(wav, wav.with_suffix(".TextGrid"))
         for wav in audio_files
@@ -42,7 +44,7 @@ def get_corpus(
 
 def read_and_associate_tg(
         corpus_pair: CorpusPair,
-        entry_classes:list[SequenceInterval] = [Word, Phone]
+        entry_classes:Sequence[type[SequenceInterval]] = [Word, Phone]
         ) -> AlignedTextGrid:
     tg = AlignedTextGrid(
         textgrid_path=str(corpus_pair.tg), 
@@ -91,8 +93,8 @@ def get_target_intervals(
 def get_sound_parts(
         intervals: list[SequenceInterval],
         window_length: float
-):
-    sound = pm.Sound(str(intervals[0].wav))
+) -> Sequence[pm.Sound]:
+    sound = pm.Sound(str(getattr(intervals[0], "wav")))
     sound_parts = [
         sound.extract_part(from_time = interval.start-(window_length/2), 
         to_time = interval.end+(window_length/2))
@@ -120,7 +122,7 @@ def get_candidates(args_dict):
         warnings.warn("formant tracking error")
     return candidates
 
-def run_candidates(arg_list, parallel:bool):
+def run_candidates(arg_list, parallel:bool) -> Sequence[CandidateTracks]:
     if parallel:
         n_jobs = cpu_count()
         all_candidates = Parallel(n_jobs=n_jobs)(

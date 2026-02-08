@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 import parselmouth as pm
 from aligned_textgrid import AlignedTextGrid, Word, Phone, SequenceInterval, SequenceTier
 import aligned_textgrid
@@ -66,7 +67,7 @@ def get_candidates(args_dict):
 
 @delayed
 @safely(message="There was a problem getting some candidate tracks.")
-def get_candidates_delayed(args_dict):
+def get_candidates_delayed(args_dict) -> CandidateTracks:
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         candidates =  CandidateTracks(**args_dict)
@@ -74,10 +75,10 @@ def get_candidates_delayed(args_dict):
         warnings.warn("formant tracking error")
     return candidates
 
-def run_candidates(arg_list, parallel:bool):
+def run_candidates(arg_list, parallel:bool) -> Sequence[CandidateTracks]:
     if parallel:
         n_jobs = cpu_count()
-        all_candidates = Parallel(n_jobs=n_jobs)(
+        all_candidates = Parallel(n_jobs=n_jobs, return_as="list")(
             get_candidates_delayed(args_dict=arg) for arg in tqdm(arg_list)
             )
         return all_candidates
@@ -104,7 +105,7 @@ def process_audio_textgrid(
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg(),
         heuristics: list[MinMaxHeuristic|SpacingHeuristic] = []     
-)->list[CandidateTracks]:
+)->Sequence[CandidateTracks]:
     """Process an audio and TextGrid file together.
 
     Args:
@@ -154,7 +155,7 @@ def process_audio_textgrid(
 
     entry_classes = get_interval_classes(textgrid_format=entry_classes)
     
-    tg = AlignedTextGrid(textgrid_path=textgrid_path, entry_classes=entry_classes)
+    tg = AlignedTextGrid(textgrid=textgrid_path, entry_classes=entry_classes)
     target_tiers = get_target_tiers(tg, target_tier=target_tier)
     target_intervals = get_target_intervals(
         target_tiers=target_tiers, 
