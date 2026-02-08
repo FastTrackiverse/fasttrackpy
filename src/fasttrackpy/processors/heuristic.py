@@ -1,11 +1,12 @@
 from dataclasses import dataclass, field
 import numpy as np
+import numpy.typing as npt
 from collections.abc import Mapping
 from typing import TypeVar, TYPE_CHECKING, Literal, Annotated
+from collections.abc import Sequence
 if TYPE_CHECKING:
     from fasttrackpy import OneTrack
 
-TrackType = TypeVar("OneTrack")
 
 @dataclass
 class MinMaxHeuristic:
@@ -40,7 +41,7 @@ class MinMaxHeuristic:
     number: int = 1
     boundary: float|int|np.floating = 1200
 
-    def eval(self, track: TrackType):
+    def eval(self, track: OneTrack):
         """
         Evaluate whether or not the track passes the 
         heuristic
@@ -63,8 +64,7 @@ class MinMaxHeuristic:
                 track.log_parameters[self.number-1,0]*
                 np.sqrt(2)
             )
-
-        if self.measure == "bandwidth":
+        else:
             mean_value = np.exp(
                 track.bandwidth_parameters[self.number-1, 0]
                 *np.sqrt(2)
@@ -98,8 +98,8 @@ class SpacingHeuristic:
         bottom_diff (float|int|np.floating):
             The spacing of the bottom formants
     """
-    top: list[int] = field(default_factory=lambda: [3])
-    bottom: list[int] = field(default_factory=lambda: [1,2])
+    top: Sequence[int]|npt.NDArray[np.int_] = field(default_factory=lambda: [3])
+    bottom: Sequence[int]|npt.NDArray[np.int_] = field(default_factory=lambda: [1,2])
     top_diff: float|int|np.floating = 2000
     bottom_diff: float|int|np.floating = 500
 
@@ -107,7 +107,7 @@ class SpacingHeuristic:
         self.top = np.array(self.top)
         self.bottom = np.array(self.bottom)
 
-    def eval(self, track:TrackType):
+    def eval(self, track:OneTrack):
         """
         Evaluate whether or not the track passes
         the heuriustic
@@ -123,7 +123,7 @@ class SpacingHeuristic:
         """
         nformants = track.n_formants
 
-        if nformants < self.top.max():
+        if nformants < np.array(self.top).max():
             return 0
         
         top_values = np.array([
