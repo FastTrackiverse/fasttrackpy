@@ -41,7 +41,7 @@ class MinMaxHeuristic:
     number: int = 1
     boundary: float|int|np.floating = 1200
 
-    def eval(self, track: OneTrack):
+    def eval(self, track: "OneTrack"):
         """
         Evaluate whether or not the track passes the 
         heuristic
@@ -107,7 +107,7 @@ class SpacingHeuristic:
         self.top = np.array(self.top)
         self.bottom = np.array(self.bottom)
 
-    def eval(self, track:OneTrack):
+    def eval(self, track:"OneTrack"):
         """
         Evaluate whether or not the track passes
         the heuriustic
