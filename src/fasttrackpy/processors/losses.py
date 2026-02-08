@@ -1,6 +1,7 @@
 import numpy as np
-from typing import Union
+import numpy.typing as npt
 from collections.abc import Callable
+
 class Loss:
     """_summary_
 
@@ -10,7 +11,7 @@ class Loss:
 
     def __init__(
         self,
-        method: Union[str, Callable] = "lmse",
+        method: str|Callable = "lmse",
         **kwargs
     ):
         self.method = self._get_fun(method)
@@ -18,13 +19,13 @@ class Loss:
     
     def _get_fun(
             self, 
-            method: Union[str, Callable]
+            method: str|Callable 
         ) -> Callable:
         if callable(method):
             return method
-        if method == "lmse":
+        elif method == "lmse":
             return lmse
-        if method == "mse":
+        else:
             return mse
         
     def calculate_loss(
@@ -35,38 +36,38 @@ class Loss:
         return self.method(formants, smoothed, **self.method_args)
     
 def lmse(
-        formants: np.ndarray, 
-        smoothed: np.ndarray, 
+        formants: npt.NDArray, 
+        smoothed: npt.NDArray, 
         axis: int = 1
-    ) -> np.ndarray:
+    ) -> npt.NDArray:
     """_summary_
 
     Args:
-        formants (np.ndarray): _description_
-        smoothed (np.ndarray): _description_
+        formants (npt.NDArray): _description_
+        smoothed (npt.NDArray): _description_
         axis (int, optional): _description_. Defaults to 1.
 
     Returns:
-        np.ndarray: _description_
+        npt.NDArray: _description_
     """
     sqe = np.power(np.log(formants) - np.log(smoothed), 2)
     mse = np.nanmean(sqe, axis = axis)
     return mse
 
 def mse(
-        formants: np.ndarray, 
-        smoothed: np.ndarray, 
+        formants: npt.NDArray, 
+        smoothed: npt.NDArray, 
         axis: int = 1
-    ) -> np.ndarray:
+    ) -> npt.NDArray:
     """_summary_
 
     Args:
-        formants (np.ndarray): _description_
-        smoothed (np.ndarray): _description_
+        formants (npt.NDArray): _description_
+        smoothed (npt.NDArray): _description_
         axis (int, optional): _description_. Defaults to 1.
 
     Returns:
-        np.ndarray: _description_
+        npt.NDArray: _description_
     """
     sqe = np.power(formants - smoothed, 2)
     mse = np.nanmean(sqe, axis = axis)
