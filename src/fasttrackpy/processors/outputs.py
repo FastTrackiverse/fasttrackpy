@@ -149,8 +149,8 @@ def get_big_df(self, output):
 
 def write_data(
         candidates,
-        file: Path|None = None,
-        destination: Path|None = None,
+        file: str|Path|None = None,
+        destination: str|Path|None = None,
         which: str = "winner",
         output: str = "formants",
         separate: bool = False

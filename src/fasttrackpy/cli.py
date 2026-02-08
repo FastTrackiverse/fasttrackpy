@@ -39,7 +39,7 @@ heuristic_dict = {
   "f3_f4_heuristic": F3_F4_Sep
 }
 
-DEFAULT_CONFIG = str(files("fasttrackpy").joinpath("resources", "config.yml"))
+DEFAULT_CONFIG = str(files("fasttrackpy").joinpath("resources").joinpath("config.yml"))
 
 logging.basicConfig(
     filename = "fasttrack.log",
@@ -300,17 +300,17 @@ def fasttrack():
 @smoother_options
 @heuristic_options
 def audio(
-        file: Union[str, Path] = None,
-        dir: Union[str,Path] = None,
-        output: Union[str, Path] = None,
-        dest: Union[str, Path] = None,
+        file: str|Path,
+        dir: str|Path,
+        output: str|Path,
+        dest: str|Path,
         which_output: str = "winner",
         data_output: str = "formants",
         smoother_method: str = "dct_smooth_regression",
         smoother_order: int = 5,
         loss_method: str = "lmse",
         xmin:float = 0,
-        xmax: float = None,
+        xmax: float|None = None,
         min_max_formant:float = 4000,
         max_max_formant:float = 7000,
         min_duration = 0.05,
@@ -454,13 +454,13 @@ def audio(
 @smoother_options
 @heuristic_options
 def audio_textgrid(
-        audio: Union[str, Path] = None,
-        textgrid: Union[str,Path] = None,
-        entry_classes: str = None,
-        target_tier: str = None,
-        target_labels: str = None,
-        output: Union[str, Path] = None,
-        dest: Union[str, Path] = None,
+        audio: str|Path,
+        textgrid: str|Path,
+        entry_classes: str,
+        target_tier: str,
+        target_labels: str,
+        output: str|Path,
+        dest: str|Path,
         which_output: str = "winner",
         data_output: str = "formants",
         smoother_method: str = "dct_smooth_regression",
@@ -533,12 +533,12 @@ def audio_textgrid(
         if k in heuristic_dict
     ]     
 
-    entry_classes = entry_classes.split("|")
+    entry_classes_list = entry_classes.split("|")
 
     all_candidates = process_audio_textgrid(
         audio_path=audio,
         textgrid_path=textgrid,
-        entry_classes=entry_classes,
+        entry_classes=entry_classes_list,
         target_tier=target_tier,
         target_labels=target_labels,
         min_duration=min_duration,
@@ -584,13 +584,13 @@ def audio_textgrid(
 @smoother_options
 @heuristic_options
 def corpus(
-        corpus: str|Path = None,
-        entry_classes: str = None,
-        target_tier: str = None,
-        target_labels: str = None,
-        output: str|Path = None,
+        corpus: str|Path,
+        entry_classes: str,
+        target_tier: str,
+        target_labels: str,
+        output: str|Path,
+        dest: str|Path,        
         separate_output: bool = False,
-        dest: str|Path = None,
         which_output: str = "winner",
         data_output: str = "formants",
         smoother_method: str = "dct_smooth_regression",
@@ -661,11 +661,11 @@ def corpus(
         if k in heuristic_dict
     ]         
 
-    entry_classes = entry_classes.split("|")
+    entry_classes_list = entry_classes.split("|")
 
     all_candidates = process_corpus(
         corpus_path = corpus,
-        entry_classes = entry_classes,
+        entry_classes = entry_classes_list,
         target_tier = target_tier,
         target_labels = target_labels,
         min_duration = min_duration,
