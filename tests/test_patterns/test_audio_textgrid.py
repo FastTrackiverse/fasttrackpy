@@ -69,7 +69,7 @@ class TestAudioTG:
         candidates = process_audio_textgrid(
             audio_path=AUDIO_PATH,
             textgrid_path=TG_PATH,
-            entry_classes="SequenceInterval",
+            entry_classes=["SequenceInterval"],
             target_tier="phones",
             target_labels="AY"
         )

@@ -1,7 +1,6 @@
 import warnings
 from pathlib import Path
-from typing import Union
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 import parselmouth as pm
 from fasttrackpy import CandidateTracks,\
                         Smoother,\
@@ -38,7 +37,7 @@ def is_audio(path: str|Path)->bool:
 def process_audio_file(
         path: str|Path,
         xmin:float = 0,
-        xmax: float = None,
+        xmax: float|None = None,
         min_max_formant:float = 4000,
         max_max_formant:float = 7000,
         nstep:int = 20,
@@ -123,7 +122,7 @@ def get_candidates_delayed(args_dict):
 def get_candidates(args_dict):
     return process_audio_file(**args_dict)
 
-def run_candidates(arg_list, parallel:bool):
+def run_candidates(arg_list, parallel:bool) -> Sequence[CandidateTracks]:
     if parallel:
         n_jobs = cpu_count()
         all_candidates = Parallel(n_jobs=n_jobs)(

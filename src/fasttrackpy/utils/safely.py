@@ -1,6 +1,6 @@
 import warnings
-from typing import Callable
-from typing import Sequence
+from typing import Any
+from collections.abc import Callable, Sequence
 
 
 def safely(
@@ -28,9 +28,9 @@ def safely(
     return decorator
 
 def filter_nones(
-    filterer: Sequence,
-    to_filter: list[Sequence]
-)->list[Sequence]:
+    filterer: Sequence[Any],
+    to_filter: Sequence[Sequence[Any]]
+)->Sequence[Sequence[Any]]:
     """
     Filter lists based on the presence of None values.
 

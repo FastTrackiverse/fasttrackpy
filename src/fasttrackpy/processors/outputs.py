@@ -44,7 +44,7 @@ def add_metadata(self, out_df):
 
     return out_df
 
-def formant_to_dataframe(self):
+def formant_to_dataframe(self)->pl.DataFrame:
     """Return data as a data frame
 
     Returns:
@@ -135,7 +135,7 @@ def log_param_to_dataframe(self):
 
     return param_df
 
-def get_big_df(self, output):
+def get_big_df(self, output) -> pl.DataFrame:
         all_df = [x.to_df(output = output) for x in self.candidates]
         all_df = [
             x.with_columns(
@@ -149,8 +149,8 @@ def get_big_df(self, output):
 
 def write_data(
         candidates,
-        file: Path = None,
-        destination: Path = None,
+        file: str|Path|None = None,
+        destination: str|Path|None = None,
         which: str = "winner",
         output: str = "formants",
         separate: bool = False
@@ -435,12 +435,10 @@ def pickle_candidates(
             The file location to save the pickle file
             to.
     """
-    if type(file) is str:
-        file = Path(file)
     sys.setrecursionlimit(3000)
     #tmp_candidates = copy.deepcopy (candidates)
 
-    with file.open('wb') as f:
+    with Path(file).open('wb') as f:
         cloudpickle.dump(candidates, f)
 
 
@@ -460,10 +458,8 @@ def unpickle_candidates(
         (CandidateTracks):
             A CandidateTracks object.
     """
-    if type(file) is str:
-        file = Path(file)    
     sys.setrecursionlimit(3000)
-    with file.open('rb') as f:
+    with Path(file).open('rb') as f:
         candidates = cloudpickle.load(f)
 
     return candidates
