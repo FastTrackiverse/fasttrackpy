@@ -356,7 +356,7 @@ class OneTrack(Track):
             (pl.DataFrame): A `polars.DataFrame`
         """
         if output == "formants"\
-              and not isinstance(self._formant_df, pl.DataFrame):
+              and self._formant_df.shape == (0, 0):
             df =  formant_to_dataframe(self)
             self._formant_df = df
             return df
@@ -364,7 +364,7 @@ class OneTrack(Track):
             return self._formant_df
 
         if output == "param"\
-            and not isinstance(self._param_df, pl.DataFrame):
+            and self._param_df.shape == (0, 0):
             df =  param_to_dataframe(self)
             self._param_df = df
             return df
@@ -372,7 +372,7 @@ class OneTrack(Track):
             return self._param_df
         
         if output == "log_param"\
-            and not isinstance(self._log_param_df, pl.DataFrame):
+            and self._log_param_df.shape == (0, 0):
             df = log_param_to_dataframe(self)
             self._log_param_df = df
             return df
@@ -691,7 +691,7 @@ class CandidateTracks(Track, Sequence):
                 return out_df
 
         if output == "formants"\
-            and not isinstance(self._formant_df, pl.DataFrame):
+            and self._formant_df.shape == (0, 0):
             big_df = get_big_df(self, output=output)
             self._formant_df = big_df
             return big_df
@@ -700,7 +700,7 @@ class CandidateTracks(Track, Sequence):
             return self._formant_df
 
         if output == "param"\
-            and not isinstance(self._param_df, pl.DataFrame):
+            and self._param_df.shape == (0, 0):
             big_df = get_big_df(self, output=output)
             self._param_df = big_df
             return big_df
@@ -709,7 +709,7 @@ class CandidateTracks(Track, Sequence):
             return self._param_df
         
         if output == "log_param"\
-            and not isinstance(self._log_param_df, pl.DataFrame):
+            and self._log_param_df.shape == (0, 0):
             big_df = get_big_df(self, output=output)
             self._log_param_df = big_df
             return big_df
