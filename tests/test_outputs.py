@@ -16,41 +16,45 @@ import numpy as np
 import matplotlib.pyplot as mp
 from pathlib import Path
 from PIL import Image
+from .conftest import TEST_DATA, CORPUS
 
-SOUND_PATH = Path("tests", "test_data", "ay.wav")
-SOUND = pm.Sound(str(SOUND_PATH))
+#SOUND_PATH = Path("tests", "test_data", "ay.wav")
+#SOUND = pm.Sound(str(SOUND_PATH))
 
+@pytest.fixture(scope="session")
+def dest(tmp_path_factory):
+    dest = tmp_path_factory.mktemp("dest") 
+    return dest
+@TEST_DATA
 class TestDataFrames:
-    candidates = CandidateTracks(sound = SOUND)
-    def test_formant_df(self):
+    def test_formant_df(self, candidates):
        
-        formant_df = self.candidates.to_df(output="formants")
-        big_formant_df = self.candidates.to_df(which='all', output="formants")
+        formant_df = candidates.to_df(output="formants")
+        big_formant_df = candidates.to_df(which='all', output="formants")
 
         assert isinstance(formant_df, pl.DataFrame)
         assert isinstance(big_formant_df, pl.DataFrame)
 
-    def test_param_df(self):
-        param_df = self.candidates.to_df(output="param")
-        big_param_df = self.candidates.to_df(which='all', output="formants")
+    def test_param_df(self, candidates):
+        param_df = candidates.to_df(output="param")
+        big_param_df = candidates.to_df(which='all', output="formants")
 
         assert isinstance(param_df, pl.DataFrame)
         assert isinstance(big_param_df, pl.DataFrame)
 
-    def test_log_param_df(self):
-        log_param_df = self.candidates.to_df(output="log_param")
-        big_log_param_df = self.candidates.to_df(which='all', output='log_param')
+    def test_log_param_df(self, candidates):
+        log_param_df = candidates.to_df(output="log_param")
+        big_log_param_df = candidates.to_df(which='all', output='log_param')
 
         assert isinstance(log_param_df, pl.DataFrame)                
         assert isinstance(big_log_param_df, pl.DataFrame)
 
-
+@TEST_DATA
 class TestWrite:
 
-    def test_formant_write(self):
-        filename1 = Path("tests", "test_data", "testing.csv")
-        filename2 = Path("tests", "test_data", "testing_all.csv")        
-        candidates = CandidateTracks(sound = SOUND)
+    def test_formant_write(self, candidates, tmp_path):
+        filename1 = tmp_path/"testing.csv"
+        filename2 = tmp_path/"testing_all.csv"
         write_data(candidates=candidates, file = filename1)
         write_data(candidates=candidates, file = filename2, which="all")        
 
@@ -66,26 +70,21 @@ class TestWrite:
         filename1.unlink()
         filename2.unlink()
     
-    def test_write_with_dest(self):
-        dest = Path("tests", "test_data")
-        file_name = SOUND_PATH.with_suffix(".csv")
-        candidates = CandidateTracks(sound = SOUND)
+    def test_write_with_dest(self, candidates, dest):
+        file_name = Path("ay.csv")
         candidates.file_name = file_name.name
         write_data(candidates=candidates,
                    destination=dest)
         
-        assert file_name.is_file()
-        file_name.unlink()
+        assert dest.joinpath(file_name).is_file()
+        #file_name.unlink()
 
-    def test_write_only_dest(self):
-        dest =  Path("tests", "test_data")
+    def test_write_only_dest(self, candidates, dest):
         file_name = dest.joinpath("output.csv")
-        candidates = CandidateTracks(sound = SOUND)
         write_data(candidates=candidates,
                    destination=dest)
         
         assert file_name.is_file()
-        file_name.unlink()
 
 @pytest.fixture(scope='function')
 def plot_spectrogram():
@@ -95,26 +94,25 @@ def plot_spectrogram():
         mp.close("all")
     return _plot
 
+@TEST_DATA
 class TestPlots:
 
-    cands = CandidateTracks(SOUND)
-
-    def test_spectrogram(self, monkeypatch):
+    def test_spectrogram(self, candidates, monkeypatch):
         monkeypatch.setattr(mp, 'show', lambda: None)
-        self.cands.winner.spectrogram()
+        candidates.winner.spectrogram()
         assert True
 
-    def test_spectrograms(self, monkeypatch):
+    def test_spectrograms(self, candidates, monkeypatch):
         monkeypatch.setattr(mp, 'show', lambda: None)
-        self.cands.spectrograms()
+        candidates.spectrograms()
         assert True
 
-    def test_save_spectrogram(self, tmp_path):
-        plot_file = tmp_path / "test.png"
+    def test_save_spectrogram(self, candidates, dest):
+        plot_file = dest / "test.png"
         width = 8
         height = 5
         dpi = 100
-        self.cands.winner.spectrogram(
+        candidates.winner.spectrogram(
             figsize = (width, height),
             file_name = plot_file,
             dpi = dpi
@@ -125,12 +123,12 @@ class TestPlots:
         assert im_width == width * dpi
         assert im_height == height * dpi
 
-    def test_save_cand_spectrogram(self, tmp_path):
-        plot_file = tmp_path / "test2.png"
+    def test_save_cand_spectrogram(self, candidates, dest):
+        plot_file = dest / "test2.png"
         width = 8
         height = 5
         dpi = 100
-        self.cands.spectrograms(
+        candidates.spectrograms(
             figsize = (width, height),
             file_name = plot_file,
             dpi = dpi
@@ -141,31 +139,28 @@ class TestPlots:
         assert im_width <= width * dpi
         assert im_height <= height * dpi
 
+@TEST_DATA
+@CORPUS
 class TestPickle:
-    cands = CandidateTracks(SOUND)
+    #cands = CandidateTracks(SOUND)
     
-
-    def test_pickle_unpickle(self, tmp_path):
-        pickle_file = tmp_path / "cand.pkl"
-        pickle_candidates(self.cands, file = pickle_file)
+    def test_pickle_unpickle(self, candidates, dest):
+        pickle_file = dest / "cand.pkl"
+        pickle_candidates(candidates, file = pickle_file)
         assert pickle_file.exists()
 
         re_read = unpickle_candidates(file = pickle_file)
         assert isinstance(re_read, CandidateTracks)
         assert np.isclose(
             re_read.winner.maximum_formant,
-            self.cands.winner.maximum_formant
+            candidates.winner.maximum_formant
             )
-        assert len(re_read.candidates) == len(self.cands.candidates)
+        assert len(re_read.candidates) == len(candidates.candidates)
 
-    def test_big_pickle_unpickle(self, tmp_path):
-        cands2 = process_audio_textgrid(
-            audio_path=Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.wav"),
-            textgrid_path=Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.TextGrid"),
-        )
-        pickle_file = tmp_path / "cand2.pkl"
-        pickle_candidates(cands2[0], file = pickle_file)
+    def test_big_pickle_unpickle(self, candidates2, dest):
+        pickle_file = dest / "cand2.pkl"
+        pickle_candidates(candidates2[0], file = pickle_file)
         assert pickle_file.exists()
 
         re_read = unpickle_candidates(file = pickle_file)
-        assert len(re_read.candidates) == len(cands2[0].candidates)
+        assert len(re_read.candidates) == len(candidates2[0].candidates)

@@ -5,22 +5,28 @@ import pytest
 import yaml
 import logging
 
-class TestCLI:
-    sound_path = Path("tests", "test_data", "ay.wav")
-    audio_path = Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.wav")
-    tg_path = Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.TextGrid")
-    corpus_path = Path("tests", "test_data", "corpus")
+from .conftest import TEST_DATA, CORPUS
+@pytest.fixture(scope="session")
+def dest(tmp_path_factory):
+    dest = tmp_path_factory.mktemp("dest") 
+    return dest
 
-    def test_file_usage(self):
-        out_dir = self.sound_path.parent.joinpath("output")
-        if not out_dir.is_dir():
-            out_dir.mkdir()
+
+class TestCLI:
+    # sound_path = Path("tests", "test_data", "ay.wav")
+    # audio_path = Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.wav")
+    # tg_path = Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.TextGrid")
+    # corpus_path = Path("tests", "test_data", "corpus")
+    
+    @TEST_DATA
+    def test_file_usage(self, datafiles, dest):
+        out_dir = dest
 
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
             ["audio", 
-             "--file", self.sound_path, 
+             "--file", datafiles/"ay.wav", 
              "--dest", out_dir]
         )
 
@@ -29,16 +35,15 @@ class TestCLI:
         [x.unlink() for x in out_files]
         out_dir.rmdir()
 
-    def test_file_usage_heuristic(self):
-        out_dir = self.sound_path.parent.joinpath("output")
-        if not out_dir.is_dir():
-            out_dir.mkdir()
+    @TEST_DATA
+    def test_file_usage_heuristic(self, datafiles, dest):
+        out_dir = dest
 
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
             ["audio", 
-             "--file", self.sound_path, 
+             "--file", datafiles/"ay.wav", 
              "--dest", out_dir, 
              "--f1-max-heuristic"]
         )
@@ -48,8 +53,9 @@ class TestCLI:
         [x.unlink() for x in out_files]
         out_dir.rmdir()        
 
-    def test_config_file(self):
-        config_path = Path("tests", "test_data", "config.yml")
+    @TEST_DATA
+    def test_config_file(self, datafiles):
+        config_path = datafiles/"config.yml"
         with config_path.open() as file:
             params = yaml.safe_load(file)
 
@@ -70,18 +76,16 @@ class TestCLI:
         [x.unlink() for x in out_files]
         dest.rmdir()
 
-
-    def test_dir_usage(self):
-        out_dir = self.sound_path.parent.joinpath("output")
-        if not out_dir.is_dir():
-            out_dir.mkdir()
+    @TEST_DATA
+    def test_dir_usage(self, datafiles, dest):
+        out_dir = dest
 
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
             ["audio", 
-             "--dir", self.sound_path.parent,
-               "--dest", out_dir]
+             "--dir", str(datafiles),
+               "--dest", str(out_dir)]
         )
         
         assert result.exit_code == 0, result.output
@@ -89,16 +93,15 @@ class TestCLI:
         [x.unlink() for x in out_files]
         out_dir.rmdir()
 
-    def test_audio_tg(self):
-        out_dir = self.sound_path.parent.joinpath("output")
-        if not out_dir.is_dir():
-            out_dir.mkdir()
+    @CORPUS
+    def test_audio_tg(self, datafiles, dest):
+        out_dir = dest
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
             ["audio-textgrid", 
-             "--audio", self.audio_path, 
-             "--textgrid", self.tg_path, 
+             "--audio", datafiles/"josef-fruehwald_speaker.wav", 
+             "--textgrid", datafiles/"josef-fruehwald_speaker.TextGrid", 
              "--target-tier", "Phone", 
              "--target-labels", "AY",
              "--dest", out_dir]
@@ -110,15 +113,14 @@ class TestCLI:
         [x.unlink() for x in out_files]
         out_dir.rmdir()
 
-    def test_corpus(self):
-        out_dir = self.corpus_path.parent.joinpath("output")
-        if not out_dir.is_dir():
-            out_dir.mkdir()
+    @CORPUS
+    def test_corpus(self, datafiles, dest):
+        out_dir = dest
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
             ["corpus",
-             "--corpus", self.corpus_path,
+             "--corpus", datafiles,
              "--target-labels", "AY",
              "--dest", out_dir, 
              "--separate-output"]
