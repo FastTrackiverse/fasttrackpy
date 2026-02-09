@@ -11,20 +11,24 @@ import numpy as np
 from pathlib import Path
 import pytest
 
-SOUND_PATH = Path("tests", "test_data", "ay.wav")
-SOUND = pm.Sound(str(SOUND_PATH))
+from .conftest import TEST_DATA
+#from tests.test_outputs import SOUND
 
-@pytest.fixture
-def candidates():
-    candidates = CandidateTracks(
-            sound = SOUND
-        )
-    return candidates
+# SOUND_PATH = Path("tests", "test_data", "ay.wav")
+# SOUND = pm.Sound(str(SOUND_PATH))
 
+# @pytest.fixture
+# @TEST_DATA
+# def sound(datafiles):
+#     sound = pm.Sound(str(datafiles/"ay.wav"))
+#     return sound
+
+
+
+@TEST_DATA
 class TestTrack:
-
-    def test_track_default(self):
-        this_track = Track(sound=SOUND)
+    def test_track_default(self, sound):
+        this_track = Track(sound=sound)
         assert this_track
         assert isinstance(this_track.sound, pm.Sound)
         assert this_track.n_formants == 4
@@ -36,11 +40,12 @@ class TestTrack:
         assert isinstance(this_track.agg_fun, Agg)
 
 
+@TEST_DATA
 class TestOneTrack:
-
-    def test_one_track_default(self):
+   
+    def test_one_track_default(self, sound):
         this_track = OneTrack(
-            sound = SOUND,
+            sound = sound,
             maximum_formant=4000
         )
 
@@ -60,9 +65,9 @@ class TestOneTrack:
         assert isinstance(df3, pl.DataFrame)
         assert isinstance(df4, pl.DataFrame)
 
-    def test_custom_one_track(self):
+    def test_custom_one_track(self, sound):
         this_track = OneTrack(
-            sound = SOUND,
+            sound = sound,
             maximum_formant=5000,
             n_formants = 5,
             smoother = Smoother(order = 6)
@@ -71,6 +76,7 @@ class TestOneTrack:
         assert this_track.formants.shape[0] == 5
         assert this_track.parameters.shape == (5, 6)
 
+@TEST_DATA
 class TestCandidateTracks:
 
     def test_candidate_tracks_default(self, candidates):
