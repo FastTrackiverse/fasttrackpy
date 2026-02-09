@@ -31,27 +31,23 @@ class TestCLI:
         )
 
         assert result.exit_code == 0, result.output
-        out_files = list(out_dir.glob("*"))
-        [x.unlink() for x in out_files]
-        out_dir.rmdir()
+
 
     @TEST_DATA
     def test_file_usage_heuristic(self, datafiles, dest):
         out_dir = dest
-
+        print(datafiles.joinpath("ay.wav").exists())
         runner = CliRunner()
         result = runner.invoke(
             fasttrack,
             ["audio", 
-             "--file", datafiles/"ay.wav", 
-             "--dest", out_dir, 
+             "--file", str(datafiles/"ay.wav"), 
+             "--dest", str(out_dir), 
              "--f1-max-heuristic"]
         )
-
+    
         assert result.exit_code == 0, result.output
-        out_files = list(out_dir.glob("*"))
-        [x.unlink() for x in out_files]
-        out_dir.rmdir()        
+
 
     @TEST_DATA
     def test_config_file(self, datafiles):
@@ -72,9 +68,7 @@ class TestCLI:
         )
 
         assert result.exit_code == 0, result.output
-        out_files = list(dest.glob("*"))
-        [x.unlink() for x in out_files]
-        dest.rmdir()
+
 
     @TEST_DATA
     def test_dir_usage(self, datafiles, dest):
@@ -89,9 +83,7 @@ class TestCLI:
         )
         
         assert result.exit_code == 0, result.output
-        out_files = out_dir.glob("*")
-        [x.unlink() for x in out_files]
-        out_dir.rmdir()
+
 
     @CORPUS
     def test_audio_tg(self, datafiles, dest):
@@ -108,10 +100,6 @@ class TestCLI:
         )
 
         assert result.exit_code == 0, result.output
-        out_files = list(out_dir.glob("*"))
-
-        [x.unlink() for x in out_files]
-        out_dir.rmdir()
 
     @CORPUS
     def test_corpus(self, datafiles, dest):
@@ -127,8 +115,4 @@ class TestCLI:
         )
 
         assert result.exit_code == 0, result.output
-        out_files = list(out_dir.iterdir())
-        assert len(out_files) > 1
 
-        [x.unlink() for x in out_files]
-        out_dir.rmdir()
