@@ -104,7 +104,7 @@ def process_audio_textgrid(
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg(),
-        heuristics: list[MinMaxHeuristic|SpacingHeuristic] = []     
+        heuristics: list[MinMaxHeuristic|SpacingHeuristic|None] = []     
 )->Sequence[CandidateTracks]:
     """Process an audio and TextGrid file together.
 
