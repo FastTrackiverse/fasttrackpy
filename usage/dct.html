@@ -428,8 +428,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>corpus_path <span class="op">=</span> Path(<span class="st">".."</span>,<span class="st">"assets"</span>, <span class="st">"corpus"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>measurements <span class="op">=</span> process_corpus(corpus_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>100%|██████████| 65/65 [00:01&lt;00:00, 62.80it/s]
-100%|██████████| 274/274 [00:01&lt;00:00, 224.56it/s]</code></pre>
+<pre><code>100%|██████████| 65/65 [00:01&lt;00:00, 45.21it/s]
+100%|██████████| 273/273 [00:01&lt;00:00, 209.07it/s]</code></pre>
 </div>
 </div>
 <p>Let’s just look at /ay/ from these speakers.</p>
@@ -513,7 +513,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> reg_fit(f1, basis)</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(params)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[480.35423508  42.95237019 -25.847216    43.60350087 -21.40266949]</code></pre>
+<pre><code>[480.34662879  42.96063735 -25.85452683  43.6064711  -21.40185004]</code></pre>
 </div>
 </div>
 </section>
@@ -587,7 +587,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   white-space: pre-wrap;
 }
 </style>
-<small>shape: (5, 10)</small>
+<small>shape: (5, 12)</small>
 <table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
@@ -601,6 +601,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th data-quarto-table-cell-role="th">id</th>
 <th data-quarto-table-cell-role="th">group</th>
 <th data-quarto-table-cell-role="th">label</th>
+<th data-quarto-table-cell-role="th">f0</th>
+<th data-quarto-table-cell-role="th">intensity</th>
 </tr>
 <tr class="even">
 <td>u32</td>
@@ -613,68 +615,80 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>str</td>
 <td>str</td>
 <td>str</td>
+<td>f64</td>
+<td>f64</td>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>0</td>
-<td>480.354235</td>
-<td>979.982402</td>
-<td>1844.645657</td>
-<td>2375.309331</td>
-<td>0.007663</td>
+<td>480.346629</td>
+<td>979.978985</td>
+<td>1844.703629</td>
+<td>2375.309121</td>
+<td>0.007656</td>
 <td>"KY25A_1"</td>
 <td>"0-0-8-1"</td>
 <td>"KY25A"</td>
 <td>"AY1"</td>
+<td>136.201147</td>
+<td>39.094136</td>
 </tr>
 <tr class="even">
 <td>1</td>
-<td>42.95237</td>
-<td>-130.966974</td>
-<td>-15.909405</td>
-<td>2.074594</td>
-<td>0.007663</td>
+<td>42.960637</td>
+<td>-130.970296</td>
+<td>-15.834371</td>
+<td>2.077693</td>
+<td>0.007656</td>
 <td>"KY25A_1"</td>
 <td>"0-0-8-1"</td>
 <td>"KY25A"</td>
 <td>"AY1"</td>
+<td>-20.717103</td>
+<td>0.798274</td>
 </tr>
 <tr class="odd">
 <td>2</td>
-<td>-25.847216</td>
-<td>13.467448</td>
-<td>-67.211033</td>
-<td>-35.364144</td>
-<td>0.007663</td>
+<td>-25.854527</td>
+<td>13.464163</td>
+<td>-67.155312</td>
+<td>-35.364346</td>
+<td>0.007656</td>
 <td>"KY25A_1"</td>
 <td>"0-0-8-1"</td>
 <td>"KY25A"</td>
 <td>"AY1"</td>
+<td>14.914196</td>
+<td>-1.437001</td>
 </tr>
 <tr class="even">
 <td>3</td>
-<td>43.603501</td>
-<td>4.180242</td>
-<td>-84.055828</td>
-<td>18.796364</td>
-<td>0.007663</td>
+<td>43.606471</td>
+<td>4.179048</td>
+<td>-84.02887</td>
+<td>18.797477</td>
+<td>0.007656</td>
 <td>"KY25A_1"</td>
 <td>"0-0-8-1"</td>
 <td>"KY25A"</td>
 <td>"AY1"</td>
+<td>-7.710264</td>
+<td>-0.179294</td>
 </tr>
 <tr class="odd">
 <td>4</td>
-<td>-21.402669</td>
-<td>-2.113492</td>
-<td>-42.2589</td>
-<td>-20.556695</td>
-<td>0.007663</td>
+<td>-21.40185</td>
+<td>-2.113124</td>
+<td>-42.265146</td>
+<td>-20.556672</td>
+<td>0.007656</td>
 <td>"KY25A_1"</td>
 <td>"0-0-8-1"</td>
 <td>"KY25A"</td>
 <td>"AY1"</td>
+<td>2.933718</td>
+<td>0.229368</td>
 </tr>
 </tbody>
 </table>
@@ -721,31 +735,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>0</td>
 <td>"KY25A_1"</td>
 <td>"KY25A"</td>
-<td>509.370491</td>
+<td>509.365702</td>
 </tr>
 <tr class="even">
 <td>1</td>
 <td>"KY25A_1"</td>
 <td>"KY25A"</td>
-<td>44.866749</td>
+<td>44.871801</td>
 </tr>
 <tr class="odd">
 <td>2</td>
 <td>"KY25A_1"</td>
 <td>"KY25A"</td>
-<td>-8.803074</td>
+<td>-8.806545</td>
 </tr>
 <tr class="even">
 <td>3</td>
 <td>"KY25A_1"</td>
 <td>"KY25A"</td>
-<td>27.038315</td>
+<td>27.038638</td>
 </tr>
 <tr class="odd">
 <td>4</td>
 <td>"KY25A_1"</td>
 <td>"KY25A"</td>
-<td>-11.637004</td>
+<td>-11.635248</td>
 </tr>
 </tbody>
 </table>
@@ -790,647 +804,80 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="cell-25" class="cell" data-execution_count="14">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ay_fits.plot(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ay_fits.plot.point(</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"time"</span>,</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"f1_fit"</span>,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    by <span class="op">=</span> <span class="st">"group"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> <span class="st">"group"</span></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<script type="application/javascript">
-(function(root) {
-  function now() {
-    return new Date();
-  }
-
-  var force = true;
-  var py_version = '3.4.1'.replace('rc', '-rc.').replace('.dev', '-dev.');
-  var reloading = false;
-  var Bokeh = root.Bokeh;
-
-  if (typeof (root._bokeh_timeout) === "undefined" || force) {
-    root._bokeh_timeout = Date.now() + 5000;
-    root._bokeh_failed_load = false;
-  }
-
-  function run_callbacks() {
-    try {
-      root._bokeh_onload_callbacks.forEach(function(callback) {
-        if (callback != null)
-          callback();
-      });
-    } finally {
-      delete root._bokeh_onload_callbacks;
-    }
-    console.debug("Bokeh: all callbacks have finished");
-  }
-
-  function load_libs(css_urls, js_urls, js_modules, js_exports, callback) {
-    if (css_urls == null) css_urls = [];
-    if (js_urls == null) js_urls = [];
-    if (js_modules == null) js_modules = [];
-    if (js_exports == null) js_exports = {};
-
-    root._bokeh_onload_callbacks.push(callback);
-
-    if (root._bokeh_is_loading > 0) {
-      console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
-      return null;
-    }
-    if (js_urls.length === 0 && js_modules.length === 0 && Object.keys(js_exports).length === 0) {
-      run_callbacks();
-      return null;
-    }
-    if (!reloading) {
-      console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    }
-
-    function on_load() {
-      root._bokeh_is_loading--;
-      if (root._bokeh_is_loading === 0) {
-        console.debug("Bokeh: all BokehJS libraries/stylesheets loaded");
-        run_callbacks()
-      }
-    }
-    window._bokeh_on_load = on_load
-
-    function on_error() {
-      console.error("failed to load " + url);
-    }
-
-    var skip = [];
-    if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {}, 'shim': {}});
-      root._bokeh_is_loading = css_urls.length + 0;
-    } else {
-      root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length + Object.keys(js_exports).length;
-    }
-
-    var existing_stylesheets = []
-    var links = document.getElementsByTagName('link')
-    for (var i = 0; i < links.length; i++) {
-      var link = links[i]
-      if (link.href != null) {
-    existing_stylesheets.push(link.href)
-      }
-    }
-    for (var i = 0; i < css_urls.length; i++) {
-      var url = css_urls[i];
-      if (existing_stylesheets.indexOf(url) !== -1) {
-    on_load()
-    continue;
-      }
-      const element = document.createElement("link");
-      element.onload = on_load;
-      element.onerror = on_error;
-      element.rel = "stylesheet";
-      element.type = "text/css";
-      element.href = url;
-      console.debug("Bokeh: injecting link tag for BokehJS stylesheet: ", url);
-      document.body.appendChild(element);
-    }    var existing_scripts = []
-    var scripts = document.getElementsByTagName('script')
-    for (var i = 0; i < scripts.length; i++) {
-      var script = scripts[i]
-      if (script.src != null) {
-    existing_scripts.push(script.src)
-      }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
-      var url = js_urls[i];
-      if (skip.indexOf(url) !== -1 || existing_scripts.indexOf(url) !== -1) {
-    if (!window.requirejs) {
-      on_load();
-    }
-    continue;
-      }
-      var element = document.createElement('script');
-      element.onload = on_load;
-      element.onerror = on_error;
-      element.async = false;
-      element.src = url;
-      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
-      document.head.appendChild(element);
-    }
-    for (var i = 0; i < js_modules.length; i++) {
-      var url = js_modules[i];
-      if (skip.indexOf(url) !== -1 || existing_scripts.indexOf(url) !== -1) {
-    if (!window.requirejs) {
-      on_load();
-    }
-    continue;
-      }
-      var element = document.createElement('script');
-      element.onload = on_load;
-      element.onerror = on_error;
-      element.async = false;
-      element.src = url;
-      element.type = "module";
-      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
-      document.head.appendChild(element);
-    }
-    for (const name in js_exports) {
-      var url = js_exports[name];
-      if (skip.indexOf(url) >= 0 || root[name] != null) {
-    if (!window.requirejs) {
-      on_load();
-    }
-    continue;
-      }
-      var element = document.createElement('script');
-      element.onerror = on_error;
-      element.async = false;
-      element.type = "module";
-      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
-      element.textContent = `
-      import ${name} from "${url}"
-      window.${name} = ${name}
-      window._bokeh_on_load()
-      `
-      document.head.appendChild(element);
-    }
-    if (!js_urls.length && !js_modules.length) {
-      on_load()
-    }
-  };
-
-  function inject_raw_css(css) {
-    const element = document.createElement("style");
-    element.appendChild(document.createTextNode(css));
-    document.body.appendChild(element);
-  }
-
-  var js_urls = ["https://cdn.bokeh.org/bokeh/release/bokeh-3.4.1.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-3.4.1.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.4.1.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.4.1.min.js", "https://cdn.holoviz.org/panel/1.4.1/dist/panel.min.js"];
-  var js_modules = [];
-  var js_exports = {};
-  var css_urls = [];
-  var inline_js = [    function(Bokeh) {
-      Bokeh.set_log_level("info");
-    },
-function(Bokeh) {} // ensure no trailing comma for IE
-  ];
-
-  function run_inline_js() {
-    if ((root.Bokeh !== undefined) || (force === true)) {
-      for (var i = 0; i < inline_js.length; i++) {
-    try {
-          inline_js[i].call(root, root.Bokeh);
-    } catch(e) {
-      if (!reloading) {
-        throw e;
-      }
-    }
-      }
-      // Cache old bokeh versions
-      if (Bokeh != undefined && !reloading) {
-    var NewBokeh = root.Bokeh;
-    if (Bokeh.versions === undefined) {
-      Bokeh.versions = new Map();
-    }
-    if (NewBokeh.version !== Bokeh.version) {
-      Bokeh.versions.set(NewBokeh.version, NewBokeh)
-    }
-    root.Bokeh = Bokeh;
-      }} else if (Date.now() < root._bokeh_timeout) {
-      setTimeout(run_inline_js, 100);
-    } else if (!root._bokeh_failed_load) {
-      console.log("Bokeh: BokehJS failed to load within specified timeout.");
-      root._bokeh_failed_load = true;
-    }
-    root._bokeh_is_initializing = false
-  }
-
-  function load_or_wait() {
-    // Implement a backoff loop that tries to ensure we do not load multiple
-    // versions of Bokeh and its dependencies at the same time.
-    // In recent versions we use the root._bokeh_is_initializing flag
-    // to determine whether there is an ongoing attempt to initialize
-    // bokeh, however for backward compatibility we also try to ensure
-    // that we do not start loading a newer (Panel>=1.0 and Bokeh>3) version
-    // before older versions are fully initialized.
-    if (root._bokeh_is_initializing && Date.now() > root._bokeh_timeout) {
-      root._bokeh_is_initializing = false;
-      root._bokeh_onload_callbacks = undefined;
-      console.log("Bokeh: BokehJS was loaded multiple times but one version failed to initialize.");
-      load_or_wait();
-    } else if (root._bokeh_is_initializing || (typeof root._bokeh_is_initializing === "undefined" && root._bokeh_onload_callbacks !== undefined)) {
-      setTimeout(load_or_wait, 100);
-    } else {
-      root._bokeh_is_initializing = true
-      root._bokeh_onload_callbacks = []
-      var bokeh_loaded = Bokeh != null && (Bokeh.version === py_version || (Bokeh.versions !== undefined && Bokeh.versions.has(py_version)));
-      if (!reloading && !bokeh_loaded) {
-    root.Bokeh = undefined;
-      }
-      load_libs(css_urls, js_urls, js_modules, js_exports, function() {
-    console.debug("Bokeh: BokehJS plotting callback run at", now());
-    run_inline_js();
-      });
-    }
-  }
-  // Give older versions of the autoload script a head-start to ensure
-  // they initialize before we start loading newer version.
-  setTimeout(load_or_wait, 100)
-}(window));
-</script>
-</div>
-<div class="cell-output cell-output-display">
-<script type="application/javascript">
-
-if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
-  window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
-}
-
-
-    function JupyterCommManager() {
-    }
-
-    JupyterCommManager.prototype.register_target = function(plot_id, comm_id, msg_handler) {
-      if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
-        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
-        comm_manager.register_target(comm_id, function(comm) {
-          comm.on_msg(msg_handler);
-        });
-      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
-        window.PyViz.kernels[plot_id].registerCommTarget(comm_id, function(comm) {
-          comm.onMsg = msg_handler;
-        });
-      } else if (typeof google != 'undefined' && google.colab.kernel != null) {
-        google.colab.kernel.comms.registerTarget(comm_id, (comm) => {
-          var messages = comm.messages[Symbol.asyncIterator]();
-          function processIteratorResult(result) {
-            var message = result.value;
-            console.log(message)
-            var content = {data: message.data, comm_id};
-            var buffers = []
-            for (var buffer of message.buffers || []) {
-              buffers.push(new DataView(buffer))
-            }
-            var metadata = message.metadata || {};
-            var msg = {content, buffers, metadata}
-            msg_handler(msg);
-            return messages.next().then(processIteratorResult);
-          }
-          return messages.next().then(processIteratorResult);
-        })
-      }
-    }
-
-    JupyterCommManager.prototype.get_client_comm = function(plot_id, comm_id, msg_handler) {
-      if (comm_id in window.PyViz.comms) {
-        return window.PyViz.comms[comm_id];
-      } else if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
-        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
-        var comm = comm_manager.new_comm(comm_id, {}, {}, {}, comm_id);
-        if (msg_handler) {
-          comm.on_msg(msg_handler);
-        }
-      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
-        var comm = window.PyViz.kernels[plot_id].connectToComm(comm_id);
-        comm.open();
-        if (msg_handler) {
-          comm.onMsg = msg_handler;
-        }
-      } else if (typeof google != 'undefined' && google.colab.kernel != null) {
-        var comm_promise = google.colab.kernel.comms.open(comm_id)
-        comm_promise.then((comm) => {
-          window.PyViz.comms[comm_id] = comm;
-          if (msg_handler) {
-            var messages = comm.messages[Symbol.asyncIterator]();
-            function processIteratorResult(result) {
-              var message = result.value;
-              var content = {data: message.data};
-              var metadata = message.metadata || {comm_id};
-              var msg = {content, metadata}
-              msg_handler(msg);
-              return messages.next().then(processIteratorResult);
-            }
-            return messages.next().then(processIteratorResult);
-          }
-        }) 
-        var sendClosure = (data, metadata, buffers, disposeOnDone) => {
-          return comm_promise.then((comm) => {
-            comm.send(data, metadata, buffers, disposeOnDone);
-          });
-        };
-        var comm = {
-          send: sendClosure
-        };
-      }
-      window.PyViz.comms[comm_id] = comm;
-      return comm;
-    }
-    window.PyViz.comm_manager = new JupyterCommManager();
-    
-
-
-var JS_MIME_TYPE = 'application/javascript';
-var HTML_MIME_TYPE = 'text/html';
-var EXEC_MIME_TYPE = 'application/vnd.holoviews_exec.v0+json';
-var CLASS_NAME = 'output';
-
-/**
- * Render data to the DOM node
- */
-function render(props, node) {
-  var div = document.createElement("div");
-  var script = document.createElement("script");
-  node.appendChild(div);
-  node.appendChild(script);
-}
-
-/**
- * Handle when a new output is added
- */
-function handle_add_output(event, handle) {
-  var output_area = handle.output_area;
-  var output = handle.output;
-  if ((output.data == undefined) || (!output.data.hasOwnProperty(EXEC_MIME_TYPE))) {
-    return
-  }
-  var id = output.metadata[EXEC_MIME_TYPE]["id"];
-  var toinsert = output_area.element.find("." + CLASS_NAME.split(' ')[0]);
-  if (id !== undefined) {
-    var nchildren = toinsert.length;
-    var html_node = toinsert[nchildren-1].children[0];
-    html_node.innerHTML = output.data[HTML_MIME_TYPE];
-    var scripts = [];
-    var nodelist = html_node.querySelectorAll("script");
-    for (var i in nodelist) {
-      if (nodelist.hasOwnProperty(i)) {
-        scripts.push(nodelist[i])
-      }
-    }
-
-    scripts.forEach( function (oldScript) {
-      var newScript = document.createElement("script");
-      var attrs = [];
-      var nodemap = oldScript.attributes;
-      for (var j in nodemap) {
-        if (nodemap.hasOwnProperty(j)) {
-          attrs.push(nodemap[j])
-        }
-      }
-      attrs.forEach(function(attr) { newScript.setAttribute(attr.name, attr.value) });
-      newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-      oldScript.parentNode.replaceChild(newScript, oldScript);
-    });
-    if (JS_MIME_TYPE in output.data) {
-      toinsert[nchildren-1].children[1].textContent = output.data[JS_MIME_TYPE];
-    }
-    output_area._hv_plot_id = id;
-    if ((window.Bokeh !== undefined) && (id in Bokeh.index)) {
-      window.PyViz.plot_index[id] = Bokeh.index[id];
-    } else {
-      window.PyViz.plot_index[id] = null;
-    }
-  } else if (output.metadata[EXEC_MIME_TYPE]["server_id"] !== undefined) {
-    var bk_div = document.createElement("div");
-    bk_div.innerHTML = output.data[HTML_MIME_TYPE];
-    var script_attrs = bk_div.children[0].attributes;
-    for (var i = 0; i < script_attrs.length; i++) {
-      toinsert[toinsert.length - 1].childNodes[1].setAttribute(script_attrs[i].name, script_attrs[i].value);
-    }
-    // store reference to server id on output_area
-    output_area._bokeh_server_id = output.metadata[EXEC_MIME_TYPE]["server_id"];
-  }
-}
-
-/**
- * Handle when an output is cleared or removed
- */
-function handle_clear_output(event, handle) {
-  var id = handle.cell.output_area._hv_plot_id;
-  var server_id = handle.cell.output_area._bokeh_server_id;
-  if (((id === undefined) || !(id in PyViz.plot_index)) && (server_id !== undefined)) { return; }
-  var comm = window.PyViz.comm_manager.get_client_comm("hv-extension-comm", "hv-extension-comm", function () {});
-  if (server_id !== null) {
-    comm.send({event_type: 'server_delete', 'id': server_id});
-    return;
-  } else if (comm !== null) {
-    comm.send({event_type: 'delete', 'id': id});
-  }
-  delete PyViz.plot_index[id];
-  if ((window.Bokeh !== undefined) & (id in window.Bokeh.index)) {
-    var doc = window.Bokeh.index[id].model.document
-    doc.clear();
-    const i = window.Bokeh.documents.indexOf(doc);
-    if (i > -1) {
-      window.Bokeh.documents.splice(i, 1);
-    }
-  }
-}
-
-/**
- * Handle kernel restart event
- */
-function handle_kernel_cleanup(event, handle) {
-  delete PyViz.comms["hv-extension-comm"];
-  window.PyViz.plot_index = {}
-}
-
-/**
- * Handle update_display_data messages
- */
-function handle_update_output(event, handle) {
-  handle_clear_output(event, {cell: {output_area: handle.output_area}})
-  handle_add_output(event, handle)
-}
-
-function register_renderer(events, OutputArea) {
-  function append_mime(data, metadata, element) {
-    // create a DOM node to render to
-    var toinsert = this.create_output_subarea(
-    metadata,
-    CLASS_NAME,
-    EXEC_MIME_TYPE
-    );
-    this.keyboard_manager.register_events(toinsert);
-    // Render to node
-    var props = {data: data, metadata: metadata[EXEC_MIME_TYPE]};
-    render(props, toinsert[0]);
-    element.append(toinsert);
-    return toinsert
-  }
-
-  events.on('output_added.OutputArea', handle_add_output);
-  events.on('output_updated.OutputArea', handle_update_output);
-  events.on('clear_output.CodeCell', handle_clear_output);
-  events.on('delete.Cell', handle_clear_output);
-  events.on('kernel_ready.Kernel', handle_kernel_cleanup);
-
-  OutputArea.prototype.register_mime_type(EXEC_MIME_TYPE, append_mime, {
-    safe: true,
-    index: 0
-  });
-}
-
-if (window.Jupyter !== undefined) {
-  try {
-    var events = require('base/js/events');
-    var OutputArea = require('notebook/js/outputarea').OutputArea;
-    if (OutputArea.prototype.mime_types().indexOf(EXEC_MIME_TYPE) == -1) {
-      register_renderer(events, OutputArea);
-    }
-  } catch(err) {
-  }
-}
-
-</script>
-</div>
-<div class="cell-output cell-output-display">
-<style>*[data-root-id],
-*[data-root-id] > * {
-  box-sizing: border-box;
-  font-family: var(--jp-ui-font-family);
-  font-size: var(--jp-ui-font-size1);
-  color: var(--vscode-editor-foreground, var(--jp-ui-font-color1));
-}
-
-/* Override VSCode background color */
-.cell-output-ipywidget-background:has(
-    > .cell-output-ipywidget-background > .lm-Widget > *[data-root-id]
-  ),
-.cell-output-ipywidget-background:has(> .lm-Widget > *[data-root-id]) {
-  background-color: transparent !important;
-}
-</style>
-</div>
-<div class="cell-output cell-output-display">
-<div id="p1002">
-  <div id="c425f03d-1c35-44a6-8442-9d5d1bb9618a" data-root-id="p1002" style="display: contents;"></div>
-</div>
-<script type="application/javascript">(function(root) {
-  var docs_json = {"ffc0e690-6266-48dc-9d5a-e27a25f8dbb1":{"version":"3.4.1","title":"Bokeh Application","roots":[{"type":"object","name":"panel.models.browser.BrowserInfo","id":"p1002"},{"type":"object","name":"panel.models.comm_manager.CommManager","id":"p1003","attributes":{"plot_id":"p1002","comm_id":"f00efa8469e84c508d9d6bd7ddf06113","client_comm_id":"c0fb64320d4547a3860f20aebb006019"}}],"defs":[{"type":"model","name":"ReactiveHTML1"},{"type":"model","name":"FlexBox1","properties":[{"name":"align_content","kind":"Any","default":"flex-start"},{"name":"align_items","kind":"Any","default":"flex-start"},{"name":"flex_direction","kind":"Any","default":"row"},{"name":"flex_wrap","kind":"Any","default":"wrap"},{"name":"gap","kind":"Any","default":""},{"name":"justify_content","kind":"Any","default":"flex-start"}]},{"type":"model","name":"FloatPanel1","properties":[{"name":"config","kind":"Any","default":{"type":"map"}},{"name":"contained","kind":"Any","default":true},{"name":"position","kind":"Any","default":"right-top"},{"name":"offsetx","kind":"Any","default":null},{"name":"offsety","kind":"Any","default":null},{"name":"theme","kind":"Any","default":"primary"},{"name":"status","kind":"Any","default":"normalized"}]},{"type":"model","name":"GridStack1","properties":[{"name":"mode","kind":"Any","default":"warn"},{"name":"ncols","kind":"Any","default":null},{"name":"nrows","kind":"Any","default":null},{"name":"allow_resize","kind":"Any","default":true},{"name":"allow_drag","kind":"Any","default":true},{"name":"state","kind":"Any","default":[]}]},{"type":"model","name":"drag1","properties":[{"name":"slider_width","kind":"Any","default":5},{"name":"slider_color","kind":"Any","default":"black"},{"name":"value","kind":"Any","default":50}]},{"type":"model","name":"click1","properties":[{"name":"terminal_output","kind":"Any","default":""},{"name":"debug_name","kind":"Any","default":""},{"name":"clears","kind":"Any","default":0}]},{"type":"model","name":"FastWrapper1","properties":[{"name":"object","kind":"Any","default":null},{"name":"style","kind":"Any","default":null}]},{"type":"model","name":"NotificationAreaBase1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0}]},{"type":"model","name":"NotificationArea1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"notifications","kind":"Any","default":[]},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0},{"name":"types","kind":"Any","default":[{"type":"map","entries":[["type","warning"],["background","#ffc107"],["icon",{"type":"map","entries":[["className","fas fa-exclamation-triangle"],["tagName","i"],["color","white"]]}]]},{"type":"map","entries":[["type","info"],["background","#007bff"],["icon",{"type":"map","entries":[["className","fas fa-info-circle"],["tagName","i"],["color","white"]]}]]}]}]},{"type":"model","name":"Notification","properties":[{"name":"background","kind":"Any","default":null},{"name":"duration","kind":"Any","default":3000},{"name":"icon","kind":"Any","default":null},{"name":"message","kind":"Any","default":""},{"name":"notification_type","kind":"Any","default":null},{"name":"_destroyed","kind":"Any","default":false}]},{"type":"model","name":"TemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"BootstrapTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"TemplateEditor1","properties":[{"name":"layout","kind":"Any","default":[]}]},{"type":"model","name":"MaterialTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"copy_to_clipboard1","properties":[{"name":"fill","kind":"Any","default":"none"},{"name":"value","kind":"Any","default":null}]}]}};
-  var render_items = [{"docid":"ffc0e690-6266-48dc-9d5a-e27a25f8dbb1","roots":{"p1002":"c425f03d-1c35-44a6-8442-9d5d1bb9618a"},"root_ids":["p1002"]}];
-  var docs = Object.values(docs_json)
-  if (!docs) {
-    return
-  }
-  const py_version = docs[0].version.replace('rc', '-rc.').replace('.dev', '-dev.')
-  function embed_document(root) {
-    var Bokeh = get_bokeh(root)
-    Bokeh.embed.embed_items_notebook(docs_json, render_items);
-    for (const render_item of render_items) {
-      for (const root_id of render_item.root_ids) {
-    const id_el = document.getElementById(root_id)
-    if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
-      const root_el = id_el.children[0]
-      root_el.id = root_el.id + '-rendered'
-    }
-      }
-    }
-  }
-  function get_bokeh(root) {
-    if (root.Bokeh === undefined) {
-      return null
-    } else if (root.Bokeh.version !== py_version) {
-      if (root.Bokeh.versions === undefined || !root.Bokeh.versions.has(py_version)) {
-    return null
-      }
-      return root.Bokeh.versions.get(py_version);
-    } else if (root.Bokeh.version === py_version) {
-      return root.Bokeh
-    }
-    return null
-  }
-  function is_loaded(root) {
-    var Bokeh = get_bokeh(root)
-    return (Bokeh != null && Bokeh.Panel !== undefined)
-  }
-  if (is_loaded(root)) {
-    embed_document(root);
-  } else {
-    var attempts = 0;
-    var timer = setInterval(function(root) {
-      if (is_loaded(root)) {
-        clearInterval(timer);
-        embed_document(root);
-      } else if (document.readyState == "complete") {
-        attempts++;
-        if (attempts > 200) {
-          clearInterval(timer);
-      var Bokeh = get_bokeh(root)
-      if (Bokeh == null || Bokeh.Panel == null) {
-            console.warn("Panel: ERROR: Unable to run Panel code because Bokeh or Panel library is missing");
-      } else {
-        console.warn("Panel: WARNING: Attempting to render but not all required libraries could be resolved.")
-        embed_document(root)
-      }
-        }
-      }
-    }, 25, root)
-  }
-})(window);</script>
-</div>
-<div class="cell-output cell-output-display">
-
-</div>
 <div class="cell-output cell-output-display" data-execution_count="14">
-<div id="p1004">
-  <div id="d7eddf93-4576-4497-b11e-aca011cc0728" data-root-id="p1004" style="display: contents;"></div>
-</div>
-<script type="application/javascript">(function(root) {
-  var docs_json = {"8ea61fd3-91e4-471a-b7b8-01545c8567d8":{"version":"3.4.1","title":"Bokeh Application","roots":[{"type":"object","name":"Row","id":"p1004","attributes":{"name":"Row00987","tags":["embedded"],"stylesheets":["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #c3c3c3;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}",{"type":"object","name":"ImportedStyleSheet","id":"p1007","attributes":{"url":"https://cdn.holoviz.org/panel/1.4.1/dist/css/loading.css"}},{"type":"object","name":"ImportedStyleSheet","id":"p1099","attributes":{"url":"https://cdn.holoviz.org/panel/1.4.1/dist/css/listpanel.css"}},{"type":"object","name":"ImportedStyleSheet","id":"p1005","attributes":{"url":"https://cdn.holoviz.org/panel/1.4.1/dist/bundled/theme/default.css"}},{"type":"object","name":"ImportedStyleSheet","id":"p1006","attributes":{"url":"https://cdn.holoviz.org/panel/1.4.1/dist/bundled/theme/native.css"}}],"min_width":700,"margin":0,"sizing_mode":"stretch_width","align":"start","children":[{"type":"object","name":"Spacer","id":"p1008","attributes":{"name":"HSpacer00994","stylesheets":["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #c3c3c3;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}",{"id":"p1007"},{"id":"p1005"},{"id":"p1006"}],"margin":0,"sizing_mode":"stretch_width","align":"start"}},{"type":"object","name":"Figure","id":"p1022","attributes":{"width":700,"height":300,"margin":[5,10],"sizing_mode":"fixed","align":"start","x_range":{"type":"object","name":"Range1d","id":"p1009","attributes":{"tags":[[["time","time",null]],[]],"reset_start":0.0,"reset_end":1.0}},"y_range":{"type":"object","name":"Range1d","id":"p1010","attributes":{"tags":[[["f1_fit","f1_fit",null]],{"type":"map","entries":[["invert_yaxis",false],["autorange",false]]}],"start":478.4063728467301,"end":857.1481420850965,"reset_start":478.4063728467301,"reset_end":857.1481420850965}},"x_scale":{"type":"object","name":"LinearScale","id":"p1032"},"y_scale":{"type":"object","name":"LinearScale","id":"p1033"},"title":{"type":"object","name":"Title","id":"p1025","attributes":{"text_color":"black","text_font_size":"12pt"}},"renderers":[{"type":"object","name":"GlyphRenderer","id":"p1062","attributes":{"name":"IVR","data_source":{"type":"object","name":"ColumnDataSource","id":"p1053","attributes":{"selected":{"type":"object","name":"Selection","id":"p1054","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1055"},"data":{"type":"map","entries":[["time",{"type":"ndarray","array":{"type":"bytes","data":"AAAAAAAAAABbv1Kg1q+EP1u/UqDWr5Q/CB988MEHnz9bv1Kg1q+kPzJvZ0jM26k/CB988MEHrz9wZ0jM2xmyP1u/UqDWr7Q/RhdddNFFtz8yb2dIzNu5Px3HcRzHcbw/CB988MEHvz96O0Ni3s7AP3BnSMzbGcI/ZZNNNtlkwz9bv1Kg1q/EP1HrVwrU+sU/RhdddNFFxz88Q2LezpDIPzJvZ0jM28k/J5tssskmyz8dx3Ecx3HMPxPzdobEvM0/CB988MEHzz9/pUCtXynQP3o7Q2LeztA/ddFFF1100T9wZ0jM2xnSP2r9SoFav9I/ZZNNNtlk0z9gKVDrVwrUP1u/UqDWr9Q/VlVVVVVV1T9R61cK1PrVP0yBWr9SoNY/RhdddNFF1z9BrV8pUOvXPzxDYt7OkNg/N9lkk0022T8yb2dIzNvZPy0Fav1Kgdo/J5tssskm2z8iMW9nSMzbPx3HcRzHcdw/GF100UUX3T8T83aGxLzdPw6JeTtDYt4/CB988MEH3z8DtX6lQK3fP3+lQK1fKeA/ffDBBx984D96O0Ni3s7gP3eGxLydIeE/ddFFF1104T9yHMdxHMfhP3BnSMzbGeI/bbLJJpts4j9q/UqBWr/iP2hIzNsZEuM/ZZNNNtlk4z9j3s6QmLfjP2ApUOtXCuQ/XnTRRRdd5D9bv1Kg1q/kP1gK1PqVAuU/VlVVVVVV5T9ToNavFKjlP1HrVwrU+uU/TjbZZJNN5j9MgVq/UqDmP0nM2xkS8+Y/RhdddNFF5z9EYt7OkJjnP0GtXylQ6+c/P/jggw8+6D88Q2LezpDoPzmO4ziO4+g/N9lkk0026T80JObtDInpPzJvZ0jM2+k/L7rooosu6j8tBWr9SoHqPypQ61cK1Oo/J5tssskm6z8l5u0MiXnrPyIxb2dIzOs/IHzwwQcf7D8dx3Ecx3HsPxsS83aGxOw/GF100UUX7T8VqPUrBWrtPxPzdobEvO0/ED744IMP7j8OiXk7Q2LuPwvU+pUCte4/CB988MEH7z8Gav1KgVrvPwO1fqVAre8/AAAAAAAA8D8="},"shape":[100],"dtype":"float64","order":"little"}],["f1_fit",{"type":"ndarray","array":{"type":"bytes","data":"ZHIWC4qVhkBOQ28GEZeGQDpJVEgdmoZA2MKjaKuehkBmLdlOtqSGQP5igTY3rIZAblU6tSW1hkD7/ErCd7+GQIFL4r8hy4ZAQJYNhhbYhkDI3HdvR+aGQFeGA2ik9YZA7ZBP/RsGh0DHszdxmxeHQGWbXM4OKodAiya+/mA9h0CZbW3ke1GHQNBoV3RIZodAckwj0657h0CxPRl0lpGHQF3w/jnmp4dAOSbQmYS+h0ATDTG/V9WHQJg6cLJF7IdApqnlfzQDiED+ynNgChqIQKCc5+KtMIhAl/fsFQZHiEA1BkWy+lyIQHhE5kR0cohAqLCnWFyHiEDKEBSfnZuIQPqK/hckr4hApWJvN93BiECBlH4JuNOIQDRcslOl5IhAuHl5s5f0iEB7W1y5gwOJQNMphQBgEYlAEw9FQiUeiUBH9URlzimJQMJAGYhYNIlAGrn6BsM9iUAjvnJ8D0aJQOfy1bxBTYlAdZB2zF9TiUA/aobQcViJQFAmsPqBXIlAUBJ/b5xfiUDKHL0nz2GJQCCY/swpY4lAUlCjkb1jiUAy7KMEnWOJQCNTkeHbYolA2ak53Y5hiUBaM3Nvy1+JQFTMmJqnXYlANJ1NsTlbiUCs1yUbmFiJQI242BjZVYlA9XWkiBJTiUC4Io+rWVCJQJbOL+zCTYlALj2pp2FLiUAebnv5R0mJQBzlyoqGR4lAMjO0ZSxGiUDdxzfNRkWJQBOkPRrhRIlA90wingRFiUBdei6LuEWJQCKmSeMBR4lAagolbeNIiUDdAQmwXUuJQOVcWvZuTolAy1zYVhNSiUAf537ERFaJQPJv4yT7WolA+lfObCxgiUDXU77CzGWJQN8p8KbOa4lAmO5yICNyiUCyJsDuuXiJQKQSQL+Bf4lALBsVZmiGiUCeD34ZW42JQEbQFa9GlIlAxzsw2hebiUC5349qu6GJQGYWrooeqIlAHu7P/C6uiUCEcyVW27OJQOS3NjcTuYlAuR3qgMe9iUAb/3mF6sGJQM6CvDRwxYlAxEIvQ07IiUDIEklLfMqJQGSHpujzy4lA5pe5zLDMiUA="},"shape":[100],"dtype":"float64","order":"little"}],["group",["IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR","IVR"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1063","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1064"}}},"glyph":{"type":"object","name":"Line","id":"p1059","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#30a2da","line_width":2}},"selection_glyph":{"type":"object","name":"Line","id":"p1067","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#30a2da","line_width":2}},"nonselection_glyph":{"type":"object","name":"Line","id":"p1060","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#30a2da","line_alpha":0.1,"line_width":2}},"muted_glyph":{"type":"object","name":"Line","id":"p1061","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#30a2da","line_alpha":0.2,"line_width":2}}}},{"type":"object","name":"GlyphRenderer","id":"p1077","attributes":{"name":"KY25A","data_source":{"type":"object","name":"ColumnDataSource","id":"p1068","attributes":{"selected":{"type":"object","name":"Selection","id":"p1069","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1070"},"data":{"type":"map","entries":[["time",{"type":"ndarray","array":{"type":"bytes","data":"AAAAAAAAAABbv1Kg1q+EP1u/UqDWr5Q/CB988MEHnz9bv1Kg1q+kPzJvZ0jM26k/CB988MEHrz9wZ0jM2xmyP1u/UqDWr7Q/RhdddNFFtz8yb2dIzNu5Px3HcRzHcbw/CB988MEHvz96O0Ni3s7AP3BnSMzbGcI/ZZNNNtlkwz9bv1Kg1q/EP1HrVwrU+sU/RhdddNFFxz88Q2LezpDIPzJvZ0jM28k/J5tssskmyz8dx3Ecx3HMPxPzdobEvM0/CB988MEHzz9/pUCtXynQP3o7Q2LeztA/ddFFF1100T9wZ0jM2xnSP2r9SoFav9I/ZZNNNtlk0z9gKVDrVwrUP1u/UqDWr9Q/VlVVVVVV1T9R61cK1PrVP0yBWr9SoNY/RhdddNFF1z9BrV8pUOvXPzxDYt7OkNg/N9lkk0022T8yb2dIzNvZPy0Fav1Kgdo/J5tssskm2z8iMW9nSMzbPx3HcRzHcdw/GF100UUX3T8T83aGxLzdPw6JeTtDYt4/CB988MEH3z8DtX6lQK3fP3+lQK1fKeA/ffDBBx984D96O0Ni3s7gP3eGxLydIeE/ddFFF1104T9yHMdxHMfhP3BnSMzbGeI/bbLJJpts4j9q/UqBWr/iP2hIzNsZEuM/ZZNNNtlk4z9j3s6QmLfjP2ApUOtXCuQ/XnTRRRdd5D9bv1Kg1q/kP1gK1PqVAuU/VlVVVVVV5T9ToNavFKjlP1HrVwrU+uU/TjbZZJNN5j9MgVq/UqDmP0nM2xkS8+Y/RhdddNFF5z9EYt7OkJjnP0GtXylQ6+c/P/jggw8+6D88Q2LezpDoPzmO4ziO4+g/N9lkk0026T80JObtDInpPzJvZ0jM2+k/L7rooosu6j8tBWr9SoHqPypQ61cK1Oo/J5tssskm6z8l5u0MiXnrPyIxb2dIzOs/IHzwwQcf7D8dx3Ecx3HsPxsS83aGxOw/GF100UUX7T8VqPUrBWrtPxPzdobEvO0/ED744IMP7j8OiXk7Q2LuPwvU+pUCte4/CB988MEH7z8Gav1KgVrvPwO1fqVAre8/AAAAAAAA8D8="},"shape":[100],"dtype":"float64","order":"little"}],["f1_fit",{"type":"ndarray","array":{"type":"bytes","data":"bzXPVi26iUDryfSHHrmJQK0GtGr9tolAciBxHMOziUCEHuSPZa+JQD4EPuDXqYlAjMBcvQqjiUCNbdbu7JqJQG3JKetrkYlAgonzf3SGiUBaOqiH83mJQEeNAqnWa4lAw7sXHA1ciUBlO9hwiEqJQOk5q1I9N4lAQMrPRCQiiUAWhD9TOguJQOdv87OB8ohA1/KkVALYiEBNMXBRyruIQB/jGlHunYhAw14wxIl+iEDL8J8Ev12IQChlE1S3O4hAgrrGt6IYiECB30Sxt/SHQJWADdQy0IdAc6PKOFarh0DbUV/PaIaHQD0juJG1YYdAP0zgmYo9h0AuUG8eOBqHQEL06VgP+IZA60AqWmHXhkBV/0vRfbiGQF9C88mxm4ZAmXgHZ0aBhkBy3C2ff2mGQATGaACbVIZAwq1FgM5ChkAqOvFdRzSGQG18XxspKYZAv+Z2kowhhkDBRtcqfx2GQO89bDQCHYZAO8B9agoghkBlzmKifyaGQCP7XKg8MIZArZ94TA89hkCbgZiguEyGQLPMFmjtXoZAooqjuFZzhkAWLUXLkomGQBdZnfs1oYZAHfvV8su5hkDex+P62NKGQB6dHnbb64ZAkoWQdk0Eh0AqE8xvphuHQBq8nP1cMYdAFg56uehEh0DVu1IYxFWHQGlJCEpuY4dAnJvQE21th0DouqieTnOHQDMgFDOrdIdAbeeN2yZxh0DG6lTncmiHQFpNmEdPWodAkjZ+wYtGh0Da6gjwCC2HQBotfRG5DYdARLSdnKDohkCwB9Ca1r2GQJKGDMWEjYZAFclSYudXhkDBzTnnTB2GQBVHFVcV3oVAIYsLaLGahUBDy1ZsoVOFQGEFxQN0CYVAhFZZmcS8hEAO3bOxOW6EQHZAmA+DHoRAHIaLtFfOg0Ciow3Ec36DQHQWaFCWL4NAytxmGH/igkCgB5M97JeCQMurrPqXUIJAJY0sYjYNgkDlNoQsc86BQPF2pZ3vlIFAgvEQiUBhgUBIuUd77DOBQHzm/g5qDYFACszfcx7ugEBSvvUrXNaAQGbNLQRixoBAZw+AS1q+gEA="},"shape":[100],"dtype":"float64","order":"little"}],["group",["KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A","KY25A"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1078","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1079"}}},"glyph":{"type":"object","name":"Line","id":"p1074","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#fc4f30","line_width":2}},"selection_glyph":{"type":"object","name":"Line","id":"p1081","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#fc4f30","line_width":2}},"nonselection_glyph":{"type":"object","name":"Line","id":"p1075","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#fc4f30","line_alpha":0.1,"line_width":2}},"muted_glyph":{"type":"object","name":"Line","id":"p1076","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#fc4f30","line_alpha":0.2,"line_width":2}}}},{"type":"object","name":"GlyphRenderer","id":"p1091","attributes":{"name":"group_0","data_source":{"type":"object","name":"ColumnDataSource","id":"p1082","attributes":{"selected":{"type":"object","name":"Selection","id":"p1083","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p1084"},"data":{"type":"map","entries":[["time",{"type":"ndarray","array":{"type":"bytes","data":"AAAAAAAAAABbv1Kg1q+EP1u/UqDWr5Q/CB988MEHnz9bv1Kg1q+kPzJvZ0jM26k/CB988MEHrz9wZ0jM2xmyP1u/UqDWr7Q/RhdddNFFtz8yb2dIzNu5Px3HcRzHcbw/CB988MEHvz96O0Ni3s7AP3BnSMzbGcI/ZZNNNtlkwz9bv1Kg1q/EP1HrVwrU+sU/RhdddNFFxz88Q2LezpDIPzJvZ0jM28k/J5tssskmyz8dx3Ecx3HMPxPzdobEvM0/CB988MEHzz9/pUCtXynQP3o7Q2LeztA/ddFFF1100T9wZ0jM2xnSP2r9SoFav9I/ZZNNNtlk0z9gKVDrVwrUP1u/UqDWr9Q/VlVVVVVV1T9R61cK1PrVP0yBWr9SoNY/RhdddNFF1z9BrV8pUOvXPzxDYt7OkNg/N9lkk0022T8yb2dIzNvZPy0Fav1Kgdo/J5tssskm2z8iMW9nSMzbPx3HcRzHcdw/GF100UUX3T8T83aGxLzdPw6JeTtDYt4/CB988MEH3z8DtX6lQK3fP3+lQK1fKeA/ffDBBx984D96O0Ni3s7gP3eGxLydIeE/ddFFF1104T9yHMdxHMfhP3BnSMzbGeI/bbLJJpts4j9q/UqBWr/iP2hIzNsZEuM/ZZNNNtlk4z9j3s6QmLfjP2ApUOtXCuQ/XnTRRRdd5D9bv1Kg1q/kP1gK1PqVAuU/VlVVVVVV5T9ToNavFKjlP1HrVwrU+uU/TjbZZJNN5j9MgVq/UqDmP0nM2xkS8+Y/RhdddNFF5z9EYt7OkJjnP0GtXylQ6+c/P/jggw8+6D88Q2LezpDoPzmO4ziO4+g/N9lkk0026T80JObtDInpPzJvZ0jM2+k/L7rooosu6j8tBWr9SoHqPypQ61cK1Oo/J5tssskm6z8l5u0MiXnrPyIxb2dIzOs/IHzwwQcf7D8dx3Ecx3HsPxsS83aGxOw/GF100UUX7T8VqPUrBWrtPxPzdobEvO0/ED744IMP7j8OiXk7Q2LuPwvU+pUCte4/CB988MEH7z8Gav1KgVrvPwO1fqVAre8/AAAAAAAA8D8="},"shape":[100],"dtype":"float64","order":"little"}],["f1_fit",{"type":"ndarray","array":{"type":"bytes","data":"qts3T35ugUDJoemd0HCBQAGCntludYFAQF0WVUx8gUBGy2RDVoWBQBT59PhzkIFApK2xQIedgUAQewnEbKyBQAjRPoT8vIFAYo4xYwrPgUC02ZS5ZuKBQKlcUfje9oFAYUWqUj4MgkDsT5tuTiKCQAAP0BjYOIJAUguJ+aNPgkD4SMJHe2aCQFxS+HcofYJADOj843eTgkA2kGppOKmCQMb8bfw7voJA9vjMLFjSgkDIgEubZuWCQM3mz11F94JAXXrtUNcHg0Bx3MhVBBeDQB3pmHu5JINAj41ZFOkwg0A3wZm0ijuDQJvSoR6bRINAh/qBGRxMg0CxZek0FFKDQA1b8nqOVoNAV6BXEZpZg0ADoMjLSVuDQAUWTLGzW4NAhULTdvBag0AMCknxGlmDQDheiIFPVoNAREm7fKtSg0AMra+TTE6DQLQGsDtQSYNAblFlG9NDg0B5nTN+8D2DQAlvZdDBN4NA0PVSJl4xg0CSSoLQ2SqDQEPihf5FJINA4TIfcrAdg0DqIOZDIxeDQFRRa7qkEINAPht9NDcKg0BCz+Um2QODQLqqpy2F/YJANGRoMDL3gkDcG22Z0/CCQHLqOJ5Z6oJAtIuVmLHjgkCi54duxtyCQCqlcgeB1YJAxnxwzMjNgkBlmb8xhMWCQKO/70aZvIJA3tFmS+6ygkD4FrtEaqiCQJ69WJT1nIJALJnoiXqQgkATB/nv5YKCQIsif5AndIJAhpPlrjJkgkAw4YZ1/lKCQIadolSGQIJACDcWUcosgkCe2WJBzxeCQISC0PeeAYJAwCjKWEjqgUCmad5c39GBQKNGIv58uIFA4+IGET+egUCygwYJSIOBQBIM36m+Z4FAJXhfps1LgUCfPRkuoy+BQNq6jGtwE4FAqOin9Gj3gEBSUKcvwtuAQJLvma6ywIBAVHLwg3GmgECeWp6SNY2AQLjWZ9w0dYBAktAA0aNegEARBqGgtEmAQHe4pZSWNoBAzeTDcHUlgEB7VC7feBaAQDqp6enDCYBAUOusBun+f0CBhn4/Ru9/QGX/7cLE5H9AoWWZsX3ff0A="},"shape":[100],"dtype":"float64","order":"little"}],["group",["group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0","group_0"]]]}}},"view":{"type":"object","name":"CDSView","id":"p1092","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p1093"}}},"glyph":{"type":"object","name":"Line","id":"p1088","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#e5ae38","line_width":2}},"selection_glyph":{"type":"object","name":"Line","id":"p1095","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#e5ae38","line_width":2}},"nonselection_glyph":{"type":"object","name":"Line","id":"p1089","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#e5ae38","line_alpha":0.1,"line_width":2}},"muted_glyph":{"type":"object","name":"Line","id":"p1090","attributes":{"tags":["apply_ranges"],"x":{"type":"field","field":"time"},"y":{"type":"field","field":"f1_fit"},"line_color":"#e5ae38","line_alpha":0.2,"line_width":2}}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p1031","attributes":{"tools":[{"type":"object","name":"WheelZoomTool","id":"p1014","attributes":{"tags":["hv_created"],"renderers":"auto","zoom_together":"none"}},{"type":"object","name":"HoverTool","id":"p1015","attributes":{"tags":["hv_created"],"renderers":[{"id":"p1062"},{"id":"p1077"},{"id":"p1091"}],"tooltips":[["group","@{group}"],["time","@{time}"],["f1_fit","@{f1_fit}"]]}},{"type":"object","name":"SaveTool","id":"p1044"},{"type":"object","name":"PanTool","id":"p1045"},{"type":"object","name":"BoxZoomTool","id":"p1046","attributes":{"overlay":{"type":"object","name":"BoxAnnotation","id":"p1047","attributes":{"syncable":false,"level":"overlay","visible":false,"left":{"type":"number","value":"nan"},"right":{"type":"number","value":"nan"},"top":{"type":"number","value":"nan"},"bottom":{"type":"number","value":"nan"},"left_units":"canvas","right_units":"canvas","top_units":"canvas","bottom_units":"canvas","line_color":"black","line_alpha":1.0,"line_width":2,"line_dash":[4,4],"fill_color":"lightgrey","fill_alpha":0.5}}}},{"type":"object","name":"ResetTool","id":"p1052"}],"active_drag":{"id":"p1045"},"active_scroll":{"id":"p1014"}}},"left":[{"type":"object","name":"LinearAxis","id":"p1039","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1040","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1041"},"axis_label":"f1_fit","major_label_policy":{"type":"object","name":"AllLabels","id":"p1042"}}}],"right":[{"type":"object","name":"Legend","id":"p1065","attributes":{"location":[0,0],"title":"group","click_policy":"mute","items":[{"type":"object","name":"LegendItem","id":"p1066","attributes":{"label":{"type":"value","value":"IVR"},"renderers":[{"id":"p1062"}]}},{"type":"object","name":"LegendItem","id":"p1080","attributes":{"label":{"type":"value","value":"KY25A"},"renderers":[{"id":"p1077"}]}},{"type":"object","name":"LegendItem","id":"p1094","attributes":{"label":{"type":"value","value":"group_0"},"renderers":[{"id":"p1091"}]}}]}}],"below":[{"type":"object","name":"LinearAxis","id":"p1034","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p1035","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p1036"},"axis_label":"time","major_label_policy":{"type":"object","name":"AllLabels","id":"p1037"}}}],"center":[{"type":"object","name":"Grid","id":"p1038","attributes":{"axis":{"id":"p1034"},"grid_line_color":null}},{"type":"object","name":"Grid","id":"p1043","attributes":{"dimension":1,"axis":{"id":"p1039"},"grid_line_color":null}}],"min_border_top":10,"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"output_backend":"webgl"}},{"type":"object","name":"Spacer","id":"p1097","attributes":{"name":"HSpacer00995","stylesheets":["\n:host(.pn-loading):before, .pn-loading:before {\n  background-color: #c3c3c3;\n  mask-size: auto calc(min(50%, 400px));\n  -webkit-mask-size: auto calc(min(50%, 400px));\n}",{"id":"p1007"},{"id":"p1005"},{"id":"p1006"}],"margin":0,"sizing_mode":"stretch_width","align":"start"}}]}}],"defs":[{"type":"model","name":"ReactiveHTML1"},{"type":"model","name":"FlexBox1","properties":[{"name":"align_content","kind":"Any","default":"flex-start"},{"name":"align_items","kind":"Any","default":"flex-start"},{"name":"flex_direction","kind":"Any","default":"row"},{"name":"flex_wrap","kind":"Any","default":"wrap"},{"name":"gap","kind":"Any","default":""},{"name":"justify_content","kind":"Any","default":"flex-start"}]},{"type":"model","name":"FloatPanel1","properties":[{"name":"config","kind":"Any","default":{"type":"map"}},{"name":"contained","kind":"Any","default":true},{"name":"position","kind":"Any","default":"right-top"},{"name":"offsetx","kind":"Any","default":null},{"name":"offsety","kind":"Any","default":null},{"name":"theme","kind":"Any","default":"primary"},{"name":"status","kind":"Any","default":"normalized"}]},{"type":"model","name":"GridStack1","properties":[{"name":"mode","kind":"Any","default":"warn"},{"name":"ncols","kind":"Any","default":null},{"name":"nrows","kind":"Any","default":null},{"name":"allow_resize","kind":"Any","default":true},{"name":"allow_drag","kind":"Any","default":true},{"name":"state","kind":"Any","default":[]}]},{"type":"model","name":"drag1","properties":[{"name":"slider_width","kind":"Any","default":5},{"name":"slider_color","kind":"Any","default":"black"},{"name":"value","kind":"Any","default":50}]},{"type":"model","name":"click1","properties":[{"name":"terminal_output","kind":"Any","default":""},{"name":"debug_name","kind":"Any","default":""},{"name":"clears","kind":"Any","default":0}]},{"type":"model","name":"FastWrapper1","properties":[{"name":"object","kind":"Any","default":null},{"name":"style","kind":"Any","default":null}]},{"type":"model","name":"NotificationAreaBase1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0}]},{"type":"model","name":"NotificationArea1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"notifications","kind":"Any","default":[]},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0},{"name":"types","kind":"Any","default":[{"type":"map","entries":[["type","warning"],["background","#ffc107"],["icon",{"type":"map","entries":[["className","fas fa-exclamation-triangle"],["tagName","i"],["color","white"]]}]]},{"type":"map","entries":[["type","info"],["background","#007bff"],["icon",{"type":"map","entries":[["className","fas fa-info-circle"],["tagName","i"],["color","white"]]}]]}]}]},{"type":"model","name":"Notification","properties":[{"name":"background","kind":"Any","default":null},{"name":"duration","kind":"Any","default":3000},{"name":"icon","kind":"Any","default":null},{"name":"message","kind":"Any","default":""},{"name":"notification_type","kind":"Any","default":null},{"name":"_destroyed","kind":"Any","default":false}]},{"type":"model","name":"TemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"BootstrapTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"TemplateEditor1","properties":[{"name":"layout","kind":"Any","default":[]}]},{"type":"model","name":"MaterialTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"copy_to_clipboard1","properties":[{"name":"fill","kind":"Any","default":"none"},{"name":"value","kind":"Any","default":null}]}]}};
-  var render_items = [{"docid":"8ea61fd3-91e4-471a-b7b8-01545c8567d8","roots":{"p1004":"d7eddf93-4576-4497-b11e-aca011cc0728"},"root_ids":["p1004"]}];
-  var docs = Object.values(docs_json)
-  if (!docs) {
-    return
+
+<style>
+  #altair-viz-4eab89d212264daba884da259064b6d8.vega-embed {
+    width: 100%;
+    display: flex;
   }
-  const py_version = docs[0].version.replace('rc', '-rc.').replace('.dev', '-dev.')
-  function embed_document(root) {
-    var Bokeh = get_bokeh(root)
-    Bokeh.embed.embed_items_notebook(docs_json, render_items);
-    for (const render_item of render_items) {
-      for (const root_id of render_item.root_ids) {
-    const id_el = document.getElementById(root_id)
-    if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
-      const root_el = id_el.children[0]
-      root_el.id = root_el.id + '-rendered'
+
+  #altair-viz-4eab89d212264daba884da259064b6d8.vega-embed details,
+  #altair-viz-4eab89d212264daba884da259064b6d8.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-4eab89d212264daba884da259064b6d8"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-4eab89d212264daba884da259064b6d8") {
+      outputDiv = document.getElementById("altair-viz-4eab89d212264daba884da259064b6d8");
     }
-      }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.1.0?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
     }
-  }
-  function get_bokeh(root) {
-    if (root.Bokeh === undefined) {
-      return null
-    } else if (root.Bokeh.version !== py_version) {
-      if (root.Bokeh.versions === undefined || !root.Bokeh.versions.has(py_version)) {
-    return null
-      }
-      return root.Bokeh.versions.get(py_version);
-    } else if (root.Bokeh.version === py_version) {
-      return root.Bokeh
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
     }
-    return null
-  }
-  function is_loaded(root) {
-    var Bokeh = get_bokeh(root)
-    return (Bokeh != null && Bokeh.Panel !== undefined)
-  }
-  if (is_loaded(root)) {
-    embed_document(root);
-  } else {
-    var attempts = 0;
-    var timer = setInterval(function(root) {
-      if (is_loaded(root)) {
-        clearInterval(timer);
-        embed_document(root);
-      } else if (document.readyState == "complete") {
-        attempts++;
-        if (attempts > 200) {
-          clearInterval(timer);
-      var Bokeh = get_bokeh(root)
-      if (Bokeh == null || Bokeh.Panel == null) {
-            console.warn("Panel: ERROR: Unable to run Panel code because Bokeh or Panel library is missing");
-      } else {
-        console.warn("Panel: WARNING: Attempting to render but not all required libraries could be resolved.")
-        embed_document(root)
-      }
-        }
-      }
-    }, 25, root)
-  }
-})(window);</script>
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.1.0"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-78ff5936fa500e120aaa741e59d3f332"}, "mark": {"type": "point", "tooltip": true}, "encoding": {"color": {"field": "group", "type": "nominal"}, "x": {"field": "time", "type": "quantitative"}, "y": {"field": "f1_fit", "type": "quantitative"}}, "params": [{"name": "param_1e9efca18e7a2868", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json", "datasets": {"data-78ff5936fa500e120aaa741e59d3f332": [{"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 722.6924039605766, "time": 0.0}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 722.8833130543146, "time": 0.010101010101010102}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 723.264298113331, "time": 0.020202020202020204}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 723.8336956781228, "time": 0.030303030303030304}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 724.5890175787903, "time": 0.04040404040404041}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 725.526959429582, "time": 0.05050505050505051}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 726.6434120709724, "time": 0.06060606060606061}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 727.9334760530901, "time": 0.07070707070707072}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 729.3914792708674, "time": 0.08080808080808081}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 731.0109978734471, "time": 0.09090909090909091}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 732.7848805774928, "time": 0.10101010101010102}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 734.7052765155194, "time": 0.11111111111111112}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 736.7636667457679, "time": 0.12121212121212122}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 738.9508995391595, "time": 0.13131313131313133}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 741.2572295412945, "time": 0.14141414141414144}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 743.672360883285, "time": 0.15151515151515152}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 746.1854942845415, "time": 0.16161616161616163}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 748.7853781536929, "time": 0.17171717171717174}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 751.4603636510573, "time": 0.18181818181818182}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 754.1984636280018, "time": 0.19191919191919193}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 756.9874153058155, "time": 0.20202020202020204}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 759.8147465001744, "time": 0.21212121212121213}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 762.6678451377979, "time": 0.22222222222222224}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 765.5340317504773, "time": 0.23232323232323235}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 768.4006345693969, "time": 0.24242424242424243}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 771.2550667806935, "time": 0.25252525252525254}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 774.0849054426836, "time": 0.26262626262626265}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 776.8779715073642, "time": 0.27272727272727276}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 779.6224103348275, "time": 0.2828282828282829}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 782.3067720403333, "time": 0.29292929292929293}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 784.920090971068, "time": 0.30303030303030304}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 787.4519635741829, "time": 0.31313131313131315}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 789.8926238905108, "time": 0.32323232323232326}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 792.23301589031, "time": 0.33333333333333337}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 794.4648618592324, "time": 0.3434343434343435}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 796.5807260450727, "time": 0.3535353535353536}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 798.5740727892173, "time": 0.36363636363636365}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 800.4393183913623, "time": 0.37373737373737376}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 802.1718759921437, "time": 0.38383838383838387}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 803.7681928057877, "time": 0.393939393939394}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 805.2257790934891, "time": 0.4040404040404041}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 806.5432283375623, "time": 0.4141414141414142}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 807.7202281558731, "time": 0.42424242424242425}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 808.7575615848793, "time": 0.43434343434343436}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 809.6570984568348, "time": 0.4444444444444445}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 810.4217767012427, "time": 0.4545454545454546}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 811.0555735112345, "time": 0.4646464646464647}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 811.5634664308243, "time": 0.4747474747474748}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 811.9513845374538, "time": 0.48484848484848486}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 812.2261500143434, "time": 0.494949494949495}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 812.3954105272451, "time": 0.5050505050505051}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 812.4675629385831, "time": 0.5151515151515152}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 812.4516690069624, "time": 0.5252525252525253}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 812.3573638299454, "time": 0.5353535353535354}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 812.1947578911736, "time": 0.5454545454545455}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 811.974333667759, "time": 0.5555555555555556}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 811.7068378388741, "time": 0.5656565656565657}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 811.4031702102277, "time": 0.5757575757575758}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 811.0742705303614, "time": 0.5858585858585859}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 810.7310044223137, "time": 0.595959595959596}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 810.3840496872425, "time": 0.6060606060606061}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 810.04378425431, "time": 0.6161616161616162}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 809.7201770529676, "time": 0.6262626262626263}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 809.4226830694012, "time": 0.6363636363636365}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 809.1601438181868, "time": 0.6464646464646465}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 808.940694413298, "time": 0.6565656565656566}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 808.7716783598079, "time": 0.6666666666666667}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 808.6595711095702, "time": 0.6767676767676768}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 808.609913331577, "time": 0.686868686868687}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 808.6272547416456, "time": 0.696969696969697}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 808.7151092177501, "time": 0.7070707070707072}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 808.8759217981195, "time": 0.7171717171717172}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 809.1110480207279, "time": 0.7272727272727273}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 809.4207459167213, "time": 0.7373737373737375}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 809.8041808185222, "time": 0.7474747474747475}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 810.2594429877614, "time": 0.7575757575757577}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 810.7835779108347, "time": 0.7676767676767677}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 811.3726289528438, "time": 0.7777777777777778}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 812.0216919060356, "time": 0.787878787878788}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 812.7249808186886, "time": 0.797979797979798}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 813.4759043467344, "time": 0.8080808080808082}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 814.2671517352198, "time": 0.8181818181818182}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 815.0907874118659, "time": 0.8282828282828284}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 815.9383530622222, "time": 0.8383838383838385}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 816.8009759568172, "time": 0.8484848484848485}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 817.6694822166969, "time": 0.8585858585858587}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 818.5345136360379, "time": 0.8686868686868687}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 819.3866466301231, "time": 0.8787878787878789}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 820.2165118446526, "time": 0.888888888888889}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 821.0149129486678, "time": 0.8989898989898991}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 821.7729431385593, "time": 0.9090909090909092}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 822.4820979047695, "time": 0.9191919191919192}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 823.1343826556117, "time": 0.9292929292929294}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 823.7224138536794, "time": 0.9393939393939394}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 824.2395123988165, "time": 0.9494949494949496}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 824.6797880866485, "time": 0.9595959595959597}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 825.0382140819823, "time": 0.9696969696969697}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 825.3106904705899, "time": 0.9797979797979799}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 825.494096089373, "time": 0.98989898989899}, {"file_name": "KY25A_1", "group": "IVR", "F1": [559.7297842885647, -19.971327719541513, -9.547564721733066, -5.7610125431973715, 0.825439273834091], "f1_fit": 825.5863279819029, "time": 1.0}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 823.2726805896398, "time": 0.0}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 823.1404065187133, "time": 0.010101010101010102}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 822.874151081625, "time": 0.020202020202020204}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 822.4705540041399, "time": 0.030303030303030304}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 821.9247095599818, "time": 0.04040404040404041}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 821.2303251171785, "time": 0.05050505050505051}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 820.3799274657125, "time": 0.06060606060606061}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 819.3651126994067, "time": 0.07070707070707072}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 818.1768345115055, "time": 0.08080808080808081}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 816.8057249419227, "time": 0.09090909090909091}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 815.2424408995288, "time": 0.10101010101010102}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 813.478029188278, "time": 0.11111111111111112}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 811.5043023024996, "time": 0.12121212121212122}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 809.3142169331994, "time": 0.13131313131313133}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 806.9022469502262, "time": 0.14141414141414144}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 804.2647425986873, "time": 0.15151515151515152}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 801.4002677735017, "time": 0.16161616161616163}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 798.3099075123446, "time": 0.17171717171717174}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 794.9975382707389, "time": 0.18181818181818182}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 791.470054107452, "time": 0.19191919191919193}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 787.7375426049954, "time": 0.20202020202020204}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 783.8134051679085, "time": 0.21212121212121213}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 779.7144172675494, "time": 0.22222222222222224}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 775.460725221288, "time": 0.23232323232323235}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 771.0757771895934, "time": 0.24242424242424243}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 766.5861872284353, "time": 0.25252525252525254}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 762.0215324274369, "time": 0.26262626262626265}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 757.4140843762975, "time": 0.27272727272727276}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 752.7984774126469, "time": 0.2828282828282829}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 748.211317293033, "time": 0.29292929292929293}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 743.6907350747473, "time": 0.30303030303030304}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 739.2758920797194, "time": 0.31313131313131315}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 735.0064428137252, "time": 0.32323232323232326}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 730.9219636167824, "time": 0.33333333333333337}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 727.0613556074553, "time": 0.3434343434343435}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 723.4622311402554, "time": 0.3535353535353536}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 720.1602935087676, "time": 0.36363636363636365}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 717.1887199872048, "time": 0.37373737373737376}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 714.5775585017906, "time": 0.38383838383838387}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 712.35314825533, "time": 0.393939393939394}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 710.537574490773, "time": 0.4040404040404041}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 709.1481672725263, "time": 0.4141414141414142}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 708.1970536904437, "time": 0.42424242424242425}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 707.6907722563103, "time": 0.43434343434343436}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 707.6299574743339, "time": 0.4444444444444445}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 708.0091016363486, "time": 0.4545454545454546}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 708.8163998321846, "time": 0.4646464646464647}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 710.0336829912063, "time": 0.4747474747474748}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 711.6364424996417, "time": 0.48484848484848486}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 713.5939485889326, "time": 0.494949494949495}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 715.869463283334, "time": 0.5050505050505051}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 718.4205472518556, "time": 0.5151515151515152}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 721.1994584526415, "time": 0.5252525252525253}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 724.1536390097325, "time": 0.5353535353535354}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 727.2262853456183, "time": 0.5454545454545455}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 730.3569952305719, "time": 0.5555555555555556}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 733.4824841233316, "time": 0.5656565656565657}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 736.5373619881169, "time": 0.5757575757575758}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 739.454960699819, "time": 0.5858585858585859}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 742.1682012103884, "time": 0.595959595959596}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 744.6104888609873, "time": 0.6060606060606061}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 746.716624600155, "time": 0.6161616161616162}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 748.4237194194759, "time": 0.6262626262626263}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 749.6720990538089, "time": 0.6363636363636365}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 750.4061859190491, "time": 0.6464646464646465}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 750.5753453798063, "time": 0.6565656565656566}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 750.1346837524741, "time": 0.6666666666666667}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 749.0457859531908, "time": 0.6767676767676768}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 747.2773813894383, "time": 0.686868686868687}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 744.80592755991, "time": 0.696969696969697}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 741.6161018585013, "time": 0.7070707070707072}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 737.7011932608809, "time": 0.7171717171717172}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 733.0633868897835, "time": 0.7272727272727273}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 727.7139358894552, "time": 0.7373737373737375}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 721.6732165701732, "time": 0.7474747474747475}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 714.9706643885393, "time": 0.7575757575757577}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 707.6445899850551, "time": 0.7676767676767677}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 699.7418761832082, "time": 0.7777777777777778}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 691.317558539261, "time": 0.787878787878788}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 682.4342936942472, "time": 0.797979797979798}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 673.1617213947169, "time": 0.8080808080808082}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 663.5757275924161, "time": 0.8181818181818182}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 653.7576174822257, "time": 0.8282828282828284}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 643.793208670434, "time": 0.8383838383838385}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 633.7718558615967, "time": 0.8484848484848485}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 623.7854194935514, "time": 0.8585858585858587}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 613.9271916205723, "time": 0.8686868686868687}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 604.2907930305852, "time": 0.8787878787878789}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 594.9690560729595, "time": 0.888888888888889}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 586.0529079606032, "time": 0.8989898989898991}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 577.6302693889014, "time": 0.9090909090909092}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 569.7849831824882, "time": 0.9191919191919192}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 562.5957873400774, "time": 0.9292929292929294}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 556.1353463018643, "time": 0.9393939393939394}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 550.4693535206209, "time": 0.9494949494949496}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 545.6557174868053, "time": 0.9595959595959597}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 541.7438422527771, "time": 0.9696969696969697}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 538.7740122372202, "time": 0.9797979797979799}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 536.7768896860857, "time": 0.98989898989899}, {"file_name": "KY25A_1", "group": "KY25A", "F1": [509.36570179412513, 44.871800820874086, -8.806545453785773, 27.038638408517137, -11.635248334390184], "f1_fit": 535.7731316408838, "time": 1.0}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 557.811674534217, "time": 0.0}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 558.1018636944293, "time": 0.010101010101010102}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 558.6791260131288, "time": 0.020202020202020204}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 559.5372716662606, "time": 0.030303030303030304}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 560.6671207308326, "time": 0.04040404040404041}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 562.0566271914017, "time": 0.05050505050505051}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 563.6910413628689, "time": 0.06060606060606061}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 565.5531082859692, "time": 0.07070707070707072}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 567.6232991130393, "time": 0.08080808080808081}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 569.8800720092371, "time": 0.09090909090909091}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 572.3001586560191, "time": 0.10101010101010102}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 574.8588720661548, "time": 0.11111111111111112}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 577.5304311087059, "time": 0.12121212121212122}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 580.2882969030156, "time": 0.13131313131313133}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 583.1055160765245, "time": 0.14141414141414144}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 585.9550657946186, "time": 0.15151515151515152}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 588.8101954630392, "time": 0.16161616161616163}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 591.6447600746284, "time": 0.17171717171717174}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 594.4335403211895, "time": 0.18181818181818182}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 597.1525448155651, "time": 0.19191919191919193}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 599.7792900650754, "time": 0.20202020202020204}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 602.293054200504, "time": 0.21212121212121213}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 604.6751008890797, "time": 0.22222222222222224}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 606.9088703386602, "time": 0.23232323232323235}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 608.9801348259895, "time": 0.24242424242424243}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 610.8771167461655, "time": 0.25252525252525254}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 612.5905677744047, "time": 0.26262626262626265}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 614.1138083454442, "time": 0.27272727272727276}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 615.442727280816, "time": 0.2828282828282829}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 616.575742019882, "time": 0.29292929292929293}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 617.5137205271321, "time": 0.30303030303030304}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 618.2598665460739, "time": 0.31313131313131315}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 618.8195704397237, "time": 0.32323232323232326}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 619.2002283902939, "time": 0.33333333333333337}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 619.4110332177956, "time": 0.3434343434343435}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 619.4627405113431, "time": 0.3535353535353536}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 619.3674141411473, "time": 0.36363636363636365}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 619.1381555277054, "time": 0.37373737373737376}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 618.7888212827448, "time": 0.38383838383838387}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 618.3337340003715, "time": 0.393939393939394}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 617.7873910641371, "time": 0.4040404040404041}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 617.1641763450668, "time": 0.4141414141414142}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 616.4780795970419, "time": 0.42424242424242425}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 615.7424282104903, "time": 0.43434343434343436}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 614.9696357655057, "time": 0.4444444444444445}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 614.1709715348497, "time": 0.4545454545454546}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 613.3563547305114, "time": 0.4646464646464647}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 612.5341768703152, "time": 0.4747474747474748}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 611.711155170193, "time": 0.48484848484848486}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 610.8922193506997, "time": 0.494949494949495}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 610.0804336914247, "time": 0.5050505050505051}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 609.2769555829942, "time": 0.5151515151515152}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 608.4810312227129, "time": 0.5252525252525253}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 607.690028486154, "time": 0.5353535353535354}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 606.8995063930108, "time": 0.5454545454545455}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 606.1033199810146, "time": 0.5555555555555556}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 605.2937588163894, "time": 0.5656565656565657}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 604.4617168124444, "time": 0.5757575757575758}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 603.5968905084192, "time": 0.5858585858585859}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 602.6880024868633, "time": 0.595959595959596}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 601.723046187217, "time": 0.6060606060606061}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 600.6895480126077, "time": 0.6161616161616162}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 599.5748423319199, "time": 0.6262626262626263}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 598.3663547547142, "time": 0.6363636363636365}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 597.0518889061334, "time": 0.6464646464646465}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 595.6199118550168, "time": 0.6565656565656566}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 594.0598333522547, "time": 0.6666666666666667}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 592.3622741179731, "time": 0.6767676767676768}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 590.5193185741816, "time": 0.686868686868687}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 588.5247476516378, "time": 0.696969696969697}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 586.3742476022209, "time": 0.7070707070707072}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 584.0655911163628, "time": 0.7171717171717172}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 581.5987874732527, "time": 0.7272727272727273}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 578.9761989329006, "time": 0.7373737373737375}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 576.2026211061307, "time": 0.7474747474747475}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 573.285325602882, "time": 0.7575757575757577}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 570.234063851927, "time": 0.7676767676767677}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 567.0610315969273, "time": 0.7777777777777778}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 563.7807941949827, "time": 0.787878787878788}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 560.4101734646733, "time": 0.797979797979798}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 556.968097441249, "time": 0.8080808080808082}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 553.4754149874243, "time": 0.8181818181818182}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 549.9546777698445, "time": 0.8282828282828284}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 546.4298926348226, "time": 0.8383838383838385}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 542.9262478940841, "time": 0.8484848484848485}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 539.4698174544699, "time": 0.8585858585858587}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 536.0872470880729, "time": 0.8686868686868687}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 532.8054274353871, "time": 0.8787878787878789}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 529.6511585589789, "time": 0.888888888888889}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 526.6508110153578, "time": 0.8989898989898991}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 523.8299884856841, "time": 0.9090909090909092}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 521.213197000501, "time": 0.9191919191919192}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 518.8235257098119, "time": 0.9292929292929294}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 516.6823439888186, "time": 0.9393939393939394}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 514.8090194339301, "time": 0.9494949494949496}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 513.2206609968915, "time": 0.9595959595959597}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 511.93189113184474, "time": 0.9696969696969697}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 510.95465039657563, "time": 0.9797979797979799}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 510.2980374619275, "time": 0.98989898989899}, {"file_name": "josef-fruehwald_speaker", "group": "group_0", "F1": [411.72156001946064, 12.201767831866949, -19.15855253390301, -0.2396566828618452, -5.047001839934401], "f1_fit": 509.968186949927, "time": 1.0}]}}, {"mode": "vega-lite"});
+</script>
 </div>
 </div>
 </section>
