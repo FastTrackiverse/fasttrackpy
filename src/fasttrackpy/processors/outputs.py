@@ -11,23 +11,24 @@ import logging
 import sys
 
 ## tk fix
-import tkinter
 from os import environ
 from sys import base_prefix
 import platform
 
-def __set_tk_environ():
-    if not ("TCL_LIBRARY" in environ and "TK_LIBRARY" in environ):
-        try:
-            tkinter.Tk()
-        except tkinter.TclError:
-            tk_dir = "tcl" if platform.system() == "Windows" else "lib"
-            tk_path = Path(base_prefix) / tk_dir
-            environ["TCL_LIBRARY"] = str(next(tk_path.glob("tcl8.*")))
-            environ["TK_LIBRARY"] = str(next(tk_path.glob("tk8.*")))
-
 if platform.system() == "Windows":
+    import tkinter
+    def __set_tk_environ():
+        if not ("TCL_LIBRARY" in environ and "TK_LIBRARY" in environ):
+            try:
+                tkinter.Tk()
+            except tkinter.TclError:
+                tk_dir = "tcl" if platform.system() == "Windows" else "lib"
+                tk_path = Path(base_prefix) / tk_dir
+                environ["TCL_LIBRARY"] = str(next(tk_path.glob("tcl8.*")))
+                environ["TK_LIBRARY"] = str(next(tk_path.glob("tk8.*")))
     __set_tk_environ()
+
+
 
 ptolmap = {"F1" :"#4477AA",
            "F1_s": "#4477AA",
