@@ -26,6 +26,8 @@ def __set_tk_environ():
             environ["TCL_LIBRARY"] = str(next(tk_path.glob("tcl8.*")))
             environ["TK_LIBRARY"] = str(next(tk_path.glob("tk8.*")))
 
+if platform.system() == "Windows":
+    __set_tk_environ()
 
 ptolmap = {"F1" :"#4477AA",
            "F1_s": "#4477AA",
@@ -273,7 +275,7 @@ def spectrogram(
             If the plot is being saved, its image resolution in 
             dots per inch. Defaults to 100.
     """
-    __set_tk_environ()
+
     spctgrm = self.sound.to_spectrogram(
         maximum_frequency=maximum_frequency
     )
@@ -356,7 +358,6 @@ def candidate_spectrograms(
             If the plot is being saved, its image resolution in 
             dots per inch. Defaults to 75
     """
-    __set_tk_environ()
 
     spectrogram = self.sound.to_spectrogram(
         maximum_frequency=maximum_frequency,
