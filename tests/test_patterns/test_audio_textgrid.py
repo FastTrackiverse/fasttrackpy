@@ -1,3 +1,4 @@
+import pytest
 from fasttrackpy.tracks import Track,\
                                OneTrack,\
                                CandidateTracks,\
@@ -23,12 +24,22 @@ import polars as pl
 import numpy as np
 from pathlib import Path
 
-TG_PATH = Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.TextGrid")
-AUDIO_PATH = Path("tests", "test_data", "corpus", "josef-fruehwald_speaker.wav")
+from ..conftest import CORPUS
 
+@pytest.fixture
+@CORPUS
+def TG_PATH(datafiles):
+    return datafiles/"josef-fruehwald_speaker.TextGrid"
+
+@pytest.fixture
+@CORPUS
+def AUDIO_PATH(datafiles):
+    return datafiles/"josef-fruehwald_speaker.wav"
+
+@CORPUS
 class TestAudioTG:
 
-    def test_audio_tg(self):
+    def test_audio_tg(self, TG_PATH, AUDIO_PATH):
         candidates = process_audio_textgrid(
             audio_path=AUDIO_PATH,
             textgrid_path=TG_PATH
@@ -41,7 +52,7 @@ class TestAudioTG:
         assert "group" in df.columns
         assert "id" in df.columns
 
-    def test_audio_tg_heuristics(self):
+    def test_audio_tg_heuristics(self, AUDIO_PATH, TG_PATH):
         bad_heuristic = MinMaxHeuristic(
             edge="max",
             measure="frequency",
@@ -65,11 +76,11 @@ class TestAudioTG:
 
         assert np.any(~np.isfinite(all_error))
 
-    def test_audio_tg2(self)    :
+    def test_audio_tg2(self, AUDIO_PATH, TG_PATH)    :
         candidates = process_audio_textgrid(
             audio_path=AUDIO_PATH,
             textgrid_path=TG_PATH,
-            entry_classes="SequenceInterval",
+            entry_classes=["SequenceInterval"],
             target_tier="phones",
             target_labels="AY"
         )

@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 import parselmouth as pm
 from aligned_textgrid import AlignedTextGrid, Word, Phone, SequenceInterval, SequenceTier
 import aligned_textgrid
@@ -66,7 +67,7 @@ def get_candidates(args_dict):
 
 @delayed
 @safely(message="There was a problem getting some candidate tracks.")
-def get_candidates_delayed(args_dict):
+def get_candidates_delayed(args_dict) -> CandidateTracks:
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         candidates =  CandidateTracks(**args_dict)
@@ -74,10 +75,10 @@ def get_candidates_delayed(args_dict):
         warnings.warn("formant tracking error")
     return candidates
 
-def run_candidates(arg_list, parallel:bool):
+def run_candidates(arg_list, parallel:bool) -> Sequence[CandidateTracks]:
     if parallel:
         n_jobs = cpu_count()
-        all_candidates = Parallel(n_jobs=n_jobs)(
+        all_candidates = Parallel(n_jobs=n_jobs, return_as="list")(
             get_candidates_delayed(args_dict=arg) for arg in tqdm(arg_list)
             )
         return all_candidates
@@ -99,11 +100,12 @@ def process_audio_textgrid(
         window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
+        pitch_floor: float = 75,
         smoother: Smoother = Smoother(),
         loss_fun: Loss = Loss(),
         agg_fun: Agg = Agg(),
-        heuristics: list[MinMaxHeuristic|SpacingHeuristic] = []     
-)->list[CandidateTracks]:
+        heuristics: list[MinMaxHeuristic|SpacingHeuristic|None] = []     
+)->Sequence[CandidateTracks]:
     """Process an audio and TextGrid file together.
 
     Args:
@@ -130,6 +132,8 @@ def process_audio_textgrid(
             Defaults to 0.002.
         pre_emphasis_from (float, optional): Pre-emphasis threshold. 
             Defaults to 50.
+        pitch_floor (float, optional): Pitch floor for f0 tracking.
+            Defaults to 75.            
         smoother (Smoother, optional): The smoother method to use. 
             Defaults to `Smoother()`.
         loss_fun (Loss, optional): The loss function to use. 
@@ -151,7 +155,7 @@ def process_audio_textgrid(
 
     entry_classes = get_interval_classes(textgrid_format=entry_classes)
     
-    tg = AlignedTextGrid(textgrid_path=textgrid_path, entry_classes=entry_classes)
+    tg = AlignedTextGrid(textgrid=textgrid_path, entry_classes=entry_classes)
     target_tiers = get_target_tiers(tg, target_tier=target_tier)
     target_intervals = get_target_intervals(
         target_tiers=target_tiers, 
@@ -176,6 +180,7 @@ def process_audio_textgrid(
             "window_length": window_length,
             "time_step" : time_step,
             "pre_emphasis_from": pre_emphasis_from,
+            "pitch_floor": pitch_floor,
             "smoother": smoother,
             "loss_fun":loss_fun,
             "agg_fun": agg_fun,

@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.typing as npt
 import scipy.fft
 from typing import Union
 from collections.abc import Callable
@@ -15,8 +16,8 @@ class Smoothed:
 
     def __init__(
         self,
-        smoothed: np.ndarray,
-        params: np.ndarray = None
+        smoothed: npt.NDArray,
+        params: npt.NDArray|None = None
     ):
         self.smoothed = smoothed
         self.params = params
@@ -33,23 +34,23 @@ class Smoother:
     """
     def __init__(
         self,
-        method: Union[str, Callable] = "dct_smooth_regression",
+        method: str|Callable = "dct_smooth_regression",
         **kwargs
     ):
         self.smooth_fun = self._get_fun(method)
         self.method_args = kwargs
     
-    def _get_fun(self, method):
+    def _get_fun(self, method)->Callable:
         if callable(method):
             return method
-        if method == "dct_smooth":
+        elif method == "dct_smooth":
             return dct_smooth
-        if method == "dct_smooth_regression":
+        else: 
             return dct_smooth_regression
         
     def smooth(
             self, 
-            x: np.array
+            x: npt.NDArray
         ) -> Smoothed:
         """Apply the smoother function to the data
 
@@ -62,7 +63,7 @@ class Smoother:
         return self.smooth_fun(x, **self.method_args)
 
 def dct_smooth(
-        x:np.array, 
+        x:npt.NDArray, 
         order:int = 5
     ) -> Smoothed:
     """A DCT Smoother
@@ -84,7 +85,7 @@ def dct_smooth(
 
 
 def dct_smooth_regression(
-        x:np.array, 
+        x:npt.NDArray, 
         order:int = 5
     ) -> Smoothed:
     """A DCT Smoother using regression

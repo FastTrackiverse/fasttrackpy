@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.typing as npt
 from typing import Union
 from collections.abc import Callable
 
@@ -11,7 +12,7 @@ class Agg:
 
     def __init__(
         self, 
-        method: Union[str, Callable]= "agg_sum",
+        method: str|Callable = "agg_sum",
         **kwargs
     ):
         self.method = self._get_method(method)
@@ -19,11 +20,11 @@ class Agg:
     
     def _get_method(
         self, 
-        method:Union[str, Callable]
-    ):
+        method:str|Callable[[npt.NDArray], float]
+    )->Callable:
         if callable(method):
             return method
-        if method == "agg_sum":
+        else:
             return agg_sum
     
     def aggregate(

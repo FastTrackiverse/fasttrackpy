@@ -39,7 +39,7 @@ heuristic_dict = {
   "f3_f4_heuristic": F3_F4_Sep
 }
 
-DEFAULT_CONFIG = str(files("fasttrackpy").joinpath("resources", "config.yml"))
+DEFAULT_CONFIG = str(files("fasttrackpy").joinpath("resources").joinpath("config.yml"))
 
 logging.basicConfig(
     filename = "fasttrack.log",
@@ -126,7 +126,13 @@ audio_processing = cloup.option_group(
         type=click.FloatRange(min=0), 
         default=50,
         help="Pre-emphasis. Defaults to 50(Hz)."
-    )    
+    ),
+    cloup.option(
+        "--pitch_floor", 
+        type=click.FloatRange(min=0), 
+        default=75,
+        help="Pitch floor, for pitch tracking"
+    )      
 )
 
 smoother_options = cloup.option_group(
@@ -294,17 +300,17 @@ def fasttrack():
 @smoother_options
 @heuristic_options
 def audio(
-        file: Union[str, Path] = None,
-        dir: Union[str,Path] = None,
-        output: Union[str, Path] = None,
-        dest: Union[str, Path] = None,
+        file: str|Path,
+        dir: str|Path,
+        output: str|Path,
+        dest: str|Path,
         which_output: str = "winner",
         data_output: str = "formants",
         smoother_method: str = "dct_smooth_regression",
         smoother_order: int = 5,
         loss_method: str = "lmse",
         xmin:float = 0,
-        xmax: float = None,
+        xmax: float|None = None,
         min_max_formant:float = 4000,
         max_max_formant:float = 7000,
         min_duration = 0.05,
@@ -313,6 +319,7 @@ def audio(
         window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
+        pitch_floor: float = 75,
         **kwargs
 ):
     """Run fasttrack.
@@ -348,6 +355,8 @@ def audio(
         time_step (float, optional): Formant analysis window step size.
             Defaults to 0.002(s)
         pre_emphasis_from (float, optional): Pre-emphasis. Defaults to 50(Hz)
+        pitch_floor (float, optional): Pitch floor for f0 tracking.
+            Defaults to 75.        
     """
     smoother_kwargs = {
         "method": smoother_method,
@@ -381,6 +390,7 @@ def audio(
             window_length=window_length,
             time_step=time_step,
             pre_emphasis_from=pre_emphasis_from,
+            pitch_floor=pitch_floor,
             smoother=smoother,
             loss_fun=loss_fun,
             agg_fun=agg_fun,
@@ -403,6 +413,7 @@ def audio(
             window_length=window_length,
             time_step=time_step,
             pre_emphasis_from=pre_emphasis_from,
+            pitch_floor=pitch_floor,
             smoother=smoother,
             loss_fun=loss_fun,
             agg_fun=agg_fun
@@ -443,13 +454,13 @@ def audio(
 @smoother_options
 @heuristic_options
 def audio_textgrid(
-        audio: Union[str, Path] = None,
-        textgrid: Union[str,Path] = None,
-        entry_classes: str = None,
-        target_tier: str = None,
-        target_labels: str = None,
-        output: Union[str, Path] = None,
-        dest: Union[str, Path] = None,
+        audio: str|Path,
+        textgrid: str|Path,
+        entry_classes: str,
+        target_tier: str,
+        target_labels: str,
+        output: str|Path,
+        dest: str|Path,
         which_output: str = "winner",
         data_output: str = "formants",
         smoother_method: str = "dct_smooth_regression",
@@ -463,6 +474,7 @@ def audio_textgrid(
         window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
+        pitch_floor: float = 75,
         **kwargs
 ):
     """Run fasttrack.
@@ -499,6 +511,8 @@ def audio_textgrid(
         time_step (float, optional): Formant analysis window step size.
             Defaults to 0.002(s)
         pre_emphasis_from (float, optional): Pre-emphasis. Defaults to 50(Hz)
+        pitch_floor (float, optional): Pitch floor for f0 tracking.
+            Defaults to 75.        
     """
     smoother_kwargs = {
         "method": smoother_method,
@@ -519,12 +533,12 @@ def audio_textgrid(
         if k in heuristic_dict
     ]     
 
-    entry_classes = entry_classes.split("|")
+    entry_classes_list = entry_classes.split("|")
 
     all_candidates = process_audio_textgrid(
         audio_path=audio,
         textgrid_path=textgrid,
-        entry_classes=entry_classes,
+        entry_classes=entry_classes_list,
         target_tier=target_tier,
         target_labels=target_labels,
         min_duration=min_duration,
@@ -535,6 +549,7 @@ def audio_textgrid(
         window_length=window_length,
         time_step=time_step,
         pre_emphasis_from=pre_emphasis_from,
+        pitch_floor=pitch_floor,
         smoother=smoother,
         loss_fun=loss_fun,
         agg_fun=agg_fun,
@@ -569,13 +584,13 @@ def audio_textgrid(
 @smoother_options
 @heuristic_options
 def corpus(
-        corpus: str|Path = None,
-        entry_classes: str = None,
-        target_tier: str = None,
-        target_labels: str = None,
-        output: str|Path = None,
+        corpus: str|Path,
+        entry_classes: str,
+        target_tier: str,
+        target_labels: str,
+        output: str|Path,
+        dest: str|Path,        
         separate_output: bool = False,
-        dest: str|Path = None,
         which_output: str = "winner",
         data_output: str = "formants",
         smoother_method: str = "dct_smooth_regression",
@@ -589,8 +604,44 @@ def corpus(
         window_length: float = 0.025,
         time_step: float = 0.002,
         pre_emphasis_from: float = 50,
+        pitch_floor:float = 75,
         **kwargs
 ):
+    """Run fasttrack.
+
+    Args:
+        corpus (Union[str, Path], optional): A path to a corpus of audio/textgrid pairs. 
+            Defaults to None.
+        output (Union[str, Path], optional): Name of an output file. Defaults to None.
+        dest (Union[str, Path], optional): "Name of an output directory. Defaults to None.
+        which_output (str, optional): Whether to save just the winner, 
+            or all candidates. Defaults to 'winner'. Defaults to "winner".
+        data_output (str, optional): Whether to save the formant data,
+            or smoothing parameter data.
+            Defaults to "formants".
+        smoother_method (str, optional): Smoother method to use. Defaults to 'dct_smooth_regression'
+            (Discrete Cosine Transform)
+        smoother_order (int, optional): Order of the smooth. 
+            Defaults to 5. (More is wigglier.)
+        loss_method (str, optional): The loss function comparing formants to 
+            smoothed tracks.
+            Defaults to lmse (log mean squared error).
+        min_max_formant (float, optional): Start of possible max-formant range. 
+            Defaults to 4000(Hz).
+        max_max_formant (float, optional): End of possible max-formant range. 
+            Defaults to 7000(Hz).
+        nstep (int, optional): Number of max-formant steps to be evaluated.
+            Defaults to 20.
+        n_formants (int, optional): Number of formants to track.
+            Defaults to 4.
+        window_length (float, optional): Formant analysis window length. 
+            Defaults to 0.05(s).
+        time_step (float, optional): Formant analysis window step size.
+            Defaults to 0.002(s)
+        pre_emphasis_from (float, optional): Pre-emphasis. Defaults to 50(Hz)
+        pitch_floor (float, optional): Pitch floor for f0 tracking.
+            Defaults to 75.        
+    """    
     smoother_kwargs = {
         "method": smoother_method,
         "order": smoother_order
@@ -610,11 +661,11 @@ def corpus(
         if k in heuristic_dict
     ]         
 
-    entry_classes = entry_classes.split("|")
+    entry_classes_list = entry_classes.split("|")
 
     all_candidates = process_corpus(
         corpus_path = corpus,
-        entry_classes = entry_classes,
+        entry_classes = entry_classes_list,
         target_tier = target_tier,
         target_labels = target_labels,
         min_duration = min_duration,
@@ -625,6 +676,7 @@ def corpus(
         window_length = window_length,
         time_step = time_step,
         pre_emphasis_from = pre_emphasis_from,
+        pitch_floor = pitch_floor,
         smoother = smoother,
         loss_fun = loss_fun,
         agg_fun = agg_fun,

@@ -1,3 +1,4 @@
+import pytest
 from fasttrackpy.tracks import Track,\
                                OneTrack,\
                                CandidateTracks,\
@@ -20,26 +21,26 @@ import polars as pl
 import numpy as np
 from pathlib import Path
 
+from ..conftest import CORPUS
 
+@CORPUS
 class TestHelpers:
 
-    def test_get_audio(self):
-        all_audio = get_audio_files(Path("tests", "test_data", "corpus"))
+    def test_get_audio(self, datafiles):
+        all_audio = get_audio_files(datafiles)
         assert len(all_audio) == 2
 
-    def test_get_corpus(self):
-        all_audio = get_audio_files(Path("tests", "test_data", "corpus"))
+    def test_get_corpus(self, datafiles):
+        all_audio = get_audio_files(datafiles)
         corpus = get_corpus(all_audio)
 
         assert len(corpus) == 2
         assert all([x.wav.exists for x in corpus])
         assert all([x.tg.exists for x in corpus])
 
-    def test_get_tgs(self):
+    def test_get_tgs(self, datafiles):
 
-        all_audio = get_audio_files(
-            Path("tests", "test_data", "corpus")
-            )
+        all_audio = get_audio_files(datafiles)
         corpus = get_corpus(all_audio)
         all_tg = [
             read_and_associate_tg(pair) 
@@ -51,10 +52,8 @@ class TestHelpers:
         
         assert all([hasattr(x, "wav") for x in all_tg])
 
-    def test_get_target_tiers(self):
-        all_audio = get_audio_files(
-            Path("tests", "test_data", "corpus")
-            )
+    def test_get_target_tiers(self, datafiles):
+        all_audio = get_audio_files(datafiles)
         corpus = get_corpus(all_audio)
         all_tg1 = [
             read_and_associate_tg(pair) 
@@ -84,10 +83,8 @@ class TestHelpers:
 
         assert isinstance(all_tiers2[0], SequenceTier)
 
-    def test_get_target_intervals(self):
-        all_audio = get_audio_files(
-            Path("tests", "test_data", "corpus")
-            )
+    def test_get_target_intervals(self, datafiles):
+        all_audio = get_audio_files(datafiles)
         
         corpus = get_corpus(all_audio)
 
@@ -129,11 +126,12 @@ class TestHelpers:
                 for interval in group
                 ]
 
+@CORPUS
 class TestCorpus:
 
-    def test_corpus_process(self):
+    def test_corpus_process(self, datafiles):
 
-        all_candidates = process_corpus(Path("tests", "test_data", "corpus"))
+        all_candidates = process_corpus(datafiles)
 
         assert [isinstance(cand, CandidateTracks) for cand in all_candidates]
         assert len(all_candidates) > 0
