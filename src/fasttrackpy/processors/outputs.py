@@ -10,8 +10,6 @@ import copy
 import logging
 import sys
 
-matplotlib.use('Agg')
-
 ptolmap = {"F1" :"#4477AA",
            "F1_s": "#4477AA",
            "F2": "#EE6677",
