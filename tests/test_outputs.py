@@ -25,16 +25,19 @@ from .conftest import TEST_DATA, CORPUS
 def dest(tmp_path_factory):
     dest = tmp_path_factory.mktemp("dest") 
     return dest
-@TEST_DATA
+
 class TestDataFrames:
-    def test_formant_df(self, candidates):
-       
-        formant_df = candidates.to_df(output="formants")
-        big_formant_df = candidates.to_df(which='all', output="formants")
+    @CORPUS
+    def test_formant_df(self, candidates2):
+        for cand in candidates2:
 
-        assert isinstance(formant_df, pl.DataFrame)
-        assert isinstance(big_formant_df, pl.DataFrame)
+            formant_df = cand.to_df(output="formants")
+            big_formant_df = cand.to_df(which='all', output="formants")
 
+            assert isinstance(formant_df, pl.DataFrame)
+            assert isinstance(big_formant_df, pl.DataFrame)
+
+    @TEST_DATA
     def test_param_df(self, candidates):
         param_df = candidates.to_df(output="param")
         big_param_df = candidates.to_df(which='all', output="formants")
@@ -42,6 +45,7 @@ class TestDataFrames:
         assert isinstance(param_df, pl.DataFrame)
         assert isinstance(big_param_df, pl.DataFrame)
 
+    @TEST_DATA
     def test_log_param_df(self, candidates):
         log_param_df = candidates.to_df(output="log_param")
         big_log_param_df = candidates.to_df(which='all', output='log_param')
