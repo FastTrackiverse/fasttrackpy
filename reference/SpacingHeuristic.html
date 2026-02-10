@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -575,10 +610,15 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="fasttrackpy.SpacingHeuristic" class="level1">
 <h1>SpacingHeuristic</h1>
-<p><code>SpacingHeuristic(top=field(default_factory=lambda : [3]), bottom=field(default_factory=lambda : [1, 2]), top_diff=2000, bottom_diff=500)</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>SpacingHeuristic(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    top<span class="op">=</span>(<span class="kw">lambda</span>: [<span class="dv">3</span>])(),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    bottom<span class="op">=</span>(<span class="kw">lambda</span>: [<span class="dv">1</span>, <span class="dv">2</span>])(),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    top_diff<span class="op">=</span><span class="dv">2000</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    bottom_diff<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A class for defining formant spacing heuristics.</p>
-<section id="parameters" class="level2">
-<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
+<section id="parameters" class="level2 doc-section doc-section-parameters">
+<h2 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -590,25 +630,25 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>top</code></td>
+<td>top</td>
 <td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="https://docs.python.org/3/library/functions.html#int">int</a>]</td>
 <td>The top formants to evaluate spacing on (or value, if the list is only 1 value long).</td>
-<td><code>field(default_factory=lambda : [3])</code></td>
+<td><code>(lambda: [3])()</code></td>
 </tr>
 <tr class="even">
-<td><code>bottom</code></td>
+<td>bottom</td>
 <td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="https://docs.python.org/3/library/functions.html#int">int</a>]</td>
 <td>The bottom formants to evaluate spacing on.</td>
-<td><code>field(default_factory=lambda : [1, 2])</code></td>
+<td><code>(lambda: [1, 2])()</code></td>
 </tr>
 <tr class="odd">
-<td><code>top_diff</code></td>
+<td>top_diff</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a> | <a href="https://docs.python.org/3/library/functions.html#int">int</a> | <a href="https://numpy.org/doc/stable/reference/index.html#module-numpy">np</a>.<a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.floating">floating</a></td>
 <td>The spacing of the top formants</td>
 <td><code>2000</code></td>
 </tr>
 <tr class="even">
-<td><code>bottom_diff</code></td>
+<td>bottom_diff</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a> | <a href="https://docs.python.org/3/library/functions.html#int">int</a> | <a href="https://numpy.org/doc/stable/reference/index.html#module-numpy">np</a>.<a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.floating">floating</a></td>
 <td>The spacing of the bottom formants</td>
 <td><code>500</code></td>
@@ -634,10 +674,10 @@ ul.task-list li input[type="checkbox"] {
 </table>
 <section id="fasttrackpy.SpacingHeuristic.eval" class="level3">
 <h3 class="anchored" data-anchor-id="fasttrackpy.SpacingHeuristic.eval">eval</h3>
-<p><code>SpacingHeuristic.eval(track)</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>SpacingHeuristic.<span class="bu">eval</span>(track)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Evaluate whether or not the track passes the heuriustic</p>
-<section id="parameters-1" class="level4">
-<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
+<section id="parameters-1" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -649,7 +689,7 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>track</code></td>
+<td>track</td>
 <td><a href="../reference/OneTrack.html#fasttrackpy.OneTrack">OneTrack</a></td>
 <td>The track to evaluate.</td>
 <td><em>required</em></td>
@@ -657,17 +697,19 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </section>
-<section id="returns" class="level4">
-<h4 class="anchored" data-anchor-id="returns">Returns</h4>
+<section id="returns" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
+<th>Name</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td></td>
 <td><a href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[0 | <a href="https://numpy.org/doc/stable/reference/index.html#module-numpy">np</a>.<a href="https://numpy.org/doc/stable/reference/constants.html#numpy.inf">inf</a>]</td>
 <td>If the track passes, 0. If the track doesn’t pass, <code>np.inf</code>.</td>
 </tr>

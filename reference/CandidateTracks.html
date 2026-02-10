@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -580,7 +615,24 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="fasttrackpy.CandidateTracks" class="level1">
 <h1>CandidateTracks</h1>
-<p><code>CandidateTracks(self, sound=None, samples=None, sampling_frequency=None, xmin=0.0, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.025, time_step=0.002, pre_emphasis_from=50, pitch_floor=75, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>CandidateTracks(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    sound<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    samples<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    sampling_frequency<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    xmin<span class="op">=</span><span class="fl">0.0</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    min_max_formant<span class="op">=</span><span class="dv">4000</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    max_max_formant<span class="op">=</span><span class="dv">7000</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    nstep<span class="op">=</span><span class="dv">20</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    n_formants<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="fl">0.025</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    time_step<span class="op">=</span><span class="fl">0.002</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    pre_emphasis_from<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    pitch_floor<span class="op">=</span><span class="dv">75</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    smoother<span class="op">=</span>Smoother(),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    loss_fun<span class="op">=</span>Loss(),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    agg_fun<span class="op">=</span>Agg(),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    heuristics<span class="op">=</span>[],</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A class for candidate tracks for a single formant</p>
 <p>You can provide <em>either</em></p>
 <ul>
@@ -593,8 +645,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Any optional time offset to the <code>xmin</code> argument.</li>
 </ul>
 <p>If a <code>Sound</code> object is passed to <code>sound</code>, any values passed to <code>samples</code>, <code>sampling_frequency</code> and <code>xmin</code> are ignored.</p>
-<section id="parameters" class="level2">
-<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
+<section id="parameters" class="level2 doc-section doc-section-parameters">
+<h2 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -606,97 +658,97 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>sound</code></td>
+<td>sound</td>
 <td><a href="https://parselmouth.readthedocs.io/en/stable/api_reference.html#module-parselmouth">pm</a>.<a href="https://parselmouth.readthedocs.io/en/stable/api_reference.html#parselmouth.Sound">Sound</a></td>
 <td>A <code>parselmouth.Sound</code> object.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
-<td><code>samples</code></td>
+<td>samples</td>
 <td><a href="https://numpy.org/doc/stable/reference/index.html#module-numpy">np</a>.<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray">ndarray</a></td>
 <td>A numpy array of audio samples.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
-<td><code>sampling_frequency</code></td>
+<td>sampling_frequency</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The audio sampling frequency.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
-<td><code>xmin</code></td>
+<td>xmin</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The time offset for the audio. Defaults to 0.0.</td>
 <td><code>0.0</code></td>
 </tr>
 <tr class="odd">
-<td><code>min_max_formant</code></td>
+<td>min_max_formant</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The lowest max-formant value to try. Defaults to 4000.</td>
 <td><code>4000</code></td>
 </tr>
 <tr class="even">
-<td><code>max_max_formant</code></td>
+<td>max_max_formant</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The highest max formant to try. Defaults to 7000.</td>
 <td><code>7000</code></td>
 </tr>
 <tr class="odd">
-<td><code>nstep</code></td>
+<td>nstep</td>
 <td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of steps from the min to the max max formant. Defaults to 20.</td>
 <td><code>20</code></td>
 </tr>
 <tr class="even">
-<td><code>n_formants</code></td>
+<td>n_formants</td>
 <td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of formants to track. Defaults to 4.</td>
 <td><code>4</code></td>
 </tr>
 <tr class="odd">
-<td><code>window_length</code></td>
+<td>window_length</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Window length of the formant analysis. Defaults to 0.025.</td>
 <td><code>0.025</code></td>
 </tr>
 <tr class="even">
-<td><code>time_step</code></td>
+<td>time_step</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Time step of the formant analyusis window. Defaults to 0.002.</td>
 <td><code>0.002</code></td>
 </tr>
 <tr class="odd">
-<td><code>pre_emphasis_from</code></td>
+<td>pre_emphasis_from</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Pre-emphasis threshold. Defaults to 50.</td>
 <td><code>50</code></td>
 </tr>
 <tr class="even">
-<td><code>pitch_floor</code></td>
+<td>pitch_floor</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Pitch floor for f0 tracking. Defaults to 75.</td>
 <td><code>75</code></td>
 </tr>
 <tr class="odd">
-<td><code>smoother</code></td>
+<td>smoother</td>
 <td><a href="../reference/Smoother.html#fasttrackpy.Smoother">Smoother</a></td>
 <td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
 <td><code>Smoother()</code></td>
 </tr>
 <tr class="even">
-<td><code>loss_fun</code></td>
+<td>loss_fun</td>
 <td><a href="../reference/Loss.html#fasttrackpy.Loss">Loss</a></td>
 <td>The loss function to use. Defaults to Loss().</td>
 <td><code>Loss()</code></td>
 </tr>
 <tr class="odd">
-<td><code>agg_fun</code></td>
+<td>agg_fun</td>
 <td><a href="../reference/Agg.html#fasttrackpy.Agg">Agg</a></td>
 <td>The loss aggregation function to use. Defaults to Agg().</td>
 <td><code>Agg()</code></td>
 </tr>
 <tr class="even">
-<td><code>heuristics</code></td>
+<td>heuristics</td>
 <td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="../reference/MinMaxHeuristic.html#fasttrackpy.MinMaxHeuristic">MinMaxHeuristic</a> | <a href="../reference/SpacingHeuristic.html#fasttrackpy.SpacingHeuristic">SpacingHeuristic</a>]</td>
 <td>A list of formant tracking heuristics to use.</td>
 <td><code>[]</code></td>
@@ -704,8 +756,8 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </section>
-<section id="attributes" class="level2">
-<h2 class="anchored" data-anchor-id="attributes">Attributes</h2>
+<section id="attributes" class="level2 doc-section doc-section-attributes">
+<h2 class="doc-section doc-section-attributes anchored" data-anchor-id="attributes">Attributes</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -780,10 +832,10 @@ ul.task-list li input[type="checkbox"] {
 </table>
 <section id="fasttrackpy.CandidateTracks.spectrograms" class="level3">
 <h3 class="anchored" data-anchor-id="fasttrackpy.CandidateTracks.spectrograms">spectrograms</h3>
-<p><code>CandidateTracks.spectrograms(**kwargs)</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>CandidateTracks.spectrograms(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will plot a grid of the candidate formant tracks and their spectrograms. If a <code>file_name</code> is provided, it will save the plot to disk.</p>
-<section id="parameters-1" class="level4">
-<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
+<section id="parameters-1" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -795,37 +847,37 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>formants</code></td>
+<td>formants</td>
 <td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of formants to plot. Defaults to 3.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td><code>maximum_frequency</code></td>
+<td>maximum_frequency</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The frequency range the spectrogram and formants will be plotted up to. Defaults to 3500.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
-<td><code>dynamic_range</code></td>
+<td>dynamic_range</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>A all spectrogram values below the dynamic range. will be plotted as white. Defaults to 60.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td><code>figsize</code></td>
+<td>figsize</td>
 <td><a href="https://docs.python.org/3/library/stdtypes.html#tuple">tuple</a>[<a href="https://docs.python.org/3/library/functions.html#float">float</a>, <a href="https://docs.python.org/3/library/functions.html#float">float</a>]</td>
 <td>Width and height of the figure in inches. Defaults to (8,5).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
-<td><code>file_name</code></td>
+<td>file_name</td>
 <td><code>Path</code> | None</td>
 <td>If provided, how to save the spectrogram. If not provided (None) the plot will show interactively. Defaults to None.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td><code>dpi</code></td>
+<td>dpi</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>If the plot is being saved, its image resolution in dots per inch. Defaults to 75</td>
 <td><em>required</em></td>
@@ -836,10 +888,10 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="fasttrackpy.CandidateTracks.to_df" class="level3">
 <h3 class="anchored" data-anchor-id="fasttrackpy.CandidateTracks.to_df">to_df</h3>
-<p><code>CandidateTracks.to_df(which='winner', output='formants')</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>CandidateTracks.to_df(which<span class="op">=</span><span class="st">'winner'</span>, output<span class="op">=</span><span class="st">'formants'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Return a polars dataframe of the candidate tracks</p>
-<section id="parameters-2" class="level4">
-<h4 class="anchored" data-anchor-id="parameters-2">Parameters</h4>
+<section id="parameters-2" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -851,35 +903,38 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>which</code></td>
-<td><a href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[‘winner’, ‘all’]</td>
+<td>which</td>
+<td><a href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>['winner', 'all']</td>
 <td>Return just the winner track data, or all candidates. Defaults to “winner”.</td>
 <td><code>'winner'</code></td>
 </tr>
 <tr class="even">
-<td><code>output</code></td>
-<td><a href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[‘formants’, ‘param’, ‘log_param’]</td>
+<td>output</td>
+<td><a href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>['formants', 'param', 'log_param']</td>
 <td>Whether to output the formants or the smoothing parameters. Defaults to “formants”.</td>
 <td><code>'formants'</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level4">
-<h4 class="anchored" data-anchor-id="returns">Returns</h4>
+<section id="returns" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 68%">
-<col style="width: 31%">
+<col style="width: 10%">
+<col style="width: 61%">
+<col style="width: 28%">
 </colgroup>
 <thead>
 <tr class="header">
+<th>Name</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td></td>
 <td><code>pl</code>.<code>DataFrame</code></td>
 <td>A <code>polars.DataFrame</code></td>
 </tr>

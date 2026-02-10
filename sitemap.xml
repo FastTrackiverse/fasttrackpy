@@ -2,114 +2,114 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/usage/getting_started.html</loc>
-    <lastmod>2026-02-09T17:50:37.198Z</lastmod>
+    <lastmod>2026-02-10T04:24:18.604Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/usage/pythonic_use.html</loc>
-    <lastmod>2026-02-09T17:50:37.224Z</lastmod>
+    <lastmod>2026-02-10T04:24:18.629Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/process_audio_textgrid.html</loc>
-    <lastmod>2026-02-09T17:51:06.757Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.190Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.outputs.pickle_candidates.html</loc>
-    <lastmod>2026-02-09T17:51:06.827Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.241Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/SpacingHeuristic.html</loc>
-    <lastmod>2026-02-09T17:51:06.890Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.287Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/Loss.html</loc>
-    <lastmod>2026-02-09T17:51:06.855Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.261Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.losses.lmse.html</loc>
-    <lastmod>2026-02-09T17:51:06.860Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.265Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/utils.safely.html</loc>
-    <lastmod>2026-02-09T17:51:06.903Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.296Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.losses.mse.html</loc>
-    <lastmod>2026-02-09T17:51:06.865Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.268Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/OneTrack.html</loc>
-    <lastmod>2026-02-09T17:51:06.797Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.219Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/heuristics.html</loc>
-    <lastmod>2026-02-09T17:51:06.894Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.290Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.smoothers.dct_smooth_regression.html</loc>
-    <lastmod>2026-02-09T17:51:06.851Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.258Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/index.html</loc>
-    <lastmod>2026-02-09T17:51:06.697Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.145Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.aggs.agg_sum.html</loc>
-    <lastmod>2026-02-09T17:51:06.871Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.273Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/index.html</loc>
-    <lastmod>2026-02-09T17:50:37.195Z</lastmod>
+    <lastmod>2026-02-10T04:24:18.601Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/Agg.html</loc>
-    <lastmod>2026-02-09T17:51:06.868Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.271Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/Smoother.html</loc>
-    <lastmod>2026-02-09T17:51:06.839Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.250Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/patterns.just_audio.is_audio.html</loc>
-    <lastmod>2026-02-09T17:51:06.906Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.299Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.smoothers.dct_smooth.html</loc>
-    <lastmod>2026-02-09T17:51:06.847Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.255Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/CandidateTracks.html</loc>
-    <lastmod>2026-02-09T17:51:06.824Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.238Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/process_audio_file.html</loc>
-    <lastmod>2026-02-09T17:51:06.731Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.172Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/process_directory.html</loc>
-    <lastmod>2026-02-09T17:51:06.743Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.180Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.smoothers.Smoothed.html</loc>
-    <lastmod>2026-02-09T17:51:06.843Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.252Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/MinMaxHeuristic.html</loc>
-    <lastmod>2026-02-09T17:51:06.880Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.280Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/process_corpus.html</loc>
-    <lastmod>2026-02-09T17:51:06.771Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.200Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/reference/processors.outputs.unpickle_candidates.html</loc>
-    <lastmod>2026-02-09T17:51:06.831Z</lastmod>
+    <lastmod>2026-02-10T04:24:28.244Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/usage/all_arguments.html</loc>
-    <lastmod>2026-02-09T17:50:37.195Z</lastmod>
+    <lastmod>2026-02-10T04:24:18.601Z</lastmod>
   </url>
   <url>
     <loc>https://FastTrackiverse.github.io/fasttrackpy/usage/dct.html</loc>
-    <lastmod>2026-02-09T17:50:37.198Z</lastmod>
+    <lastmod>2026-02-10T04:24:18.604Z</lastmod>
   </url>
 </urlset>

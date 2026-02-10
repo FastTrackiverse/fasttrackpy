@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -568,10 +603,24 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="fasttrackpy.process_directory" class="level1">
 <h1>process_directory</h1>
-<p><code>process_directory(path, min_max_formant=4000, max_max_formant=7000, nstep=20, n_formants=4, window_length=0.05, time_step=0.002, pre_emphasis_from=50, pitch_floor=75, smoother=Smoother(), loss_fun=Loss(), agg_fun=Agg(), heuristics=[])</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>process_directory(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    path,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    min_max_formant<span class="op">=</span><span class="dv">4000</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    max_max_formant<span class="op">=</span><span class="dv">7000</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    nstep<span class="op">=</span><span class="dv">20</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    n_formants<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="fl">0.05</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    time_step<span class="op">=</span><span class="fl">0.002</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    pre_emphasis_from<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    pitch_floor<span class="op">=</span><span class="dv">75</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    smoother<span class="op">=</span>Smoother(),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    loss_fun<span class="op">=</span>Loss(),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    agg_fun<span class="op">=</span>Agg(),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    heuristics<span class="op">=</span>[],</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Given a path to a directoy of audio files, process them all.</p>
-<section id="parameters" class="level2">
-<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
+<section id="parameters" class="level2 doc-section doc-section-parameters">
+<h2 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -583,79 +632,79 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>path</code></td>
+<td>path</td>
 <td><a href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></td>
 <td>Path to the directory to process.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td><code>min_max_formant</code></td>
+<td>min_max_formant</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The lowest max-formant value to try. Defaults to 4000.</td>
 <td><code>4000</code></td>
 </tr>
 <tr class="odd">
-<td><code>max_max_formant</code></td>
+<td>max_max_formant</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>The highest max formant to try. Defaults to 7000.</td>
 <td><code>7000</code></td>
 </tr>
 <tr class="even">
-<td><code>nstep</code></td>
+<td>nstep</td>
 <td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of steps from the min to the max max formant. Defaults to 20.</td>
 <td><code>20</code></td>
 </tr>
 <tr class="odd">
-<td><code>n_formants</code></td>
+<td>n_formants</td>
 <td><a href="https://docs.python.org/3/library/functions.html#int">int</a></td>
 <td>The number of formants to track. Defaults to 4.</td>
 <td><code>4</code></td>
 </tr>
 <tr class="even">
-<td><code>window_length</code></td>
+<td>window_length</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Window length of the formant analysis. Defaults to 0.025.</td>
 <td><code>0.05</code></td>
 </tr>
 <tr class="odd">
-<td><code>time_step</code></td>
+<td>time_step</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Time step of the formant analyusis window. Defaults to 0.002.</td>
 <td><code>0.002</code></td>
 </tr>
 <tr class="even">
-<td><code>pre_emphasis_from</code></td>
+<td>pre_emphasis_from</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Pre-emphasis threshold. Defaults to 50.</td>
 <td><code>50</code></td>
 </tr>
 <tr class="odd">
-<td><code>pitch_floor</code></td>
+<td>pitch_floor</td>
 <td><a href="https://docs.python.org/3/library/functions.html#float">float</a></td>
 <td>Pitch floor for f0 tracking. Defaults to 75.</td>
 <td><code>75</code></td>
 </tr>
 <tr class="even">
-<td><code>smoother</code></td>
+<td>smoother</td>
 <td><a href="../reference/Smoother.html#fasttrackpy.Smoother">Smoother</a></td>
 <td>The smoother method to use. Defaults to <code>Smoother()</code>.</td>
 <td><code>Smoother()</code></td>
 </tr>
 <tr class="odd">
-<td><code>loss_fun</code></td>
+<td>loss_fun</td>
 <td><a href="../reference/Loss.html#fasttrackpy.Loss">Loss</a></td>
 <td>The loss function to use. Defaults to Loss().</td>
 <td><code>Loss()</code></td>
 </tr>
 <tr class="even">
-<td><code>agg_fun</code></td>
+<td>agg_fun</td>
 <td><a href="../reference/Agg.html#fasttrackpy.Agg">Agg</a></td>
 <td>The loss aggregation function to use. Defaults to Agg().</td>
 <td><code>Agg()</code></td>
 </tr>
 <tr class="odd">
-<td><code>heuristics</code></td>
+<td>heuristics</td>
 <td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="../reference/MinMaxHeuristic.html#fasttrackpy.MinMaxHeuristic">MinMaxHeuristic</a> | <a href="../reference/SpacingHeuristic.html#fasttrackpy.SpacingHeuristic">SpacingHeuristic</a>]</td>
 <td>A list of formant tracking heuristics to use.</td>
 <td><code>[]</code></td>
@@ -663,17 +712,19 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </section>
-<section id="returns" class="level2">
-<h2 class="anchored" data-anchor-id="returns">Returns</h2>
+<section id="returns" class="level2 doc-section doc-section-returns">
+<h2 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
+<th>Name</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td></td>
 <td><a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a href="../reference/CandidateTracks.html#fasttrackpy.CandidateTracks">CandidateTracks</a>]</td>
 <td>A list of <code>CandidateTracks</code> objects.</td>
 </tr>
