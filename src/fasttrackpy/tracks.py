@@ -586,7 +586,7 @@ class CandidateTracks(Track, Sequence):
         )
         pitch_array = np.array([
             pitch_obj.get_value_at_time(t)
-            for t in self.candidates[0].time_domain
+            for t in self.winner.time_domain
         ])
         return pitch_array
     
@@ -594,7 +594,7 @@ class CandidateTracks(Track, Sequence):
         intensity_obj = self.sound.to_intensity(time_step = self.time_step)
         intensity = np.array([
             intensity_obj.get_value(time = t)
-            for t in self.candidates[0].time_domain
+            for t in self.winner.time_domain
         ])
         return intensity
 
